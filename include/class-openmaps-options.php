@@ -15,7 +15,7 @@ class Openmaps_Options {
 	 *
 	 * @var $options
 	 */
-	public $options;
+	private $options;
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -26,6 +26,7 @@ class Openmaps_Options {
 
 		if ( null == self::$instance ) {
 			self::$instance = new self();
+			self::$instance->hooks();
 		}
 		return self::$instance;
 	}
@@ -36,19 +37,14 @@ class Openmaps_Options {
 	private function __construct() {
 		// Get registered option.
 		$this->options = get_option( 'openmaps_settings' );
-		$this->hooks();
 	}
 
 	/**
 	 * Initiate hooks
 	 */
 	public function hooks() {
-		// Add the page to the admin menu.
 		add_action( 'admin_menu', array( $this, 'add_page' ) );
-
-		// Register page options.
 		add_action( 'admin_init', array( $this, 'register_page_options' ) );
-
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
 	}
 
@@ -61,10 +57,12 @@ class Openmaps_Options {
 		if ( 'settings_page_openmaps' != $hook ) {
 			return;
 		}
-		wp_enqueue_style( 'openmaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
-		wp_enqueue_script( 'openmaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
-		wp_enqueue_script( 'openmaps-box-image', plugins_url( 'js/openmaps-settings.js', __FILE__ ), array( 'jquery', 'openmaps-ol' ), WP_OPENMAPS_VERSION );
-		wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-admin.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
+
+		$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
+		// wp_enqueue_style( 'openmaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
+		// wp_enqueue_script( 'openmaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
+		wp_enqueue_script( 'openmaps-box-image', plugins_url( 'js/openmaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), WP_OPENMAPS_VERSION );
+		wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-admin' . $min . '.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
 	}
 
 	/**
@@ -101,7 +99,7 @@ class Openmaps_Options {
 	public function register_page_options() {
 		add_settings_section( 'openmaps_section', __( 'Options', 'openmaps' ), array( $this, 'display_section' ), __FILE__ ); // id, title, display cb, page.
 		add_settings_field( 'openmaps_style_field', __( 'Style', 'openmaps' ), array( $this, 'style_settings_field' ), __FILE__, 'openmaps_section' );
-		add_settings_field( 'openmaps_geo_field', __( 'Utilities', 'openmaps' ), array( $this, 'geo_settings_field' ), __FILE__, 'openmaps_section' );
+		// add_settings_field( 'openmaps_geo_field', __( 'Utilities', 'openmaps' ), array( $this, 'geo_settings_field' ), __FILE__, 'openmaps_section' );
 		register_setting( __FILE__, 'openmaps_settings', array( $this, 'validate_options' ) ); // option group, option name, sanitize cb.
 	}
 
@@ -193,13 +191,14 @@ class Openmaps_Options {
 	/**
 	 * Geolocation
 	 */
+	/*
 	public function geo_settings_field() {
 		?>
 		<h2><?php esc_html_e( 'Geolocation', 'openmaps' ); ?></h2>
 		<p><?php esc_html_e( 'Search an address or click on the map to adjust the marker position and get the coordinates', 'openmaps' ); ?></p>
 			<fieldset>
 				<div class="wpol-form-group">
-					<input type="text" class="regular-text openmaps-set-address" value="" placeholder="Type a place address"> 
+					<input type="text" class="regular-text openmaps-set-address" value="" placeholder="Type a place address">
 					<div class="button openmaps-get-coordinates"><span class="dashicons dashicons-search"></span> <?php esc_html_e( 'Search', 'openmaps' ); ?></div>
 				</div>
 			</fieldset>
@@ -215,9 +214,10 @@ class Openmaps_Options {
 			<div id="wpol-admin-map" class="openmap"></div>
 			<div style="display:none;">
 				<div class="wpol-infomarker" id="infomarker_admin"><img src="<?php echo esc_url( plugins_url( '/images/marker.svg', __FILE__ ) ); ?>" style="height: 40px;"></div>
-			</div>	
+			</div>
 		<?php
 	}
+	*/
 
 } // end class
 

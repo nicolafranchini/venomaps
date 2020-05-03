@@ -3,6 +3,11 @@ jQuery(document).ready(function($) {
 
     function initOpenMaps( infomap ){
 
+        if (typeof ol === 'undefined' || ol === null) {
+          console.log('WARNING: OpenLayers Library not loaded');
+          return false;
+        }
+
         var mapid, maplat, maplon, styleJson, zoom, zoom_scroll;
 
         mapid = infomap.mapid;
@@ -116,6 +121,3 @@ jQuery(document).ready(function($) {
     });
 
 });
-
-
-

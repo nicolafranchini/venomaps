@@ -10,8 +10,8 @@ class Openmaps_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openmaps_widget', // Base ID.
-			__( 'WP OpenMaps', 'wpb_widget_domain' ), // Name.
-			array( 'description' => __( 'WP OpenMaps Widget', 'openmaps' ) ) // Args.
+			__( 'OpenMaps', 'wpb_widget_domain' ), // Name.
+			array( 'description' => __( 'Displays one of your custom OpenMaps', 'openmaps' ) ) // Args.
 		);
 	}
 
@@ -35,7 +35,7 @@ class Openmaps_Widget extends WP_Widget {
 		if ( strlen( $page_id ) ) {
 			$data_escaped .= do_shortcode( '[openmap' . $page_id . ']' );
 		} else {
-			$data_escaped .= esc_html_e( 'Please select a Map from the widget editor', 'openmaps' );
+			$data_escaped .= esc_html_e( 'Please select a map from the widget editor', 'openmaps' );
 		}
 		$data_escaped .= $args['after_widget'];
 		echo $data_escaped; // XSS ok.

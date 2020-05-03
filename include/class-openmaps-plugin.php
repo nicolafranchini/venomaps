@@ -27,6 +27,7 @@ class Openmaps_Plugin {
 
 		if ( null == self::$instance ) {
 			self::$instance = new self();
+			self::$instance->hooks();
 		}
 		return self::$instance;
 	}
@@ -37,7 +38,6 @@ class Openmaps_Plugin {
 	private function __construct() {
 		require dirname( __FILE__ ) . '/class-openmaps-options.php';
 		require dirname( __FILE__ ) . '/class-openmaps-widget.php';
-		$this->hooks();
 	}
 
 	/**
@@ -99,14 +99,27 @@ class Openmaps_Plugin {
 
 	/**
 	 * Load custom post scripts.
+	 *
+	 * @param string $hook page hook.
 	 */
-	public function load_admin_scripts() {
-		global $typenow;
-		if ( 'openmaps' == $typenow ) {
-			wp_enqueue_media();
-			wp_enqueue_editor();
-			wp_enqueue_script( 'openmaps-metabox', plugins_url( 'js/openmaps-metabox.js', __FILE__ ), array( 'jquery' ), '1.0' );
-			wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-metabox.css', __FILE__ ), array(), '1.0' );
+	public function load_admin_scripts( $hook ) {
+
+		if ( in_array( $hook, array( 'post.php', 'post-new.php' ) ) ) {
+			$screen = get_current_screen();
+
+			if ( is_object( $screen ) && 'openmaps' == $screen->post_type ) {
+
+				$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
+
+				wp_enqueue_media();
+				wp_enqueue_editor();
+
+				wp_enqueue_style( 'openmaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
+				wp_enqueue_script( 'openmaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
+
+				wp_enqueue_script( 'openmaps-metabox', plugins_url( 'js/openmaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), WP_OPENMAPS_VERSION );
+				wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-admin' . $min . '.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
+			}
 		}
 	}
 
@@ -305,10 +318,52 @@ class Openmaps_Plugin {
 			'default' // high, default, low.
 		);
 
+		add_meta_box(
+			'openmaps_geolocation_box',
+			__( 'Geolocation', 'openmaps' ),
+			array( $this, 'render_openmaps_geolocation_metabox' ),
+			'openmaps',
+			'side', // normal, side.
+			'default' // high, default, low.
+		);
+
 	}
 
 	/**
 	 * Render the metabox
+	 *
+	 * @param WP_Post $post Post object.
+	 */
+	public function render_openmaps_geolocation_metabox( $post ) {
+		?>
+		<p><?php esc_html_e( 'Search an address or click on the map to adjust the marker position and get the coordinates', 'openmaps' ); ?></p>
+			<fieldset>
+				<div class="wpol-form-group">
+					<input type="text" class="widefat openmaps-set-address" value="" placeholder="Type a place address"> 
+				</div>
+				<div class="wpol-form-group">
+					<div class="button openmaps-get-coordinates"><span class="dashicons dashicons-search"></span> <?php esc_html_e( 'Search', 'openmaps' ); ?></div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="wpol-form-group">
+					<span class="description"><?php esc_html_e( 'Latitude', 'openmaps' ); ?></span>
+					<input type="text" class="widefat openmaps-get-lat" value="" placeholder="Latitude">
+					<span class="description"><?php esc_html_e( 'Longitude', 'openmaps' ); ?></span>
+					<input type="text" class="widefat openmaps-get-lon" value="" placeholder="Longitude">
+				</div>
+			</fieldset>
+
+			<div id="wpol-admin-map" class="openmap"></div>
+			<div style="display:none;">
+				<div class="wpol-infomarker" id="infomarker_admin"><img src="<?php echo esc_url( plugins_url( '/images/marker.svg', __FILE__ ) ); ?>" style="height: 40px;"></div>
+			</div>	
+		<?php
+	}
+
+
+	/**
+	 * Render shortcode field metabox
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -322,7 +377,7 @@ class Openmaps_Plugin {
 	}
 
 	/**
-	 * Render the metabox
+	 * Render map metabox
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -385,8 +440,7 @@ class Openmaps_Plugin {
 					<input type="text" class="all-options" name="openmaps_lon" value="<?php echo esc_attr( $lon ); ?>">
 					<span class="description"><?php esc_html_e( 'Longitude', 'openmaps' ); ?></span>
 				</div>
-				<?php // translators: "Get Coordinates" links to the plugin setting page. ?>
-				<p><?php printf( __( '%1$sGet Coordinates%2$s', 'openmaps' ), '<a target="_blank" href="' . esc_url( get_admin_url( null, 'options-general.php?page=openmaps' ) ) . '">', '</a>' ); // XSS ok. ?></p>
+				<p><?php esc_html_e( 'Get coordinates from the Geolocation box', 'openmaps' ); ?></p>
 			</fieldset>
 		</div>
 
@@ -420,7 +474,7 @@ class Openmaps_Plugin {
 	}
 
 	/**
-	 * Render the metabox
+	 * Render markers metabox
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -443,9 +497,11 @@ class Openmaps_Plugin {
 			),
 		);
 
-		foreach ( $marker_settings as $key => $setting ) {
-			if ( isset( $setting['lat'] ) && ! empty( $setting['lat'] ) && isset( $setting['lon'] ) && ! empty( $setting['lon'] ) ) {
-				$output_settings[] = $setting;
+		if ( $marker_settings ) {
+			foreach ( $marker_settings as $key => $setting ) {
+				if ( isset( $setting['lat'] ) && ! empty( $setting['lat'] ) && isset( $setting['lon'] ) && ! empty( $setting['lon'] ) ) {
+					$output_settings[] = $setting;
+				}
 			}
 		}
 		if ( ! isset( $output_settings[0] ) || empty( $output_settings[0] ) ) {

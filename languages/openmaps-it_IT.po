@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP OpenMaps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-02 20:38+0000\n"
-"PO-Revision-Date: 2020-05-02 20:39+0000\n"
+"POT-Creation-Date: 2020-05-03 15:48+0000\n"
+"PO-Revision-Date: 2020-05-03 15:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -14,190 +14,187 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.3; wp-5.4.1"
 
-#: include/class-wpolmaps-widget.php:14
-msgid "WP OpenMaps Widget"
-msgstr "Widget WP OpenMaps"
-
-#: include/class-wpolmaps-widget.php:38
-msgid "Please select a Map from the widget editor"
-msgstr "Per favore seleziona una mappa dal pannello widget"
-
-#: include/class-wpolmaps-widget.php:65 include/class-wpolmaps-options.php:172
-#: include/class-wpolmaps-options.php:180
-msgid "Title"
-msgstr "Titolo"
-
-#: include/class-wpolmaps-plugin.php:226
+#: include/class-openmaps-plugin.php:238
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: include/class-wpolmaps-plugin.php:236
+#: include/class-openmaps-plugin.php:248
 msgctxt "post type general name"
 msgid "OpenMaps"
 msgstr "OpenMaps"
 
-#: include/class-wpolmaps-plugin.php:237
+#: include/class-openmaps-plugin.php:249
 msgctxt "post type singular name"
 msgid "Map"
 msgstr "Map"
 
-#: include/class-wpolmaps-plugin.php:238 include/class-wpolmaps-plugin.php:239
+#: include/class-openmaps-plugin.php:250 include/class-openmaps-plugin.php:251
 msgid "Add new"
 msgstr "Aggiungi nuova"
 
-#: include/class-wpolmaps-plugin.php:240
+#: include/class-openmaps-plugin.php:252
 msgid "Edit map"
 msgstr "Modifica mappa"
 
-#: include/class-wpolmaps-plugin.php:241
+#: include/class-openmaps-plugin.php:253
 msgid "New map"
 msgstr "Nuova mappa"
 
-#: include/class-wpolmaps-plugin.php:242
+#: include/class-openmaps-plugin.php:254
 msgid "All maps"
 msgstr "Tutte le mappe"
 
-#: include/class-wpolmaps-plugin.php:243
+#: include/class-openmaps-plugin.php:255
 msgid "View map"
 msgstr "Visualizza mappa"
 
-#: include/class-wpolmaps-plugin.php:244
+#: include/class-openmaps-plugin.php:256
 msgid "Search maps"
 msgstr "Cerca mappe"
 
-#: include/class-wpolmaps-plugin.php:245
+#: include/class-openmaps-plugin.php:257
 msgid "No map found."
 msgstr "Nessuna mappa trovata."
 
-#: include/class-wpolmaps-plugin.php:246
+#: include/class-openmaps-plugin.php:258
 msgid "No Maps found in trash."
 msgstr "Nessuna mappa trovata nel cestino."
 
-#: include/class-wpolmaps-plugin.php:247 include/class-wpolmaps-options.php:75
-#: include/class-wpolmaps-options.php:76
+#: include/class-openmaps-plugin.php:259 include/class-openmaps-options.php:73
+#: include/class-openmaps-options.php:74
 msgid "OpenMaps"
 msgstr "OpenMaps"
 
-#: include/class-wpolmaps-plugin.php:284
+#: include/class-openmaps-plugin.php:296
 msgid "Map Shortcode"
 msgstr "Shortcode Mappa"
 
-#: include/class-wpolmaps-plugin.php:293
+#: include/class-openmaps-plugin.php:305
 msgid "Map Options"
 msgstr "Opzioni Mappa"
 
-#: include/class-wpolmaps-plugin.php:302
+#: include/class-openmaps-plugin.php:314
 msgid "Markers"
 msgstr "Segnaposti"
 
-#: include/class-wpolmaps-plugin.php:321
+#: include/class-openmaps-plugin.php:323
+msgid "Geolocation"
+msgstr "Geolocalizzazione"
+
+#: include/class-openmaps-plugin.php:339
+msgid ""
+"Search an address or click on the map to adjust the marker position and get "
+"the coordinates"
+msgstr ""
+"Cerca un indirizzo o clicca sulla mappa per aggiornare la posizione del "
+"segnaposto e ottenere le coordinate"
+
+#: include/class-openmaps-plugin.php:345
+msgid "Search"
+msgstr "Cerca"
+
+#: include/class-openmaps-plugin.php:350 include/class-openmaps-plugin.php:439
+#: include/class-openmaps-plugin.php:530
+msgid "Latitude"
+msgstr "Latitudine"
+
+#: include/class-openmaps-plugin.php:352 include/class-openmaps-plugin.php:441
+#: include/class-openmaps-plugin.php:532
+msgid "Longitude"
+msgstr "Longitudine"
+
+#: include/class-openmaps-plugin.php:375
 msgid "Copy the shortcode and paste it in your Post or Page"
 msgstr "Copia lo shortcode e incollalo in un Articolo o Pagina"
 
-#: include/class-wpolmaps-plugin.php:359 include/class-wpolmaps-options.php:103
+#: include/class-openmaps-plugin.php:412 include/class-openmaps-options.php:101
 msgid "Style"
 msgstr "Stile"
 
-#: include/class-wpolmaps-plugin.php:363
+#: include/class-openmaps-plugin.php:416
 msgid "Default"
 msgstr "Predefinito"
 
 #. "Settings Page" is the link to plugins settings page.
-#: include/class-wpolmaps-plugin.php:378
+#: include/class-openmaps-plugin.php:431
 #, php-format
 msgid "Add more Map Styles inside %1$sSettings Page%2$s."
 msgstr "Aggiungi nuovi stili dalla %1$spagina Impostazioni%2$s."
 
-#: include/class-wpolmaps-plugin.php:382 include/class-wpolmaps-plugin.php:472
+#: include/class-openmaps-plugin.php:435 include/class-openmaps-plugin.php:526
 msgid "Coordinates"
 msgstr "Coordinate"
 
-#: include/class-wpolmaps-plugin.php:386 include/class-wpolmaps-plugin.php:476
-#: include/class-wpolmaps-options.php:209
-msgid "Latitude"
-msgstr "Latitudine"
+#: include/class-openmaps-plugin.php:443
+msgid "Get coordinates from the Geolocation box"
+msgstr "Ottieni coordinate dal riquadro Geolocalizzazione"
 
-#: include/class-wpolmaps-plugin.php:388 include/class-wpolmaps-plugin.php:478
-#: include/class-wpolmaps-options.php:211
-msgid "Longitude"
-msgstr "Longitudine"
-
-#. "Get Coordinates" links to the plugin setting page.
-#: include/class-wpolmaps-plugin.php:391
-#, php-format
-msgid "%1$sGet Coordinates%2$s"
-msgstr "%1$sOttieni Coordinate%2$s"
-
-#: include/class-wpolmaps-plugin.php:396
+#: include/class-openmaps-plugin.php:448
 msgid "Map Height"
 msgstr "Altezza Mappa"
 
-#: include/class-wpolmaps-plugin.php:409
+#: include/class-openmaps-plugin.php:461
 msgid "Zoom"
 msgstr "Zoom"
 
-#: include/class-wpolmaps-plugin.php:416
+#: include/class-openmaps-plugin.php:468
 msgid "Enable mouse wheel zoom"
 msgstr "Abilita zoom allo scroll del mouse"
 
-#: include/class-wpolmaps-plugin.php:484
+#: include/class-openmaps-plugin.php:538
 msgid "Size"
 msgstr "Dimensioni"
 
-#: include/class-wpolmaps-plugin.php:488
+#: include/class-openmaps-plugin.php:542
 msgid "Small"
 msgstr "Piccolo"
 
-#: include/class-wpolmaps-plugin.php:489
+#: include/class-openmaps-plugin.php:543
 msgid "Medium"
 msgstr "Medio"
 
-#: include/class-wpolmaps-plugin.php:490
+#: include/class-openmaps-plugin.php:544
 msgid "Large"
 msgstr "Grande"
 
-#: include/class-wpolmaps-plugin.php:491
+#: include/class-openmaps-plugin.php:545
 msgid "Extra Large"
 msgstr "Molto Grande"
 
-#: include/class-wpolmaps-plugin.php:497
+#: include/class-openmaps-plugin.php:551
 msgid "Custom Marker"
 msgstr "Segnaposto Personalizzato"
 
-#: include/class-wpolmaps-plugin.php:504
+#: include/class-openmaps-plugin.php:558
 msgid "Upload Media"
 msgstr "Carica file"
 
-#: include/class-wpolmaps-plugin.php:510
+#: include/class-openmaps-plugin.php:564
 msgid "Info Box"
 msgstr "Pannello Informazioni"
 
-#: include/class-wpolmaps-plugin.php:514
+#: include/class-openmaps-plugin.php:568
 msgid "Visible panel"
 msgstr "Pannello visibile"
 
-#: include/class-wpolmaps-plugin.php:535
+#: include/class-openmaps-plugin.php:589
 msgid "New marker"
 msgstr "Nuovo segnaposto"
 
-#: include/class-wpolmaps-options.php:86
+#: include/class-openmaps-options.php:84
 msgid "OpenMaps Settings"
 msgstr "Impostazioni OpenMaps"
 
-#: include/class-wpolmaps-options.php:102
+#: include/class-openmaps-options.php:100
 msgid "Options"
 msgstr "Opzioni"
 
-#: include/class-wpolmaps-options.php:104
-msgid "Utilities"
-msgstr "Utilità"
-
-#: include/class-wpolmaps-options.php:149
+#: include/class-openmaps-options.php:147
 msgid "Custom Maps"
 msgstr "Mappe personalizzate"
 
 #. "maptiler" is the website where to get custom maps.
-#: include/class-wpolmaps-options.php:153
+#: include/class-openmaps-options.php:151
 #, php-format
 msgid ""
 "Select a standard map or create your custom map at %1$sMapTiler%2$s and "
@@ -206,29 +203,22 @@ msgstr ""
 "Seleziona una mappa standard, o crea la tua mappa personalizzata su "
 "%1$sMapTiler%2$s e incolla qui il %3$sVector Style%4$s."
 
-#: include/class-wpolmaps-options.php:188
+#: include/class-openmaps-options.php:170
+#: include/class-openmaps-options.php:178 include/class-openmaps-widget.php:61
+msgid "Title"
+msgstr "Titolo"
+
+#: include/class-openmaps-options.php:186
 msgid "New style"
 msgstr "Nuovo stile"
 
-#: include/class-wpolmaps-options.php:198
-msgid "Geolocation"
-msgstr "Geolocalizzazione"
+#: include/class-openmaps-widget.php:14
+msgid "Displays one of your custom OpenMaps"
+msgstr "Visualizza una delle tue OpenMaps personalizzate"
 
-#: include/class-wpolmaps-options.php:199
-msgid ""
-"Search an address or click on the map to adjust the marker position and get "
-"the coordinates"
-msgstr ""
-"Cerca un indirizzo o clicca sulla mappa per aggiornare la posizione del "
-"segnaposto e ottenere le coordinate"
-
-#: include/class-wpolmaps-options.php:203
-msgid "Search"
-msgstr "Cerca"
-
-#. Name of the plugin
-msgid "WP OpenMaps"
-msgstr "WP OpenMaps"
+#: include/class-openmaps-widget.php:38
+msgid "Please select a map from the widget editor"
+msgstr "Seleziona una mappa dal pannello widget"
 
 #. Description of the plugin
 msgid ""
