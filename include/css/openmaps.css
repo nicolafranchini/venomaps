@@ -1,0 +1,114 @@
+/*!
+ * OpenMaps
+ *
+ * Copyright 2020 Nicola Franchini
+ */
+.openmap {
+  height: 500px;
+  width: 100%;
+  font-family: arial, helvetica, sans-serif;
+}
+.wpol-hide{
+  visibility: hidden;
+  opacity: 0;
+}
+/*
+ * Marker
+ */
+.wpol-infomarker{
+  display: block;
+  margin: 0;
+}
+.wpol-infomarker img{
+  width: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+/*
+ * Infopanel
+ */ 
+.wpol-infopanel{
+  position: relative;
+  width: auto;
+  max-width: 400px;
+}
+.wpol-infopanel.infobox-closed{
+  display: none;
+}
+.wpol-infopanel-close{
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.wpol-infopanel-overlay{
+  z-index: 4;
+}
+.wpol-infopanel-active{
+  z-index: 5;
+}
+.wpol-infolabel{
+  padding: 15px 12px;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
+  -moz-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
+  box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
+  border-radius: 2px;
+  display: block;
+  font-size: .7rem;
+  line-height: 1.2;
+}
+.wpol-infolabel *{
+  margin: 0;
+}
+.wpol-arrow{
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-top-color: transparent;
+  border-style: solid;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -11px;
+  border-width: 11px;
+  border-bottom-width: 0;
+}
+.wpol-arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-top-color: transparent;
+  border-style: solid;
+  bottom: 1px;
+  margin-left: -10px;
+  content: " ";
+  border-top-color: #fff;
+  border-width: 10px;
+  border-bottom-width: 0;
+}
+/*
+ * OL controls
+ */
+.ol-attribution{
+  font-size: 9px;
+}
+.ol-control,
+.ol-control:hover{
+  background:none;
+  z-index: 9;
+}
+
+.ol-control button,
+.ol-control button:focus, .ol-control button:hover{
+  background-color: #393939;
+  font-size: 1em;
+}
+.ol-control button:focus, .ol-control button:hover{
+  opacity: .8;
+}

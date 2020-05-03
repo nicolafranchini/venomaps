@@ -1,0 +1,253 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP OpenMaps\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-02 20:38+0000\n"
+"PO-Revision-Date: 2020-05-02 20:38+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.3; wp-5.4.1"
+
+#: include/class-wpolmaps-widget.php:14
+msgid "WP OpenMaps Widget"
+msgstr "WP OpenMaps Widget"
+
+#: include/class-wpolmaps-widget.php:38
+msgid "Please select a Map from the widget editor"
+msgstr "Please select a Map from the widget editor"
+
+#: include/class-wpolmaps-widget.php:65 include/class-wpolmaps-options.php:172
+#: include/class-wpolmaps-options.php:180
+msgid "Title"
+msgstr "Title"
+
+#: include/class-wpolmaps-plugin.php:226
+msgid "Settings"
+msgstr "Settings"
+
+#: include/class-wpolmaps-plugin.php:236
+msgctxt "post type general name"
+msgid "OpenMaps"
+msgstr "OpenMaps"
+
+#: include/class-wpolmaps-plugin.php:237
+msgctxt "post type singular name"
+msgid "Map"
+msgstr "Map"
+
+#: include/class-wpolmaps-plugin.php:238 include/class-wpolmaps-plugin.php:239
+msgid "Add new"
+msgstr "Add new"
+
+#: include/class-wpolmaps-plugin.php:240
+msgid "Edit map"
+msgstr "Edit map"
+
+#: include/class-wpolmaps-plugin.php:241
+msgid "New map"
+msgstr "New map"
+
+#: include/class-wpolmaps-plugin.php:242
+msgid "All maps"
+msgstr "All maps"
+
+#: include/class-wpolmaps-plugin.php:243
+msgid "View map"
+msgstr "View map"
+
+#: include/class-wpolmaps-plugin.php:244
+msgid "Search maps"
+msgstr "Search maps"
+
+#: include/class-wpolmaps-plugin.php:245
+msgid "No map found."
+msgstr "No map found."
+
+#: include/class-wpolmaps-plugin.php:246
+msgid "No Maps found in trash."
+msgstr "No Maps found in trash."
+
+#: include/class-wpolmaps-plugin.php:247 include/class-wpolmaps-options.php:75
+#: include/class-wpolmaps-options.php:76
+msgid "OpenMaps"
+msgstr "OpenMaps"
+
+#: include/class-wpolmaps-plugin.php:284
+msgid "Map Shortcode"
+msgstr "Map Shortcode"
+
+#: include/class-wpolmaps-plugin.php:293
+msgid "Map Options"
+msgstr "Map Options"
+
+#: include/class-wpolmaps-plugin.php:302
+msgid "Markers"
+msgstr "Markers"
+
+#: include/class-wpolmaps-plugin.php:321
+msgid "Copy the shortcode and paste it in your Post or Page"
+msgstr "Copy the shortcode and paste it in your Post or Page"
+
+#: include/class-wpolmaps-plugin.php:359 include/class-wpolmaps-options.php:103
+msgid "Style"
+msgstr "Style"
+
+#: include/class-wpolmaps-plugin.php:363
+msgid "Default"
+msgstr "Default"
+
+#. "Settings Page" is the link to plugins settings page.
+#: include/class-wpolmaps-plugin.php:378
+#, php-format
+msgid "Add more Map Styles inside %1$sSettings Page%2$s."
+msgstr "Add more Map Styles inside %1$sSettings Page%2$s."
+
+#: include/class-wpolmaps-plugin.php:382 include/class-wpolmaps-plugin.php:472
+msgid "Coordinates"
+msgstr "Coordinates"
+
+#: include/class-wpolmaps-plugin.php:386 include/class-wpolmaps-plugin.php:476
+#: include/class-wpolmaps-options.php:209
+msgid "Latitude"
+msgstr "Latitude"
+
+#: include/class-wpolmaps-plugin.php:388 include/class-wpolmaps-plugin.php:478
+#: include/class-wpolmaps-options.php:211
+msgid "Longitude"
+msgstr "Longitude"
+
+#. "Get Coordinates" links to the plugin setting page.
+#: include/class-wpolmaps-plugin.php:391
+#, php-format
+msgid "%1$sGet Coordinates%2$s"
+msgstr "%1$sGet Coordinates%2$s"
+
+#: include/class-wpolmaps-plugin.php:396
+msgid "Map Height"
+msgstr "Map Height"
+
+#: include/class-wpolmaps-plugin.php:409
+msgid "Zoom"
+msgstr "Zoom"
+
+#: include/class-wpolmaps-plugin.php:416
+msgid "Enable mouse wheel zoom"
+msgstr "Enable mouse wheel zoom"
+
+#: include/class-wpolmaps-plugin.php:484
+msgid "Size"
+msgstr "Size"
+
+#: include/class-wpolmaps-plugin.php:488
+msgid "Small"
+msgstr "Small"
+
+#: include/class-wpolmaps-plugin.php:489
+msgid "Medium"
+msgstr "Medium"
+
+#: include/class-wpolmaps-plugin.php:490
+msgid "Large"
+msgstr "Large"
+
+#: include/class-wpolmaps-plugin.php:491
+msgid "Extra Large"
+msgstr "Extra Large"
+
+#: include/class-wpolmaps-plugin.php:497
+msgid "Custom Marker"
+msgstr "Custom Marker"
+
+#: include/class-wpolmaps-plugin.php:504
+msgid "Upload Media"
+msgstr "Upload Media"
+
+#: include/class-wpolmaps-plugin.php:510
+msgid "Info Box"
+msgstr "Info Box"
+
+#: include/class-wpolmaps-plugin.php:514
+msgid "Visible panel"
+msgstr "Visible panel"
+
+#: include/class-wpolmaps-plugin.php:535
+msgid "New marker"
+msgstr "New marker"
+
+#: include/class-wpolmaps-options.php:86
+msgid "OpenMaps Settings"
+msgstr "OpenMaps Settings"
+
+#: include/class-wpolmaps-options.php:102
+msgid "Options"
+msgstr "Options"
+
+#: include/class-wpolmaps-options.php:104
+msgid "Utilities"
+msgstr "Utilities"
+
+#: include/class-wpolmaps-options.php:149
+msgid "Custom Maps"
+msgstr "Custom Maps"
+
+#. "maptiler" is the website where to get custom maps.
+#: include/class-wpolmaps-options.php:153
+#, php-format
+msgid ""
+"Select a standard map or create your custom map at %1$sMapTiler%2$s and "
+"paste here the %3$sVector Style%4$s."
+msgstr ""
+"Select a standard map or create your custom map at %1$sMapTiler%2$s and "
+"paste here the %3$sVector Style%4$s."
+
+#: include/class-wpolmaps-options.php:188
+msgid "New style"
+msgstr "New style"
+
+#: include/class-wpolmaps-options.php:198
+msgid "Geolocation"
+msgstr "Geolocation"
+
+#: include/class-wpolmaps-options.php:199
+msgid ""
+"Search an address or click on the map to adjust the marker position and get "
+"the coordinates"
+msgstr ""
+"Search an address or click on the map to adjust the marker position and get "
+"the coordinates"
+
+#: include/class-wpolmaps-options.php:203
+msgid "Search"
+msgstr "Search"
+
+#. Name of the plugin
+msgid "WP OpenMaps"
+msgstr "WP OpenMaps"
+
+#. Description of the plugin
+msgid ""
+"Simple plugin to create maps with custom styles, multiple markers, info "
+"windows with rich text editors. Widget ready, vector Maps supported. Plugin "
+"based on OpenLayers, OpenStreetMap and MapTiler."
+msgstr ""
+"Simple plugin to create maps with custom styles, multiple markers, info "
+"windows with rich text editors. Widget ready, vector Maps supported. Plugin "
+"based on OpenLayers, OpenStreetMap and MapTiler."
+
+#. URI of the plugin
+msgid "http://veno.es/openmaps"
+msgstr "http://veno.es/openmaps"
+
+#. Author of the plugin
+msgid "Nicola Franchini"
+msgstr "Nicola Franchini"
+
+#. Author URI of the plugin
+msgid "https://veno.es"
+msgstr "https://veno.es"

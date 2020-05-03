@@ -1,0 +1,25 @@
+.openmap {
+  height: 500px;
+  width: 100%;
+  max-width: 800px;
+  font-family: arial, helvetica, sans-serif;
+}
+.wpol-infomarker{
+  display: block;
+  margin: 0;
+}
+.wpol-infomarker img{
+  width: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+.wpol-form-group{
+	display: block;
+	margin: 4px 0;
+	clear: both;
+}
+
+.button .dashicons{
+	vertical-align: middle;
+}
