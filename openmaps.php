@@ -5,7 +5,7 @@
  * @package openmaps
  *
  * Plugin Name: OpenMaps
- * Plugin URI: http://veno.es/openmaps
+ * Plugin URI: https://veno.es/openmaps
  * Description: Simple plugin to create maps with custom styles, multiple markers, info windows with rich text editors. Widget ready, vector Maps supported. Plugin based on OpenLayers, OpenStreetMap and MapTiler.
  * Version: 1.0
  * Author: Nicola Franchini

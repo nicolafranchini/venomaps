@@ -8,7 +8,7 @@ Tested up to: 5.4
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: OpenMaps
-Plugin URI: http://veno.es/openmaps/
+Plugin URI: https://veno.es/openmaps/
 Description: Simple plugin to create maps with custom styles, multiple markers, info windows with rich text editors. Widget ready, vector Maps supported. Plugin based on OpenLayers, OpenStreetMap and MapTiler.
 Tags: lightbox, video, responsive, modal, pop-up, gallery, images
 Author URI: https://veno.es/
