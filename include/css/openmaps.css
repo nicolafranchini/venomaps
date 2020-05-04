@@ -57,7 +57,7 @@
 .wpol-infopanel-active{
   z-index: 5;
 }
-.wpol-infolabel{
+.wpol-infopanel .wpol-infolabel{
   padding: 14px;
   background: #fff;
   -webkit-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
@@ -68,8 +68,9 @@
   font-size: 14px;
   line-height: 1.2;
 }
-.wpol-infolabel *{
+.wpol-infopanel .wpol-infolabel *{
   margin: 0;
+  line-height: 1.2;
 }
 .wpol-arrow{
   position: absolute;

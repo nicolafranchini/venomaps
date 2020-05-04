@@ -64,7 +64,47 @@ class Openmaps_Plugin {
 
 		add_action( 'widgets_init', array( $this, 'register_widget' ) );
 
+		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_block' ) );
+
 	}
+
+	/**
+	 * Enqueue Gutenberg block script
+	 */
+	public function gutenberg_block() {
+		// wp_register_script( 'openmaps-block', plugins_url( 'block/openmaps-block.js', __FILE__ ), array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ), WP_OPENMAPS_VERSION, true );
+
+		wp_register_script(
+			'openmaps-block',
+			plugins_url( 'block/openmaps-block.js', __FILE__ ),
+			array(
+				'wp-blocks',
+				'wp-i18n',
+				'wp-element',
+				'wp-block-editor',
+				'wp-components',
+			),
+			WP_OPENMAPS_VERSION,
+			true
+		);
+
+		$args = array(
+			'post_type' => 'openmaps',
+			'numberposts' => -1,
+			'fields' => 'ids',
+		);
+		$olmaps = get_posts( $args );
+		foreach ( $olmaps as $mapid ) {
+			$templist[ $mapid ] = get_the_title( $mapid );
+		}
+		$openmaps_vars = array(
+			'templates' => wp_json_encode( $templist ),
+		);
+
+		wp_localize_script( 'openmaps-block', 'openmapsBlockVars', $openmaps_vars );
+		wp_enqueue_script( 'openmaps-block' );
+	}
+
 	/**
 	 * Register widget
 	 */
@@ -199,27 +239,29 @@ class Openmaps_Plugin {
 		// Output markers and infoboxes.
 		$marker_settings = get_post_meta( $map_id, 'openmaps_marker', true );
 
-		foreach ( $marker_settings as $key => $marker ) {
-			$marker_data = array();
+		if ( $marker_settings ) {
+			foreach ( $marker_settings as $key => $marker ) {
+				$marker_data = array();
 
-			$marker_size = isset( $marker['size'] ) && strlen( $marker['size'] ) ? $marker['size'] : '30';
-			$marker_icon = isset( $marker['icon'] ) && strlen( $marker['icon'] ) ? $marker['icon'] : plugins_url( '/images/marker.svg', __FILE__ );
-			$infobox = isset( $marker['infobox'] ) && strlen( $marker['infobox'] ) ? $marker['infobox'] : '';
+				$marker_size = isset( $marker['size'] ) && strlen( $marker['size'] ) ? $marker['size'] : '30';
+				$marker_icon = isset( $marker['icon'] ) && strlen( $marker['icon'] ) ? $marker['icon'] : plugins_url( '/images/marker.svg', __FILE__ );
+				$infobox = isset( $marker['infobox'] ) && strlen( $marker['infobox'] ) ? $marker['infobox'] : '';
 
-			$marker_data['icon'] = $marker_icon;
-			$marker_data['lat'] = $marker['lat'];
-			$marker_data['lon'] = $marker['lon'];
-			$marker_data['size'] = $marker_size;
+				$marker_data['icon'] = $marker_icon;
+				$marker_data['lat'] = $marker['lat'];
+				$marker_data['lon'] = $marker['lon'];
+				$marker_data['size'] = $marker_size;
 
-			$infobox_open = 1 === $marker['infobox_open'] ? '' : ' infobox-closed';
+				$infobox_open = 1 === $marker['infobox_open'] ? '' : ' infobox-closed';
 
-			if ( strlen( $infobox ) ) {
-				$output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
-				$output .= '<div class="wpol-infolabel">' . nl2br( $infobox ) . '</div>';
-				$output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><img src="' . plugins_url( '/images/close-x.svg', __FILE__ ) . '"></div></div>';
+				if ( strlen( $infobox ) ) {
+					$output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
+					$output .= '<div class="wpol-infolabel">' . nl2br( $infobox ) . '</div>';
+					$output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><img src="' . plugins_url( '/images/close-x.svg', __FILE__ ) . '"></div></div>';
+				}
+
+				$output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px;"></div>';
 			}
-
-			$output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px;"></div>';
 		}
 		$output .= '</div></div>';
 
@@ -372,7 +414,8 @@ class Openmaps_Plugin {
 		<fieldset>
 			<input type="text" class="large-text" name="" value='[openmap id="<?php echo esc_attr( $post->ID ); ?>"]' readonly>
 		</fieldset>
-		<p><?php esc_html_e( 'Copy the shortcode and paste it in your Post or Page', 'openmaps' ); ?></p>
+		<p><?php esc_html_e( 'Copy the shortcode and paste it inside your Post or Page', 'openmaps' ); ?><br>
+		<?php esc_html_e( 'You will also find OpenMaps among Blocks and Widgets', 'openmaps' ); ?></p>
 		<?php
 	}
 
