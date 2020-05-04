@@ -61,7 +61,6 @@ jQuery(document).ready(function($) {
         }
 
         $('#wrap-overlay-' + mapid + ' .wpol-infomarker').each(function(key){
-
             var datamarker = $(this).data('marker');
             var markerpos = ol.proj.fromLonLat([parseFloat(datamarker.lon), parseFloat(datamarker.lat)]);
             var markerint = parseFloat(datamarker.size);
@@ -94,7 +93,6 @@ jQuery(document).ready(function($) {
                 map.addOverlay(infolabel);
                 $('.wpol-infopanel').closest('.ol-overlay-container').addClass('wpol-infopanel-overlay');
             });
-
         });
     }
 

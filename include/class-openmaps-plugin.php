@@ -216,7 +216,7 @@ class Openmaps_Plugin {
 			if ( strlen( $infobox ) ) {
 				$output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
 				$output .= '<div class="wpol-infolabel">' . nl2br( $infobox ) . '</div>';
-				$output .= '<div class="wpol-arrow"></div><span class="wpol-infopanel-close dashicons dashicons-no-alt"></span></div>';
+				$output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><img src="' . plugins_url( '/images/close-x.svg', __FILE__ ) . '"></div></div>';
 			}
 
 			$output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px;"></div>';
