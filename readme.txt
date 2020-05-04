@@ -25,7 +25,9 @@ This plugin creates custom Maps which can be placed anywhere in your WordPress w
 ### Features
 
 * **Easy to install and setup**
-* **Ability to add Maps on pages/posts and widgets**
+* **Ability to add Maps on pages/posts**
+* **Widget**
+* **Gutenberg Block**
 * **Ability to set custom options for each Map**
 * **Custom map styles, pixel perfect vector maps**
 * **Manage custom markers with the WP media library**
@@ -38,7 +40,7 @@ This plugin creates custom Maps which can be placed anywhere in your WordPress w
 Upload the plugin folder `openmaps` to the `/wp-content/plugins/` directory
 Activate the plugin through the Plugins menu in WordPress
 Create a new map under OpenMaps > Add New
-Select the generated shortcode and insert it inside any post or page
+Select the generated shortcode and insert it inside any post or page, or search OpenMaps among Blocks
 Use the OpenMaps widget to select a map and insert it inside your sidebars
 Optionally add new styles inside Settings > OpenMaps
 
