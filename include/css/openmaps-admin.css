@@ -94,3 +94,10 @@ input.all-options.openmaps_custom_marker{
 	position: absolute;
 	right: 0;
 }
+.openamps_block_map_units select{
+	margin-top: 0;
+}
+.openamps_block_map_height{
+	padding-right: 6px;
+	max-width: 16rem;
+}

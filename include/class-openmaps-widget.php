@@ -30,13 +30,15 @@ class Openmaps_Widget extends WP_Widget {
 			$data_escaped .= $args['before_title'] . $title . $args['after_title'];
 		}
 
-		$page_id = isset( $instance['page_id'] ) ? ' widget="widget-' . esc_attr( $args['id'] ) . '" id="' . esc_attr( $instance['page_id'] ) . '"' : '';
+		$page_id = isset( $instance['page_id'] ) ? ' widget="widget-' . esc_attr( $args['id'] ) . '" id="' . esc_attr( $instance['page_id'] ) . '"' : 0;
 
-		if ( strlen( $page_id ) ) {
-			$data_escaped .= do_shortcode( '[openmap' . $page_id . ']' );
-		} else {
-			$data_escaped .= esc_html_e( 'Please select a map from the widget editor', 'openmaps' );
-		}
+		$height = isset( $instance['height'] ) ? esc_attr( $instance['height'] ) : '300';
+		$height_um = isset( $instance['height_um'] ) ? esc_attr( $instance['height_um'] ) : 'px';
+
+		$map_height = ' height="' . $height . $height_um . '"';
+
+		$data_escaped .= do_shortcode( '[openmap' . $page_id . $map_height . ']' );
+
 		$data_escaped .= $args['after_widget'];
 		echo $data_escaped; // XSS ok.
 	}
@@ -47,6 +49,7 @@ class Openmaps_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
+		// Avalilable maps.
 		$title = isset( $instance['title'] ) ? $instance['title'] : '';
 		$page_id = isset( $instance['page_id'] ) ? $instance['page_id'] : '';
 		$args = array(
@@ -55,6 +58,11 @@ class Openmaps_Widget extends WP_Widget {
 			'fields' => 'ids',
 		);
 		$olmaps = get_posts( $args );
+
+		// Map height.
+		$height = isset( $instance['height'] ) ? $instance['height'] : '300';
+		$height_um = isset( $instance['height_um'] ) ? $instance['height_um'] : 'px';
+		$map_height = $height . $height_um;
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
@@ -66,14 +74,23 @@ class Openmaps_Widget extends WP_Widget {
 			type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
 		<p>
-		<select id="<?php echo esc_attr( $this->get_field_name( 'page_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'page_id' ) ); ?>" class="widefat">
-		<?php
-		foreach ( $olmaps as $mapid ) {
-			$maptitle = get_the_title( $mapid );
-			echo '<option ' . selected( $page_id, $mapid ) . ' value="' . esc_attr( $mapid ) . '">' . esc_attr( $maptitle ) . '</option>';
-		}
-		?>
-		</select>
+			<label><?php esc_html_e( 'Select a map to display', 'openmaps' ); ?></label>
+			<select id="<?php echo esc_attr( $this->get_field_name( 'page_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'page_id' ) ); ?>" class="widefat">
+			<?php
+			foreach ( $olmaps as $mapid ) {
+				$maptitle = get_the_title( $mapid );
+				echo '<option ' . selected( $page_id, $mapid ) . ' value="' . esc_attr( $mapid ) . '">' . esc_attr( $maptitle ) . '</option>';
+			}
+			?>
+			</select>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Map Height', 'openmaps' ); ?></label><br>
+			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" value="<?php echo esc_attr( $height ); ?>" style="vertical-align: middle;"> 
+			<select id="<?php echo esc_attr( $this->get_field_name( 'height_um' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height_um' ) ); ?>">
+				<option <?php selected( $height_um, 'px' ); ?> value="px">px</option>
+				<option <?php selected( $height_um, 'vh' ); ?> value="vh">vh</option>
+			</select>
 		</p>
 		<?php
 	}
@@ -90,6 +107,9 @@ class Openmaps_Widget extends WP_Widget {
 		$instance = array();
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 		$instance['page_id'] = ! empty( $new_instance['page_id'] ) ? strip_tags( $new_instance['page_id'] ) : '';
+
+		$instance['height'] = ! empty( $new_instance['height'] ) ? strip_tags( $new_instance['height'] ) : '';
+		$instance['height_um'] = ! empty( $new_instance['height_um'] ) ? strip_tags( $new_instance['height_um'] ) : '';
 
 		return $instance;
 	}

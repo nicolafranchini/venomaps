@@ -98,6 +98,8 @@ class Openmaps_Plugin {
 		$openmaps_vars = array(
 			'templates' => wp_json_encode( $templist ),
 			'_select_map' => __( 'Select a map to display', 'openmaps' ),
+			'_map_height' => __( 'Map Height', 'openmaps' ),
+			'_units' => __( 'units', 'openmaps' ),
 		);
 		wp_localize_script( 'openmaps-block', 'openmapsBlockVars', $openmaps_vars );
 		wp_enqueue_script( 'openmaps-block' );
@@ -144,10 +146,11 @@ class Openmaps_Plugin {
 
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ) ) ) {
 			$screen = get_current_screen();
+			$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
+
+			wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-admin' . $min . '.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
 
 			if ( is_object( $screen ) && 'openmaps' == $screen->post_type ) {
-
-				$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
 
 				wp_enqueue_media();
 				wp_enqueue_editor();
@@ -155,8 +158,7 @@ class Openmaps_Plugin {
 				wp_enqueue_style( 'openmaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
 				wp_enqueue_script( 'openmaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
 
-				wp_enqueue_script( 'openmaps-metabox', plugins_url( 'js/openmaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), WP_OPENMAPS_VERSION );
-				wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-admin' . $min . '.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
+				wp_enqueue_script( 'openmaps-admin', plugins_url( 'js/openmaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), WP_OPENMAPS_VERSION );
 			}
 		}
 	}
@@ -172,6 +174,7 @@ class Openmaps_Plugin {
 		$args = shortcode_atts(
 			array(
 				'id' => 0,
+				'height' => '',
 				'widget' => 0,
 			),
 			$atts
@@ -179,9 +182,16 @@ class Openmaps_Plugin {
 
 		$map_id = (int) esc_attr( $args['id'] );
 
-		$html_map_id = $map_id;
+		if ( ! $map_id ) {
+			$output = '<h4>- ' . __( 'No map selected', 'openmaps' ) . ' -</h4>';
+			return $output;
+		}
 
 		$widget = esc_attr( $args['widget'] );
+		$height = esc_attr( $args['height'] );
+		$map_height = strlen( $height ) ? $height : '500px';
+
+		$html_map_id = $map_id;
 
 		if ( strlen( $widget ) ) {
 			$html_map_id .= '_' . $widget;
@@ -208,9 +218,6 @@ class Openmaps_Plugin {
 		$styleurl = isset( $styles[ $stylekey ]['url'] ) ? $styles[ $stylekey ]['url'] : 0;
 		$styleurl = strlen( $styleurl ) ? $styleurl : 0;
 
-		$height = get_post_meta( $map_id, 'openmaps_height', true );
-		$height_um = get_post_meta( $map_id, 'openmaps_height_um', true );
-
 		// Load front-end scripts and styles.
 		wp_enqueue_style( 'openmaps-ol' );
 
@@ -230,7 +237,7 @@ class Openmaps_Plugin {
 		);
 
 		$output = '<div class="wrap-openmaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
-		$output .= '<div id="openmaps_' . $html_map_id . '" class="openmap" style="height: ' . $height . $height_um . ';"></div>';
+		$output .= '<div id="openmaps_' . $html_map_id . '" class="openmap" style="height: ' . $map_height . ';"></div>';
 
 		$output .= '<div style="display: none;" id="wrap-overlay-' . $html_map_id . '">';
 
@@ -401,16 +408,22 @@ class Openmaps_Plugin {
 		<?php
 	}
 
-
 	/**
 	 * Render shortcode field metabox
 	 *
 	 * @param WP_Post $post Post object.
 	 */
 	public function render_openmaps_shortcode_metabox( $post ) {
+
+		$height = get_post_meta( $post->ID, 'openmaps_height', true );
+		$height = $height ? $height : '500';
+
+		$height_um = get_post_meta( $post->ID, 'openmaps_height_um', true );
+		$height_um = $height_um ? $height_um : 'px';
+		$map_height = $height . $height_um;
 		?>
 		<fieldset>
-			<input type="text" class="large-text" name="" value='[openmap id="<?php echo esc_attr( $post->ID ); ?>"]' readonly>
+			<input type="text" class="large-text" name="" value='[openmap id="<?php echo esc_attr( $post->ID ); ?>" height="<?php echo esc_attr( $map_height ); ?>"]' readonly>
 		</fieldset>
 		<p><?php esc_html_e( 'Copy the shortcode and paste it inside your Post or Page', 'openmaps' ); ?><br>
 		<?php esc_html_e( 'You will also find OpenMaps among Blocks and Widgets', 'openmaps' ); ?></p>
