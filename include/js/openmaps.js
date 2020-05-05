@@ -108,14 +108,18 @@ jQuery(document).ready(function($) {
       $(this).closest('.ol-overlay-container').addClass('wpol-infopanel-active');
     });
 
-
+    // Close infopanel
     $(document).on('click', '.wpol-infopanel-close', function(){
       $(this).parent('.wpol-infopanel').fadeOut();
     });
 
     $(document).on('click', '.wpol-infomarker', function(){
-      var paneltarget = $(this).data('paneltarget');
-      $('#infopanel_' + paneltarget).fadeIn();
+      var paneltarget_id = $(this).data('paneltarget');
+      var paneltarget = $('#infopanel_' + paneltarget_id);
+      $('.ol-overlay-container').removeClass('wpol-infopanel-active');
+      paneltarget.closest('.ol-overlay-container').addClass('wpol-infopanel-active');
+      paneltarget.fadeIn();
+      
     });
 
 });

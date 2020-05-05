@@ -72,7 +72,6 @@ class Openmaps_Plugin {
 	 * Enqueue Gutenberg block script
 	 */
 	public function gutenberg_block() {
-		// wp_register_script( 'openmaps-block', plugins_url( 'block/openmaps-block.js', __FILE__ ), array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components' ), WP_OPENMAPS_VERSION, true );
 
 		wp_register_script(
 			'openmaps-block',

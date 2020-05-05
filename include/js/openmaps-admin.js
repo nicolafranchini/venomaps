@@ -60,6 +60,7 @@
 		clone.attr('data-index', cloneindexnew);
 		clone.find('input').attr('value', '');
 		clone.find('option:selected').removeAttr('selected');
+		clone.find('input:checked').prop('checked', false);
 
 		clone.find('input').each(function() {
 		    this.name = this.name.replace('['+cloneindex+']', '['+cloneindexnew+']');
@@ -168,8 +169,6 @@
 	if ( $('#wpol-admin-map').length && $('#infomarker_admin').length ) {
 		loadGeolocator( 'wpol-admin-map', 'infomarker_admin' );
 	}
-	
-
 
 	/*
 	 * Options page repeatable items
