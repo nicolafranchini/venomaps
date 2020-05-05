@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP OpenMaps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-03 15:48+0000\n"
-"PO-Revision-Date: 2020-05-03 15:55+0000\n"
+"POT-Creation-Date: 2020-05-05 00:54+0000\n"
+"PO-Revision-Date: 2020-05-05 00:56+0000\n"
 "Last-Translator: \n"
-"Language-Team: Italiano\n"
+"Language-Team: Italian\n"
 "Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
@@ -14,74 +14,78 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.3; wp-5.4.1"
 
-#: include/class-openmaps-plugin.php:238
+#: include/class-openmaps-plugin.php:101
+msgid "Select a map to display"
+msgstr "Seleziona una mappa da mostrare"
+
+#: include/class-openmaps-plugin.php:280
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: include/class-openmaps-plugin.php:248
+#: include/class-openmaps-plugin.php:290
 msgctxt "post type general name"
 msgid "OpenMaps"
 msgstr "OpenMaps"
 
-#: include/class-openmaps-plugin.php:249
+#: include/class-openmaps-plugin.php:291
 msgctxt "post type singular name"
 msgid "Map"
 msgstr "Map"
 
-#: include/class-openmaps-plugin.php:250 include/class-openmaps-plugin.php:251
+#: include/class-openmaps-plugin.php:292 include/class-openmaps-plugin.php:293
 msgid "Add new"
 msgstr "Aggiungi nuova"
 
-#: include/class-openmaps-plugin.php:252
+#: include/class-openmaps-plugin.php:294
 msgid "Edit map"
 msgstr "Modifica mappa"
 
-#: include/class-openmaps-plugin.php:253
+#: include/class-openmaps-plugin.php:295
 msgid "New map"
 msgstr "Nuova mappa"
 
-#: include/class-openmaps-plugin.php:254
+#: include/class-openmaps-plugin.php:296
 msgid "All maps"
 msgstr "Tutte le mappe"
 
-#: include/class-openmaps-plugin.php:255
+#: include/class-openmaps-plugin.php:297
 msgid "View map"
 msgstr "Visualizza mappa"
 
-#: include/class-openmaps-plugin.php:256
+#: include/class-openmaps-plugin.php:298
 msgid "Search maps"
 msgstr "Cerca mappe"
 
-#: include/class-openmaps-plugin.php:257
+#: include/class-openmaps-plugin.php:299
 msgid "No map found."
 msgstr "Nessuna mappa trovata."
 
-#: include/class-openmaps-plugin.php:258
+#: include/class-openmaps-plugin.php:300
 msgid "No Maps found in trash."
 msgstr "Nessuna mappa trovata nel cestino."
 
-#: include/class-openmaps-plugin.php:259 include/class-openmaps-options.php:73
+#: include/class-openmaps-plugin.php:301 include/class-openmaps-options.php:73
 #: include/class-openmaps-options.php:74
 msgid "OpenMaps"
 msgstr "OpenMaps"
 
-#: include/class-openmaps-plugin.php:296
+#: include/class-openmaps-plugin.php:338
 msgid "Map Shortcode"
 msgstr "Shortcode Mappa"
 
-#: include/class-openmaps-plugin.php:305
+#: include/class-openmaps-plugin.php:347
 msgid "Map Options"
 msgstr "Opzioni Mappa"
 
-#: include/class-openmaps-plugin.php:314
+#: include/class-openmaps-plugin.php:356
 msgid "Markers"
 msgstr "Segnaposti"
 
-#: include/class-openmaps-plugin.php:323
+#: include/class-openmaps-plugin.php:365
 msgid "Geolocation"
 msgstr "Geolocalizzazione"
 
-#: include/class-openmaps-plugin.php:339
+#: include/class-openmaps-plugin.php:381
 msgid ""
 "Search an address or click on the map to adjust the marker position and get "
 "the coordinates"
@@ -89,95 +93,99 @@ msgstr ""
 "Cerca un indirizzo o clicca sulla mappa per aggiornare la posizione del "
 "segnaposto e ottenere le coordinate"
 
-#: include/class-openmaps-plugin.php:345
+#: include/class-openmaps-plugin.php:387
 msgid "Search"
 msgstr "Cerca"
 
-#: include/class-openmaps-plugin.php:350 include/class-openmaps-plugin.php:439
-#: include/class-openmaps-plugin.php:530
+#: include/class-openmaps-plugin.php:392 include/class-openmaps-plugin.php:482
+#: include/class-openmaps-plugin.php:573
 msgid "Latitude"
 msgstr "Latitudine"
 
-#: include/class-openmaps-plugin.php:352 include/class-openmaps-plugin.php:441
-#: include/class-openmaps-plugin.php:532
+#: include/class-openmaps-plugin.php:394 include/class-openmaps-plugin.php:484
+#: include/class-openmaps-plugin.php:575
 msgid "Longitude"
 msgstr "Longitudine"
 
-#: include/class-openmaps-plugin.php:375
-msgid "Copy the shortcode and paste it in your Post or Page"
+#: include/class-openmaps-plugin.php:417
+msgid "Copy the shortcode and paste it inside your Post or Page"
 msgstr "Copia lo shortcode e incollalo in un Articolo o Pagina"
 
-#: include/class-openmaps-plugin.php:412 include/class-openmaps-options.php:101
+#: include/class-openmaps-plugin.php:418
+msgid "You will also find OpenMaps among Blocks and Widgets"
+msgstr "Troverai OpenMaps anche tra i Blocchi e i Widget"
+
+#: include/class-openmaps-plugin.php:455 include/class-openmaps-options.php:101
 msgid "Style"
 msgstr "Stile"
 
-#: include/class-openmaps-plugin.php:416
+#: include/class-openmaps-plugin.php:459
 msgid "Default"
 msgstr "Predefinito"
 
 #. "Settings Page" is the link to plugins settings page.
-#: include/class-openmaps-plugin.php:431
+#: include/class-openmaps-plugin.php:474
 #, php-format
 msgid "Add more Map Styles inside %1$sSettings Page%2$s."
 msgstr "Aggiungi nuovi stili dalla %1$spagina Impostazioni%2$s."
 
-#: include/class-openmaps-plugin.php:435 include/class-openmaps-plugin.php:526
+#: include/class-openmaps-plugin.php:478 include/class-openmaps-plugin.php:569
 msgid "Coordinates"
 msgstr "Coordinate"
 
-#: include/class-openmaps-plugin.php:443
+#: include/class-openmaps-plugin.php:486
 msgid "Get coordinates from the Geolocation box"
 msgstr "Ottieni coordinate dal riquadro Geolocalizzazione"
 
-#: include/class-openmaps-plugin.php:448
+#: include/class-openmaps-plugin.php:491
 msgid "Map Height"
 msgstr "Altezza Mappa"
 
-#: include/class-openmaps-plugin.php:461
+#: include/class-openmaps-plugin.php:504
 msgid "Zoom"
 msgstr "Zoom"
 
-#: include/class-openmaps-plugin.php:468
+#: include/class-openmaps-plugin.php:511
 msgid "Enable mouse wheel zoom"
 msgstr "Abilita zoom allo scroll del mouse"
 
-#: include/class-openmaps-plugin.php:538
+#: include/class-openmaps-plugin.php:581
 msgid "Size"
 msgstr "Dimensioni"
 
-#: include/class-openmaps-plugin.php:542
+#: include/class-openmaps-plugin.php:585
 msgid "Small"
 msgstr "Piccolo"
 
-#: include/class-openmaps-plugin.php:543
+#: include/class-openmaps-plugin.php:586
 msgid "Medium"
 msgstr "Medio"
 
-#: include/class-openmaps-plugin.php:544
+#: include/class-openmaps-plugin.php:587
 msgid "Large"
 msgstr "Grande"
 
-#: include/class-openmaps-plugin.php:545
+#: include/class-openmaps-plugin.php:588
 msgid "Extra Large"
 msgstr "Molto Grande"
 
-#: include/class-openmaps-plugin.php:551
+#: include/class-openmaps-plugin.php:594
 msgid "Custom Marker"
 msgstr "Segnaposto Personalizzato"
 
-#: include/class-openmaps-plugin.php:558
+#: include/class-openmaps-plugin.php:601
 msgid "Upload Media"
 msgstr "Carica file"
 
-#: include/class-openmaps-plugin.php:564
+#: include/class-openmaps-plugin.php:607
 msgid "Info Box"
 msgstr "Pannello Informazioni"
 
-#: include/class-openmaps-plugin.php:568
+#: include/class-openmaps-plugin.php:611
 msgid "Visible panel"
 msgstr "Pannello visibile"
 
-#: include/class-openmaps-plugin.php:589
+#: include/class-openmaps-plugin.php:632
 msgid "New marker"
 msgstr "Nuovo segnaposto"
 
@@ -231,8 +239,8 @@ msgstr ""
 "vettoriali supportate. Plugin basato su OpenLayers, OpenStreetMap e MapTiler."
 
 #. URI of the plugin
-msgid "http://veno.es/openmaps"
-msgstr "http://veno.es/openmaps"
+msgid "https://veno.es/openmaps"
+msgstr "https://veno.es/openmaps"
 
 #. Author of the plugin
 msgid "Nicola Franchini"

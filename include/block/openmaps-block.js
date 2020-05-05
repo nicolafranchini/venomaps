@@ -1,4 +1,4 @@
-( function( blocks, i18n, element, blockEditor, components ) {
+( function( blocks, element, blockEditor, components ) {
     const registerBlockType = blocks.registerBlockType,
     createBlock = blocks.createBlock,
     Placeholder = components.Placeholder,
@@ -6,7 +6,6 @@
     PanelBody = wp.components.PanelBody,
     InspectorControls = blockEditor.InspectorControls;
 
-    var __ = i18n.__;
     var el = element.createElement;
     var templates_active = [];
     var templates_active = [ { label: '--', value : '' } ];
@@ -43,7 +42,7 @@
                     el(
                         SelectControl,
                         {
-                            label: __( 'Select a map to display' ),
+                            label: openmapsBlockVars._select_map,
                             help : ' ',
                             options: templates_active,
                             value: map_id_init,
@@ -63,7 +62,6 @@
     } );
 }(
   window.wp.blocks,
-  window.wp.i18n,
   window.wp.element,
   window.wp.blockEditor,
   window.wp.components

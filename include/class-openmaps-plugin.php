@@ -79,7 +79,6 @@ class Openmaps_Plugin {
 			plugins_url( 'block/openmaps-block.js', __FILE__ ),
 			array(
 				'wp-blocks',
-				'wp-i18n',
 				'wp-element',
 				'wp-block-editor',
 				'wp-components',
@@ -99,8 +98,8 @@ class Openmaps_Plugin {
 		}
 		$openmaps_vars = array(
 			'templates' => wp_json_encode( $templist ),
+			'_select_map' => __( 'Select a map to display', 'openmaps' ),
 		);
-
 		wp_localize_script( 'openmaps-block', 'openmapsBlockVars', $openmaps_vars );
 		wp_enqueue_script( 'openmaps-block' );
 	}
