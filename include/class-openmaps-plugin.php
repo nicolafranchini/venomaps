@@ -30,23 +30,26 @@ class Openmaps_Plugin {
 		),
 		'terrain' => array(
 			'name' => 'Terrain',
-			'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
+			// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
+			'url' => '//stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
 			'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>.',
 		),
 		'toner' => array(
 			'name' => 'Toner',
-			'url' => 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
+			// 'url' => 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
+			'url' => '//stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
 			'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>',
 		),
 		'watercolor' => array(
 			'name' => 'Watercolor',
-			'url' => 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+			// 'url' => 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+			'url' => '//stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
 			'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
 
 		),
 		'wiki' => array(
 			'name' => 'WikiMedia',
-			'url' => 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+			'url' => '//maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
 			'attribution' => '<a target="_blank" href="https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		),
 	);
