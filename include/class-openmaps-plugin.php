@@ -31,18 +31,23 @@ class Openmaps_Plugin {
 		'wiki' => array(
 			'name' => 'WikiMedia',
 			'url' => 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+			'attribution' => '<a target="_blank" href="https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		),
 		'toner' => array(
 			'name' => 'Toner',
 			'url' => 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
+			'attribution' => '<a target="_blank" href="http://stamen.com">Stamen Design</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		),
 		'terrain' => array(
 			'name' => 'Terrain',
 			'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
+			'attribution' => '<a target="_blank" href="http://stamen.com">Stamen Design</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		),
 		'watercolor' => array(
 			'name' => 'Watercolor',
 			'url' => 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+			'attribution' => '<a target="_blank" href="http://stamen.com">Stamen Design</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+
 		),
 	);
 	/**
@@ -249,6 +254,8 @@ class Openmaps_Plugin {
 
 		$custom_style = array_key_exists( $stylekey, $this->styles_default ) || 'default' == $stylekey ? 0 : 1;
 
+		$attribution = isset( $styles[ $stylekey ]['attribution'] ) ? $styles[ $stylekey ]['attribution'] : 0;
+
 		// Load front-end scripts and styles.
 		wp_enqueue_style( 'openmaps-ol' );
 
@@ -267,6 +274,7 @@ class Openmaps_Plugin {
 			'zoom' => $zoom,
 			'zoom_scroll' => $zoom_scroll,
 			'stylekey' => $stylekey,
+			'attribution' => $attribution,
 		);
 
 		$output = '<div class="wrap-openmaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';

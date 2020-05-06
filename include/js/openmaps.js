@@ -7,14 +7,14 @@ jQuery(document).ready(function($) {
           return false;
         }
 
-        var mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, customStyle;
+        var mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, customStyle, attribution, getsource;
 
         mapid = infomap.mapid;
         maplat = infomap.lat;
         maplon = infomap.lon;
         styleUrl = infomap.style_url;
         customStyle = infomap.custom_style;
-
+        attribution = infomap.attribution;
         zoom = infomap.zoom;
         zoom_scroll = infomap.zoom_scroll;
 
@@ -27,15 +27,21 @@ jQuery(document).ready(function($) {
         var pos = ol.proj.fromLonLat([parseFloat(maplon), parseFloat(maplat)]);
 
         if ( customStyle == 0 ) {
-
           if ( styleUrl == 'default' ) {
-              var getsource = new ol.source.OSM();
+              getsource = new ol.source.OSM();
           } else {
-              var getsource = new ol.source.OSM({
-                'url' : styleUrl,
-              });
+            if ( attribution ) {
+                getsource = new ol.source.OSM({
+                  url : styleUrl,
+                  attributions: attribution
+                });
+            } else {
+                getsource = new ol.source.OSM({
+                  url : styleUrl,
+                });
+            }
           }
-          // Default Style
+          // Default Styles
           var map = new ol.Map({
             target: 'openmaps_' + mapid,
             view: new ol.View({
@@ -52,7 +58,7 @@ jQuery(document).ready(function($) {
            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
         } else {
-          // Custom Style
+          // Custom Styles
           var map = new ol.Map({
             target: 'openmaps_' + mapid,
             view: new ol.View({
@@ -106,7 +112,6 @@ jQuery(document).ready(function($) {
     // Init Maps
     $('.wrap-openmaps').each(function( index ) {
         var datamap = $( this ).data('infomap');
-        console.log(datamap)
         initOpenMaps( datamap );
     });
 
