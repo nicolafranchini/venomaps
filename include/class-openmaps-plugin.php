@@ -305,7 +305,7 @@ class Openmaps_Plugin {
 
 				if ( strlen( $infobox ) ) {
 					$output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
-					$output .= '<div class="wpol-infolabel">' . nl2br( $infobox ) . '</div>';
+					$output .= '<div class="wpol-infolabel">' . $infobox . '</div>';
 					$output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><img src="' . plugins_url( '/images/close-x.svg', __FILE__ ) . '"></div></div>';
 				}
 

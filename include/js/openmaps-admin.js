@@ -73,7 +73,7 @@
 		var text_editor = '<div class="wp-editor-container openmaps_marker_editor"><textarea id="openmaps_infobox_'+cloneindexnew+'" name="openmaps_marker['+cloneindexnew+'][infobox]" class="wp-editor-area" rows="4"></textarea></div>';
 		$(text_editor).appendTo('#wrap-clone-'+cloneindexnew);
 
-		wp.editor.initialize( 'openmaps_infobox_'+cloneindexnew, settings );
+		wp.editor.initialize( 'openmaps_infobox_'+cloneindexnew, om_editor_settings );
 
 		var removebtn = '<div class="wpol-remove-marker wpol-btn-link"><span class="dashicons dashicons-no"></span></div>';
 		$(removebtn).appendTo('#wrap-clone-'+cloneindexnew);

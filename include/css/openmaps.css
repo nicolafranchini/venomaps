@@ -59,6 +59,7 @@
 }
 .wpol-infopanel .wpol-infolabel{
   padding: 14px;
+  padding-right: 16px;
   background: #fff;
   -webkit-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
   -moz-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
@@ -71,6 +72,9 @@
 .wpol-infopanel .wpol-infolabel *{
   margin: 0;
   line-height: 1.2;
+}
+.wpol-infopanel .wpol-infolabel p{
+  margin-bottom: 4px;
 }
 .wpol-arrow{
   position: absolute;

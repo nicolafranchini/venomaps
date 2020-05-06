@@ -63,13 +63,12 @@ No, this plugin borns as an alternative to Google Maps, and is based on OpenStre
 
 == Screenshots ==
  
-1. Default Map
+1. Default Maps
 2. Custom map with markers
-3. InfoBox windows
-4. Map page settings
-5. Block
-6. Widgets
-7. General settings
+3. Map page settings
+4. Block
+5. Widgets
+6. General settings
 
 == Other Notes ==
 
