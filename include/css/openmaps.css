@@ -18,6 +18,7 @@
 .wpol-infomarker{
   display: block;
   margin: 0;
+  cursor: pointer;
 }
 .wpol-infomarker img{
   width: auto;

@@ -81,16 +81,27 @@ jQuery(document).ready(function($) {
             var markerint = parseFloat(datamarker.size);
             var markeroffset = (markerint * -1)/2;
             var labeloffset = (markerint + 12) * -1;
+
+            var marker_el = document.getElementById('infomarker_' + mapid + '_' + key);
             
             // Add Marker
             var infomarker = new ol.Overlay({
               position: markerpos,
               positioning: 'center-center',
               offset: [0, markeroffset],
-              element: document.getElementById('infomarker_' + mapid + '_' + key),
+              element: marker_el,
+              stopEvent: true
             });
 
             map.addOverlay(infomarker);
+
+
+            // Block marker dragging,
+            marker_el.addEventListener('mousedown', function(evt) {
+                evt.preventDefault();
+                return false;
+            });
+
 
             // Add infoPanel
             var infolabel = new ol.Overlay({
