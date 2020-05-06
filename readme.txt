@@ -86,6 +86,10 @@ Insert the Block OpenMaps inside your posts or page, or copy the shortcode from 
 
 Under Appearance > Widgets you will find a new widget **OpenMaps**. Add it to your sidebar, select the desired map from the dropdown menu and save.
 
+### Custom styles
+
+Create a free account at cloud.maptiler.com/maps/, select your favorite styles and paste them inside of Settings > OpenMaps
+
 == Changelog ==
 
 = 1.0 =
