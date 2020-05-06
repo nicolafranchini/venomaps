@@ -55,6 +55,7 @@ jQuery(document).ready(function($) {
                 source: getsource
               })
             ],
+                controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
         } else {
@@ -68,6 +69,7 @@ jQuery(document).ready(function($) {
               maxZoom: 24,
               minZoom: 1
             }),
+                controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
           olms.apply(map, styleUrl);

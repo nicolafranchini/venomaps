@@ -107,7 +107,7 @@ input.all-options.openmaps_custom_marker{
 }
 .openmaps-image-placeholder{
 	width: 120px;
-	padding: .5rem;
+	padding-right: 1rem;
 	display: inline-block;
 	box-sizing: border-box;
 	text-align: center;

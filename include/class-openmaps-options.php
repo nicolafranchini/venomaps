@@ -153,20 +153,20 @@ class Openmaps_Options {
 				<p>Default</p>
 			</div>
 			<div class="openmaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/wikimedia.jpg', __FILE__ ) ); ?>">
-				<p>Wikimedia</p>
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/terrain.jpg', __FILE__ ) ); ?>">
+				<p>Terrain</p>
 			</div>
 			<div class="openmaps-image-placeholder">
 				<img src="<?php echo esc_url( plugins_url( '/images/maps/toner.jpg', __FILE__ ) ); ?>">
 				<p>Toner</p>
 			</div>
 			<div class="openmaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/terrain.jpg', __FILE__ ) ); ?>">
-				<p>Terrain</p>
-			</div>
-			<div class="openmaps-image-placeholder">
 				<img src="<?php echo esc_url( plugins_url( '/images/maps/watercolor.jpg', __FILE__ ) ); ?>">
 				<p>Watercolor</p>
+			</div>
+			<div class="openmaps-image-placeholder">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/wikimedia.jpg', __FILE__ ) ); ?>">
+				<p>Wikimedia</p>
 			</div>
 		</div>
 

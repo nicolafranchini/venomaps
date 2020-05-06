@@ -107,8 +107,11 @@
 .ol-attribution *{
   font-size: 9px;
 }
-.ol-control,
-.ol-control:hover{
+.ol-control{
+  padding: 0;
+}
+.ol-control.ol-zoom,
+.ol-control.ol-zoom:hover{
   background:none;
   z-index: 9;
 }
