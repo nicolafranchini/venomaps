@@ -118,3 +118,9 @@ input.all-options.openmaps_custom_marker{
 	border: 1px solid #7e8993;
 	display: block;
 }
+.openamps_block_map_id{
+	width: 100%;
+}
+.openamps_block_map_id select{
+	max-width: none;
+}

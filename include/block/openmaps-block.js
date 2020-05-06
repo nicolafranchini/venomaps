@@ -56,7 +56,8 @@
                             value: map_id_init,
                             onChange: function(value) {
                                 props.setAttributes({map_id: value});
-                            }
+                            },
+                            className: 'openamps_block_map_id'
                         }
                     ),
                     el(
