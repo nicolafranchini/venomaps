@@ -19,6 +19,33 @@ class Openmaps_Plugin {
 	private static $instance = null;
 
 	/**
+	 * Default map styles.
+	 *
+	 * @var $styles_default
+	 */
+	private $styles_default = array(
+		'default' => array(
+			'name' => 'Default',
+			'url' => 'default',
+		),
+		'wiki' => array(
+			'name' => 'WikiMedia',
+			'url' => 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+		),
+		'toner' => array(
+			'name' => 'Toner',
+			'url' => 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
+		),
+		'terrain' => array(
+			'name' => 'Terrain',
+			'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
+		),
+		'watercolor' => array(
+			'name' => 'Watercolor',
+			'url' => 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+		),
+	);
+	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @return  Openmaps_Plugin a single instance of this class.
@@ -36,6 +63,9 @@ class Openmaps_Plugin {
 	 * Initializes the plugin
 	 */
 	private function __construct() {
+
+		// $styles_default = $this->styles_default;
+
 		require dirname( __FILE__ ) . '/class-openmaps-options.php';
 		require dirname( __FILE__ ) . '/class-openmaps-widget.php';
 	}
@@ -131,7 +161,7 @@ class Openmaps_Plugin {
 
 		wp_register_style( 'openmaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
 		wp_register_script( 'openmaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
-		wp_register_script( 'openmaps-olms', plugins_url( 'ol/olms.js', __FILE__ ), array( 'openmaps-ol' ), '5.0.2', true );
+		wp_register_script( 'openmaps-olms', plugins_url( 'ol/olms.js', __FILE__ ), array( 'openmaps-ol' ), '6.1.1', true );
 
 		wp_register_style( 'openmaps-style', plugins_url( 'css/openmaps' . $min . '.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
 		wp_register_script( 'openmaps-script', plugins_url( 'js/openmaps' . $min . '.js', __FILE__ ), array( 'jquery', 'openmaps-ol' ), WP_OPENMAPS_VERSION, true );
@@ -204,8 +234,6 @@ class Openmaps_Plugin {
 		$lon = get_post_meta( $map_id, 'openmaps_lon', true );
 		$lon = $lon ? $lon : '-74.005974';
 
-		$stylekey = get_post_meta( $map_id, 'openmaps_style', true );
-
 		$zoom = get_post_meta( $map_id, 'openmaps_zoom', true );
 		$zoom = $zoom ? $zoom : 12;
 
@@ -213,10 +241,13 @@ class Openmaps_Plugin {
 
 		// General settings.
 		$settings = get_option( 'openmaps_settings' );
-		$styles = $settings['style'];
 
-		$styleurl = isset( $styles[ $stylekey ]['url'] ) ? $styles[ $stylekey ]['url'] : 0;
-		$styleurl = strlen( $styleurl ) ? $styleurl : 0;
+		$styles = array_merge( $this->styles_default, $settings['style'] );
+		$stylekey = get_post_meta( $map_id, 'openmaps_style', true );
+		$styleurl = isset( $styles[ $stylekey ]['url'] ) ? $styles[ $stylekey ]['url'] : 'default';
+		$styleurl = strlen( $styleurl ) ? $styleurl : 'default';
+
+		$custom_style = array_key_exists( $stylekey, $this->styles_default ) || 'default' == $stylekey ? 0 : 1;
 
 		// Load front-end scripts and styles.
 		wp_enqueue_style( 'openmaps-ol' );
@@ -231,9 +262,11 @@ class Openmaps_Plugin {
 			'mapid' => $html_map_id,
 			'lat' => $lat,
 			'lon' => $lon,
-			'style' => $styleurl,
+			'style_url' => $styleurl,
+			'custom_style' => $custom_style,
 			'zoom' => $zoom,
 			'zoom_scroll' => $zoom_scroll,
+			'stylekey' => $stylekey,
 		);
 
 		$output = '<div class="wrap-openmaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
@@ -448,7 +481,6 @@ class Openmaps_Plugin {
 		// Map style.
 		$stylekey = get_post_meta( $post->ID, 'openmaps_style', true );
 		$settings = get_option( 'openmaps_settings' );
-		$styles = $settings['style'];
 
 		$zoom_scroll = get_post_meta( $post->ID, 'openmaps_zoom_scroll', true );
 
@@ -467,12 +499,13 @@ class Openmaps_Plugin {
 			<fieldset>
 				<div class="wpol-form-group">
 				<select name="openmaps_style" class="all-options">
-					<option value=""><?php esc_html_e( 'Default', 'openmaps' ); ?></option>
 				<?php
+				$styles = array_merge( $this->styles_default, $settings['style'] );
+
 				foreach ( $styles as $key => $value ) {
 					if ( isset( $value['url'] ) && strlen( $value['url'] ) ) {
 						?>
-						<option <?php selected( $stylekey, $key ); ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_attr( $value['name'] ); ?></option>
+					<option <?php selected( $stylekey, $key ); ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_attr( $value['name'] ); ?></option>
 						<?php
 					}
 				}
@@ -682,7 +715,7 @@ class Openmaps_Plugin {
 
 		update_post_meta( $post_id, 'openmaps_lon', $lon );
 
-		$style = filter_input( INPUT_POST, 'openmaps_style', FILTER_SANITIZE_NUMBER_INT );
+		$style = filter_input( INPUT_POST, 'openmaps_style', FILTER_SANITIZE_STRING );
 		update_post_meta( $post_id, 'openmaps_style', $style );
 
 		$height = filter_input( INPUT_POST, 'openmaps_height', FILTER_SANITIZE_STRING );

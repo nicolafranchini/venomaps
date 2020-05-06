@@ -11,13 +11,6 @@ class Openmaps_Options {
 	private static $instance = null;
 
 	/**
-	 * Saved options
-	 *
-	 * @var $options
-	 */
-	private $options;
-
-	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @return  Openmaps_Options A single instance of this class.
@@ -59,8 +52,6 @@ class Openmaps_Options {
 		}
 
 		$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
-		// wp_enqueue_style( 'openmaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
-		// wp_enqueue_script( 'openmaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
 		wp_enqueue_script( 'openmaps-box-image', plugins_url( 'js/openmaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), WP_OPENMAPS_VERSION );
 		wp_enqueue_style( 'openmaps-admin', plugins_url( 'css/openmaps-admin' . $min . '.css', __FILE__ ), array(), WP_OPENMAPS_VERSION );
 	}
@@ -127,6 +118,17 @@ class Openmaps_Options {
 				}
 			}
 		}
+
+		$cleanstyles = array();
+
+		if ( is_array( $valid_fields ) ) {
+			foreach ( $valid_fields as $key => $value ) {
+				if ( isset( $value['url'] ) && strlen( $value['url'] ) ) {
+					$cleanstyles[ $key ] = $value;
+				}
+			}
+		}
+
 		return apply_filters( 'validate_options', $valid_fields, $fields );
 	}
 
@@ -142,7 +144,6 @@ class Openmaps_Options {
 	public function style_settings_field() {
 
 		$style = isset( $this->options['style'] ) ? $this->options['style'] : false;
-		// var_dump( $style ); // debug.
 		?>
 		<h2><?php esc_html_e( 'Custom Maps', 'openmaps' ); ?></h2>
 		<p>

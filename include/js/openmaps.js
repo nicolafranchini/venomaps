@@ -2,18 +2,19 @@ jQuery(document).ready(function($) {
     'use strict';
 
     function initOpenMaps( infomap ){
-
         if (typeof ol === 'undefined' || ol === null) {
           console.log('WARNING: OpenLayers Library not loaded');
           return false;
         }
 
-        var mapid, maplat, maplon, styleJson, zoom, zoom_scroll;
+        var mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, customStyle;
 
         mapid = infomap.mapid;
         maplat = infomap.lat;
         maplon = infomap.lon;
-        styleJson = infomap.style;
+        styleUrl = infomap.style_url;
+        customStyle = infomap.custom_style;
+
         zoom = infomap.zoom;
         zoom_scroll = infomap.zoom_scroll;
 
@@ -25,27 +26,33 @@ jQuery(document).ready(function($) {
 
         var pos = ol.proj.fromLonLat([parseFloat(maplon), parseFloat(maplat)]);
 
-        if ( styleJson == 0 ) {
+        if ( customStyle == 0 ) {
 
-          // Default Map
+          if ( styleUrl == 'default' ) {
+              var getsource = new ol.source.OSM();
+          } else {
+              var getsource = new ol.source.OSM({
+                'url' : styleUrl,
+              });
+          }
+          // Default Style
           var map = new ol.Map({
             target: 'openmaps_' + mapid,
             view: new ol.View({
               center: pos,
               zoom: zoom,
               maxZoom: 24,
-              minZoom: 1
+              minZoom: 1,
             }),
             layers: [
               new ol.layer.Tile({
-                source: new ol.source.OSM()
+                source: getsource
               })
             ],
            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
         } else {
-
-          // Custom Map
+          // Custom Style
           var map = new ol.Map({
             target: 'openmaps_' + mapid,
             view: new ol.View({
@@ -57,7 +64,7 @@ jQuery(document).ready(function($) {
             }),
            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
-          olms.apply(map, styleJson);
+          olms.apply(map, styleUrl);
         }
 
         $('#wrap-overlay-' + mapid + ' .wpol-infomarker').each(function(key){
@@ -99,6 +106,7 @@ jQuery(document).ready(function($) {
     // Init Maps
     $('.wrap-openmaps').each(function( index ) {
         var datamap = $( this ).data('infomap');
+        console.log(datamap)
         initOpenMaps( datamap );
     });
 
@@ -118,8 +126,7 @@ jQuery(document).ready(function($) {
       var paneltarget = $('#infopanel_' + paneltarget_id);
       $('.ol-overlay-container').removeClass('wpol-infopanel-active');
       paneltarget.closest('.ol-overlay-container').addClass('wpol-infopanel-active');
-      paneltarget.fadeIn();
-      
+      paneltarget.fadeIn();      
     });
 
 });
