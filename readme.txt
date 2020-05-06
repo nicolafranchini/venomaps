@@ -67,7 +67,7 @@ No, this plugin borns as an alternative to Google Maps, and is based on OpenStre
 2. Custom map with markers
 3. Map page settings
 4. Block
-5. Widgets
+5. Widget
 6. General settings
 
 == Other Notes ==
