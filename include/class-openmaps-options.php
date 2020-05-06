@@ -145,6 +145,31 @@ class Openmaps_Options {
 
 		$style = isset( $this->options['style'] ) ? $this->options['style'] : false;
 		?>
+
+		<h2><?php esc_html_e( 'Default Maps', 'openmaps' ); ?></h2>
+		<div class="openmaps-default-maps">
+			<div class="openmaps-image-placeholder">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/default.jpg', __FILE__ ) ); ?>">
+				<p>Default</p>
+			</div>
+			<div class="openmaps-image-placeholder">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/wikimedia.jpg', __FILE__ ) ); ?>">
+				<p>Wikimedia</p>
+			</div>
+			<div class="openmaps-image-placeholder">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/toner.jpg', __FILE__ ) ); ?>">
+				<p>Toner</p>
+			</div>
+			<div class="openmaps-image-placeholder">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/terrain.jpg', __FILE__ ) ); ?>">
+				<p>Terrain</p>
+			</div>
+			<div class="openmaps-image-placeholder">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/watercolor.jpg', __FILE__ ) ); ?>">
+				<p>Watercolor</p>
+			</div>
+		</div>
+
 		<h2><?php esc_html_e( 'Custom Maps', 'openmaps' ); ?></h2>
 		<p>
 		<?php

@@ -101,3 +101,20 @@ input.all-options.openmaps_custom_marker{
 	padding-right: 6px;
 	max-width: 16rem;
 }
+.openmaps-default-maps{
+	width: 100%;
+	display: block;
+}
+.openmaps-image-placeholder{
+	width: 120px;
+	padding: .5rem;
+	display: inline-block;
+	box-sizing: border-box;
+	text-align: center;
+}
+.openmaps-image-placeholder img{
+	max-width: 100%;
+	height: auto;
+	border: 1px solid #7e8993;
+	display: block;
+}
