@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
     'use strict';
 
-    function initOpenMaps( infomap ){
+    function initVenoMaps( infomap ){
         if (typeof ol === 'undefined' || ol === null) {
           console.log('WARNING: OpenLayers Library not loaded');
           return false;
@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
           }
           // Default Styles
           var map = new ol.Map({
-            target: 'openmaps_' + mapid,
+            target: 'venomaps_' + mapid,
             view: new ol.View({
               center: pos,
               zoom: zoom,
@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
         } else {
           // Custom Styles
           var map = new ol.Map({
-            target: 'openmaps_' + mapid,
+            target: 'venomaps_' + mapid,
             view: new ol.View({
               constrainResolution: true,
               center: pos,
@@ -123,9 +123,9 @@ jQuery(document).ready(function($) {
     }
 
     // Init Maps
-    $('.wrap-openmaps').each(function( index ) {
+    $('.wrap-venomaps').each(function( index ) {
         var datamap = $( this ).data('infomap');
-        initOpenMaps( datamap );
+        initVenoMaps( datamap );
     });
 
     // Toggle infoPanel

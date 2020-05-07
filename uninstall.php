@@ -1,1 +1,1 @@
-<?php delete_option( 'openmaps_settings' );
+<?php delete_option( 'venomaps_settings' );

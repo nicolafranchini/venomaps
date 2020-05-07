@@ -2,16 +2,16 @@
 /**
  * Widget class
  */
-class Openmaps_Widget extends WP_Widget {
+class Venomaps_Widget extends WP_Widget {
 
 	/**
 	 * Initializes the widget
 	 */
 	public function __construct() {
 		parent::__construct(
-			'openmaps_widget', // Base ID.
+			'venomaps_widget', // Base ID.
 			__( 'OpenMaps', 'wpb_widget_domain' ), // Name.
-			array( 'description' => __( 'Displays one of your custom OpenMaps', 'openmaps' ) ) // Args.
+			array( 'description' => __( 'Displays one of your custom OpenMaps', 'venomaps' ) ) // Args.
 		);
 	}
 
@@ -37,7 +37,7 @@ class Openmaps_Widget extends WP_Widget {
 
 		$map_height = ' height="' . $height . $height_um . '"';
 
-		$data_escaped .= do_shortcode( '[openmap' . $page_id . $map_height . ']' );
+		$data_escaped .= do_shortcode( '[venomap' . $page_id . $map_height . ']' );
 
 		$data_escaped .= $args['after_widget'];
 		echo $data_escaped; // XSS ok.
@@ -53,7 +53,7 @@ class Openmaps_Widget extends WP_Widget {
 		$title = isset( $instance['title'] ) ? $instance['title'] : '';
 		$page_id = isset( $instance['page_id'] ) ? $instance['page_id'] : '';
 		$args = array(
-			'post_type' => 'openmaps',
+			'post_type' => 'venomaps',
 			'numberposts' => -1,
 			'fields' => 'ids',
 		);
@@ -66,7 +66,7 @@ class Openmaps_Widget extends WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
-				<?php echo esc_html__( 'Title', 'openmaps' ); ?>:
+				<?php echo esc_html__( 'Title', 'venomaps' ); ?>:
 			</label> 
 			<input class="widefat" 
 			id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" 
@@ -74,7 +74,7 @@ class Openmaps_Widget extends WP_Widget {
 			type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Select a map to display', 'openmaps' ); ?></label>
+			<label><?php esc_html_e( 'Select a map to display', 'venomaps' ); ?></label>
 			<select id="<?php echo esc_attr( $this->get_field_name( 'page_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'page_id' ) ); ?>" class="widefat">
 			<?php
 			foreach ( $olmaps as $mapid ) {
@@ -85,7 +85,7 @@ class Openmaps_Widget extends WP_Widget {
 			</select>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Map Height', 'openmaps' ); ?></label><br>
+			<label><?php esc_html_e( 'Map Height', 'venomaps' ); ?></label><br>
 			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" value="<?php echo esc_attr( $height ); ?>" style="vertical-align: middle;"> 
 			<select id="<?php echo esc_attr( $this->get_field_name( 'height_um' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height_um' ) ); ?>">
 				<option <?php selected( $height_um, 'px' ); ?> value="px">px</option>

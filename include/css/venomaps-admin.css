@@ -1,4 +1,4 @@
-.openmap {
+.venomap {
 	height: 450px;
 	width: 100%;
 	font-family: arial, helvetica, sans-serif;
@@ -81,46 +81,46 @@
 .wpol-btn-link:hover{
 	color: #DC3232;
 }
-.openmaps_custom_marker-wrap{
+.venomaps_custom_marker-wrap{
 	position: relative;
 	display: inline-block;
 }
 
-input.all-options.openmaps_custom_marker{
+input.all-options.venomaps_custom_marker{
 	padding-right: 3em;
 }
 
-.openmaps_custom_marker-wrap .openmaps_marker_remove_btn{
+.venomaps_custom_marker-wrap .venomaps_marker_remove_btn{
 	position: absolute;
 	right: 0;
 }
-.openamps_block_map_units select{
+.venomaps_block_map_units select{
 	margin-top: 0;
 }
-.openamps_block_map_height{
+.venomaps_block_map_height{
 	padding-right: 6px;
 	max-width: 16rem;
 }
-.openmaps-default-maps{
+.venomaps-default-maps{
 	width: 100%;
 	display: block;
 }
-.openmaps-image-placeholder{
+.venomaps-image-placeholder{
 	width: 120px;
 	padding-right: 1rem;
 	display: inline-block;
 	box-sizing: border-box;
 	text-align: center;
 }
-.openmaps-image-placeholder img{
+.venomaps-image-placeholder img{
 	max-width: 100%;
 	height: auto;
 	border: 1px solid #7e8993;
 	display: block;
 }
-.openamps_block_map_id{
+.venomaps_block_map_id{
 	width: 100%;
 }
-.openamps_block_map_id select{
+.venomaps_block_map_id select{
 	max-width: none;
 }

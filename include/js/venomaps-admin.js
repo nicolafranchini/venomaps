@@ -1,5 +1,5 @@
 /*!
- * openmaps admin scripts
+ * venomaps admin scripts
  *
  * Copyright 2020 Nicola Franchini
  */
@@ -10,8 +10,8 @@
 	 * Load media library
 	 */
 	var om_metaImageFrame;
-	$(document).on('click', '.openmaps_marker_upload_btn', function(e){
-		var field = $( this ).prev('.openmaps_custom_marker-wrap').find( '.openmaps_custom_marker' );
+	$(document).on('click', '.venomaps_marker_upload_btn', function(e){
+		var field = $( this ).prev('.venomaps_custom_marker-wrap').find( '.venomaps_custom_marker' );
 		e.preventDefault();
 		om_metaImageFrame = wp.media.frames.om_metaImageFrame = wp.media();
 		om_metaImageFrame.on('select', function() {
@@ -21,8 +21,8 @@
 		om_metaImageFrame.open();
 	});
 
-	$(document).on('click', '.openmaps_marker_remove_btn', function(e){
-		var field = $( this ).parent().find( '.openmaps_custom_marker' );
+	$(document).on('click', '.venomaps_marker_remove_btn', function(e){
+		var field = $( this ).parent().find( '.venomaps_custom_marker' );
 		e.preventDefault();
 		$( field ).val('');
 	});
@@ -36,7 +36,7 @@
 	        'buttons': 'strong,em,link,ul,ol,li,del,close'
 	    }
 	}
-	$('.openmaps_marker_editor').each(function(){
+	$('.venomaps_marker_editor').each(function(){
 		var editorid = $(this).find('textarea').attr('id');
 		wp.editor.initialize( editorid, om_editor_settings );
 	});
@@ -70,10 +70,10 @@
 
 		clone.appendTo('#wrap-clone-'+cloneindexnew);
 
-		var text_editor = '<div class="wp-editor-container openmaps_marker_editor"><textarea id="openmaps_infobox_'+cloneindexnew+'" name="openmaps_marker['+cloneindexnew+'][infobox]" class="wp-editor-area" rows="4"></textarea></div>';
+		var text_editor = '<div class="wp-editor-container venomaps_marker_editor"><textarea id="venomaps_infobox_'+cloneindexnew+'" name="venomaps_marker['+cloneindexnew+'][infobox]" class="wp-editor-area" rows="4"></textarea></div>';
 		$(text_editor).appendTo('#wrap-clone-'+cloneindexnew);
 
-		wp.editor.initialize( 'openmaps_infobox_'+cloneindexnew, om_editor_settings );
+		wp.editor.initialize( 'venomaps_infobox_'+cloneindexnew, om_editor_settings );
 
 		var removebtn = '<div class="wpol-remove-marker wpol-btn-link"><span class="dashicons dashicons-no"></span></div>';
 		$(removebtn).appendTo('#wrap-clone-'+cloneindexnew);
@@ -125,8 +125,8 @@
 		map.on('click', function(evt) {
 			var coordinate = evt.coordinate;
 			var lonlat = ol.proj.toLonLat(coordinate);
-			$('.openmaps-get-lat').val(lonlat[1]);
-			$('.openmaps-get-lon').val(lonlat[0]);
+			$('.venomaps-get-lat').val(lonlat[1]);
+			$('.venomaps-get-lon').val(lonlat[0]);
 			infomarker.setPosition(coordinate);
 		});
 
@@ -140,15 +140,15 @@
 			view.setCenter(newcoord);
 			view.setZoom(6);
 
-			$('.openmaps-get-lat').val(lat);
-			$('.openmaps-get-lon').val(lon);
+			$('.venomaps-get-lat').val(lat);
+			$('.venomaps-get-lon').val(lon);
 		}
 
 		// Get coordinates from Address.
-		$('.openmaps-get-coordinates').on('click', function(){
+		$('.venomaps-get-coordinates').on('click', function(){
 
 			var button = $(this);
-			var address = $('.openmaps-set-address').val()
+			var address = $('.venomaps-set-address').val()
 
 			if ( address.length > 3 ) {
 				button.hide();
@@ -177,7 +177,7 @@
 		var repgroup = $('.wpol-repeatable-group');
 		var lastitemnum = $('.wpol-repeatable-item').last().data('number');
 		var newnum = parseFloat(lastitemnum) + 1;
-		var newitem = '<div class="wpol-repeatable-item wpol-form-group" data-number="'+newnum+'"><input type="text" class="all-options" name="openmaps_settings[style]['+newnum+'][name]" value="map style '+newnum+'"> <input type="url" class="regular-text" name="openmaps_settings[style]['+newnum+'][url]" value="" placeholder="https://api.maptiler.com/maps/.../style.json?key=..."></div>';
+		var newitem = '<div class="wpol-repeatable-item wpol-form-group" data-number="'+newnum+'"><input type="text" class="all-options" name="venomaps_settings[style]['+newnum+'][name]" value="map style '+newnum+'"> <input type="url" class="regular-text" name="venomaps_settings[style]['+newnum+'][url]" value="" placeholder="https://api.maptiler.com/maps/.../style.json?key=..."></div>';
 		$('.wpol-repeatable-group').append(newitem);
 	});
 

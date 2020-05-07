@@ -8,7 +8,7 @@
     var el = element.createElement;
     var templates_active = [];
     var templates_active = [ { label: '--', value : '' } ];
-    var templates = JSON.parse( openmapsBlockVars.templates );
+    var templates = JSON.parse( venomapsBlockVars.templates );
 
     Object.keys(templates).forEach(function(index) {
       templates_active.push({ label: templates[index], value : index });  
@@ -19,7 +19,7 @@
         { label: 'vh', value: 'vh' }
     ];
 
-    registerBlockType( 'openmaps/openmap', {
+    registerBlockType( 'venomaps/venomap', {
         title: 'OpenMaps',
         // description: '',
         icon: 'location-alt',
@@ -43,47 +43,47 @@
                 el(
                     Placeholder, 
                     {
-                        key: 'openmap-placeholder',
+                        key: 'venomap-placeholder',
                         icon: 'location-alt',
                         label: "OpenMap",
                     },
                     el(
                         SelectControl,
                         {
-                            label: openmapsBlockVars._select_map,
+                            label: venomapsBlockVars._select_map,
                             // help : ' ',
                             options: templates_active,
                             value: map_id_init,
                             onChange: function(value) {
                                 props.setAttributes({map_id: value});
                             },
-                            className: 'openamps_block_map_id'
+                            className: 'venomaps_block_map_id'
                         }
                     ),
                     el(
                         TextControl,
                         {
-                            label: openmapsBlockVars._map_height,
+                            label: venomapsBlockVars._map_height,
                             type: 'number',
                             value: height_init,
                             onChange: function(value) {
                                 var state = value ? value : 500;
                                 props.setAttributes({height: state});
                             },
-                            className: 'openamps_block_map_height'
+                            className: 'venomaps_block_map_height'
                         },
                     ),
                     el(
                         SelectControl,
                         {
-                            label: openmapsBlockVars._units,
+                            label: venomapsBlockVars._units,
                             options: unit_list,
                             value: height_um_init,
                             onChange: function(value) {
                                 var state = value ? value : 'px';
                                 props.setAttributes({height_um: state});
                             },
-                            className: 'openamps_block_map_units'
+                            className: 'venomaps_block_map_units'
                         }
                     )
                 )
@@ -91,7 +91,7 @@
         },
         save: function (props) {
             return el(
-                'div', {}, '[openmap id="' + props.attributes.map_id + '" height="' + props.attributes.height + props.attributes.height_um + '"]'
+                'div', {}, '[venomap id="' + props.attributes.map_id + '" height="' + props.attributes.height + props.attributes.height_um + '"]'
             )
         }
     } );
