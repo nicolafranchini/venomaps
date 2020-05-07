@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0
-Stable tag: 1.0
+Version: 1.0.0
+Stable tag: 1.0.0
 Tested up to: 5.4
 Requires at least: 4.0
 Requires PHP: 5.3
