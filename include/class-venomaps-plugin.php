@@ -493,7 +493,6 @@ class Venomaps_Plugin {
 		// Map style.
 		$stylekey = get_post_meta( $post->ID, 'venomaps_style', true );
 		$settings = get_option( 'venomaps_settings' );
-
 		$custom_styles = is_array( $settings['style'] ) ? $settings['style'] : array();
 
 		$zoom_scroll = get_post_meta( $post->ID, 'venomaps_zoom_scroll', true );
@@ -727,7 +726,6 @@ class Venomaps_Plugin {
 
 		$lon = filter_input( INPUT_POST, 'venomaps_lon', FILTER_SANITIZE_STRING );
 		$lon = $lon ? esc_attr( $lon ) : '-74.005974';
-
 		update_post_meta( $post_id, 'venomaps_lon', $lon );
 
 		$style = filter_input( INPUT_POST, 'venomaps_style', FILTER_SANITIZE_STRING );
@@ -758,7 +756,7 @@ class Venomaps_Plugin {
 			$markervars['size'] = esc_attr( $value['size'] );
 			$markervars['icon'] = esc_url_raw( $value['icon'] );
 			$markervars['infobox'] = wp_kses_post( $value['infobox'] );
-			$markervars['infobox_open'] = (int) $value['infobox_open'];
+			$markervars['infobox_open'] = isset( $value['infobox_open'] ) ? 1 : 0;
 
 			// $markervars = filter_var_array( $value, $markerargs, true );
 			if ( strlen( $markervars['lat'] ) && strlen( $markervars['lon'] ) ) {

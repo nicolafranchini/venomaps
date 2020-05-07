@@ -20,7 +20,7 @@
     ];
 
     registerBlockType( 'venomaps/venomap', {
-        title: 'OpenMaps',
+        title: 'VenoMaps',
         // description: '',
         icon: 'location-alt',
         category: 'widgets',
@@ -45,7 +45,7 @@
                     {
                         key: 'venomap-placeholder',
                         icon: 'location-alt',
-                        label: "OpenMap",
+                        label: "VenoMap",
                     },
                     el(
                         SelectControl,
