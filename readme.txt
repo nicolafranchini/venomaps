@@ -1,4 +1,4 @@
-=== OpenMaps ===
+=== VenoMaps ===
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
@@ -7,8 +7,8 @@ Stable tag: 1.0
 Tested up to: 5.4
 Requires at least: 4.0
 Requires PHP: 5.3
-Plugin Name: OpenMaps
-Plugin URI: https://veno.es/openmaps/
+Plugin Name: VenoMaps
+Plugin URI: https://veno.es/venomaps/
 Description: Create maps with custom styles, multiple markers, info windows with rich text editors. Widget and Block available. Vector maps supported.
 Tags: map, openlayers, openstreetmap, wikimedia, block, widget, maptiler, gmaps, geolocation, places, responsive
 Author URI: https://veno.es/
@@ -16,11 +16,11 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://www.paypal.me/venoes
 
-OpenMaps is a simple and lightweight plugin to quickly create custom Maps.
+VenoMaps is a simple and lightweight plugin to quickly create custom Maps.
 
 == Description ==
 
-This plugin creates custom maps which can be placed anywhere in your WordPress website: Pages, Posts, Widgets. Upload your custom markers, select a size, set the map's and the markers' coordinates, select a custom style for the map, insert some html content for the popup info boxes and publish your map. The OpenMaps page also offers some geolocation utilities to get the coordinates typing an address, or placing the marker in a specific position on the map. OpenMaps Block available.
+This plugin creates custom maps which can be placed anywhere in your WordPress website: Pages, Posts, Widgets. Upload your custom markers, select a size, set the map's and the markers' coordinates, select a custom style for the map, insert some html content for the popup info boxes and publish your map. The VenoMaps page also offers some geolocation utilities to get the coordinates typing an address, or placing the marker in a specific position on the map. VenoMaps Block available.
 
 ### Features
 
@@ -38,12 +38,12 @@ This plugin creates custom maps which can be placed anywhere in your WordPress w
 
 == Installation ==
 
-Upload the plugin folder `openmaps` to the `/wp-content/plugins/` directory
+Upload the plugin folder `venomaps` to the `/wp-content/plugins/` directory
 Activate the plugin through the Plugins menu in WordPress
-Create a new map under OpenMaps > Add New
-Select the generated shortcode and insert it inside any post or page, or search OpenMaps among Blocks
-Use the OpenMaps widget to select a map and insert it inside your sidebars
-Optionally add new styles inside Settings > OpenMaps
+Create a new map under VenoMaps > Add New
+Select the generated shortcode and insert it inside any post or page, or search VenoMaps among Blocks
+Use the VenoMaps widget to select a map and insert it inside your sidebars
+Optionally add new styles inside Settings > VenoMaps
 
 == Frequently Asked Questions ==
 
@@ -74,16 +74,16 @@ No, this plugin borns as an alternative to Google Maps, and is based on OpenStre
 
 ### Create a Map 
 
-Go to your website admin panel, click on OpenMaps > Add New, give it a title and fill the coordinates as basic options. 
+Go to your website admin panel, click on VenoMaps > Add New, give it a title and fill the coordinates as basic options. 
 You can add one or more markers with various options and attach a infobox to each marker. Publish the map.
 
 ### Adding into posts/pages
 
-Insert the Block OpenMaps inside your posts or page, or copy the shortcode from the field below the map's title and paste it anywhere inside your posts or pages, that's it.
+Insert the Block VenoMaps inside your posts or page, or copy the shortcode from the field below the map's title and paste it anywhere inside your posts or pages, that's it.
 
 ### Adding into widget
 
-Under Appearance > Widgets you will find a new widget **OpenMaps**. Add it to your sidebar, select the desired map from the dropdown menu and save.
+Under Appearance > Widgets you will find a new widget **VenoMaps**. Add it to your sidebar, select the desired map from the dropdown menu and save.
 
 
 == Changelog ==
