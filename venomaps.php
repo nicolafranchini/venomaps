@@ -15,4 +15,6 @@
  */
 
 define( 'VENOMAPS_VERSION', '1.0' );
-require dirname( __FILE__ ) . '/include/class-venomaps-plugin.php';
+if ( ! class_exists( 'Venomaps_Plugin', false ) ) {
+	require_once dirname( __FILE__ ) . '/include/class-venomaps-plugin.php';
+}
