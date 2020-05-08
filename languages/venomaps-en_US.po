@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP OpenMaps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-07 17:09+0000\n"
-"PO-Revision-Date: 2020-05-07 17:11+0000\n"
+"POT-Creation-Date: 2020-05-07 23:08+0000\n"
+"PO-Revision-Date: 2020-05-07 23:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -60,8 +60,8 @@ msgid "New style"
 msgstr "New style"
 
 #: include/class-venomaps-widget.php:14
-msgid "Displays one of your custom OpenMaps"
-msgstr "Displays one of your custom OpenMaps"
+msgid "Displays one of your custom maps"
+msgstr "Displays one of your custom maps"
 
 #: include/class-venomaps-widget.php:77 include/class-venomaps-plugin.php:138
 msgid "Select a map to display"

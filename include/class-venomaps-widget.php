@@ -10,8 +10,8 @@ class Venomaps_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'venomaps_widget', // Base ID.
-			__( 'OpenMaps', 'wpb_widget_domain' ), // Name.
-			array( 'description' => __( 'Displays one of your custom OpenMaps', 'venomaps' ) ) // Args.
+			__( 'VenoMaps', 'wpb_widget_domain' ), // Name.
+			array( 'description' => __( 'Displays one of your custom maps', 'venomaps' ) ) // Args.
 		);
 	}
 
