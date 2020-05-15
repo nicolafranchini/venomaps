@@ -28,6 +28,12 @@ class Venomaps_Plugin {
 			'name' => 'Default',
 			'url' => 'default',
 		),
+		// 'trans-dark' => array(
+		// 	'name' => 'Transport Dark',
+		// 	// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
+		// 	'url' => '//tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=xxx',
+		// 	'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+		// ),
 		'terrain' => array(
 			'name' => 'Terrain',
 			// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
@@ -130,6 +136,7 @@ class Venomaps_Plugin {
 			'fields' => 'ids',
 		);
 		$olmaps = get_posts( $args );
+		$templist = array();
 		foreach ( $olmaps as $mapid ) {
 			$templist[ $mapid ] = get_the_title( $mapid );
 		}
@@ -167,11 +174,11 @@ class Venomaps_Plugin {
 
 		$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
 
-		wp_register_style( 'venomaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
+		wp_enqueue_style( 'venomaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
 		wp_register_script( 'venomaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
 		wp_register_script( 'venomaps-olms', plugins_url( 'ol/olms.js', __FILE__ ), array( 'venomaps-ol' ), '6.1.1', true );
 
-		wp_register_style( 'venomaps-style', plugins_url( 'css/venomaps' . $min . '.css', __FILE__ ), array(), VENOMAPS_VERSION );
+		wp_enqueue_style( 'venomaps-style', plugins_url( 'css/venomaps' . $min . '.css', __FILE__ ), array(), VENOMAPS_VERSION );
 		wp_register_script( 'venomaps-script', plugins_url( 'js/venomaps' . $min . '.js', __FILE__ ), array( 'jquery', 'venomaps-ol' ), VENOMAPS_VERSION, true );
 	}
 
@@ -260,13 +267,10 @@ class Venomaps_Plugin {
 
 		$attribution = isset( $styles[ $stylekey ]['attribution'] ) ? $styles[ $stylekey ]['attribution'] : 0;
 
-		// Load front-end scripts and styles.
-		wp_enqueue_style( 'venomaps-ol' );
-
+		// Load front-end scripts.
 		if ( 0 !== $styleurl ) {
 			wp_enqueue_script( 'venomaps-olms' );
 		}
-		wp_enqueue_style( 'venomaps-style' );
 		wp_enqueue_script( 'venomaps-script' );
 
 		$map_data = array(
@@ -365,6 +369,7 @@ class Venomaps_Plugin {
 			'supports' => array( 'title' ),
 			'menu_icon' => 'dashicons-location-alt',
 			'show_in_rest' => false, // disable Gutenberg editor.
+			'show_in_nav_menus' => false,
 		);
 
 		register_post_type( 'venomaps', $venomaps_cpt_args );

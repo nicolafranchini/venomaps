@@ -47,7 +47,7 @@ jQuery(document).ready(function($) {
             view: new ol.View({
               center: pos,
               zoom: zoom,
-              maxZoom: 24,
+              maxZoom: 22,
               minZoom: 1,
             }),
             layers: [
@@ -66,7 +66,7 @@ jQuery(document).ready(function($) {
               constrainResolution: true,
               center: pos,
               zoom: zoom,
-              maxZoom: 24,
+              maxZoom: 22,
               minZoom: 1
             }),
                 controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
