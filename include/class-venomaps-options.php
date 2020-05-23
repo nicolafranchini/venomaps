@@ -129,7 +129,7 @@ class Venomaps_Options {
 			}
 		}
 
-		return apply_filters( 'validate_options', $valid_fields, $fields );
+		return apply_filters( 'validate_options', $valid_fields, $values );
 	}
 
 	/**

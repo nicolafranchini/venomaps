@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0.1
-Stable tag: 1.0.1
+Version: 1.0.2
+Stable tag: 1.0.2
 Tested up to: 5.4
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -110,8 +110,10 @@ Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.0.2 =
+* Update: small fix on save setings
 
+= 1.0.1 =
 * Update: Hide VenoMaps CPT from nav menu items
 * Update: Load css inside head
 * Fix: Undefined templist
