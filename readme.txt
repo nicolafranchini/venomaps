@@ -1,4 +1,4 @@
-=== VenoMaps ===
+=== VenoMaps - geo map and custom markers ===
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
