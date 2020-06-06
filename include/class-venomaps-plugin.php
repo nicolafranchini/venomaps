@@ -357,7 +357,6 @@ class Venomaps_Plugin {
 
 		$venomaps_cpt_args = array(
 			'labels' => $venomaps_cpt_labels,
-			'public' => true,
 			// 'rewrite' => true,
 			'rewrite' => array(
 				'slug' => 'venomaps',
@@ -369,7 +368,8 @@ class Venomaps_Plugin {
 			'supports' => array( 'title' ),
 			'menu_icon' => 'dashicons-location-alt',
 			'show_in_rest' => false, // disable Gutenberg editor.
-			'show_in_nav_menus' => false,
+			'public' => false, // $exclude_from_search, $publicly_queryable, $show_ui, and $show_in_nav_menus are inherited from public.
+			'show_ui' => true,
 		);
 
 		register_post_type( 'venomaps', $venomaps_cpt_args );
