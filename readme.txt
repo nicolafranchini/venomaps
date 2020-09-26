@@ -2,9 +2,9 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0.3
-Stable tag: 1.0.3
-Tested up to: 5.4
+Version: 1.0.4
+Stable tag: 1.0.4
+Tested up to: 5.5
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps
@@ -109,6 +109,9 @@ Stamen Design [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use)
 
 == Changelog ==
+
+= 1.0.4 =
+* Update: Drag and drop marker to get geolocation inside map edit
 
 = 1.0.3 =
 * Update: exclude venomaps cpt from public query

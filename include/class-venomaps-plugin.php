@@ -433,7 +433,7 @@ class Venomaps_Plugin {
 	 */
 	public function render_venomaps_geolocation_metabox( $post ) {
 		?>
-		<p><?php esc_html_e( 'Search an address or click on the map to adjust the marker position and get the coordinates', 'venomaps' ); ?></p>
+		<p><?php esc_html_e( 'Search an address or drag the marker to adjust the position and get the coordinates', 'venomaps' ); ?></p>
 			<fieldset>
 				<div class="wpol-form-group">
 					<input type="text" class="widefat venomaps-set-address" value="" placeholder="Type a place address"> 
@@ -453,7 +453,14 @@ class Venomaps_Plugin {
 
 			<div id="wpol-admin-map" class="venomap"></div>
 			<div style="display:none;">
-				<div class="wpol-infomarker" id="infomarker_admin"><img src="<?php echo esc_url( plugins_url( '/images/marker.svg', __FILE__ ) ); ?>" style="height: 40px;"></div>
+				<div class="wpol-infomarker" id="infomarker_admin"></div>
+				<?php
+
+				/*
+				<div class="wpol-infomarker" id="infomarker_admin"><img src="<?php // echo esc_url( plugins_url( '/images/marker.svg', __FILE__ ) ); ?>" style="height: 40px;"></div>
+				<?php
+				*/
+				?>
 			</div>	
 		<?php
 	}

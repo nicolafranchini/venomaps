@@ -113,21 +113,54 @@
 		});
 
 	    // Add Marker
+	    var marker_el = document.getElementById(geomarker_id);
 	    var infomarker = new ol.Overlay({
-	      position: om_map_pos,
-	      positioning: 'center-center',
-	      offset: [0, -20],
-	      element: document.getElementById(geomarker_id),
+			position: om_map_pos,
+			positioning: 'center-center',
+			// offset: [0, -20],
+			element: marker_el,
+			stopEvent: false,
+			dragging: false
 	    });
 	    map.addOverlay(infomarker);
 
 	    // Update marker position and lat lon fields
-		map.on('click', function(evt) {
+
+		// map.on('click', function(evt) {
+		// 	var coordinate = evt.coordinate;
+		// 	var lonlat = ol.proj.toLonLat(coordinate);
+		// 	$('.venomaps-get-lat').val(lonlat[1]);
+		// 	$('.venomaps-get-lon').val(lonlat[0]);
+		// 	infomarker.setPosition(coordinate);
+		// });
+
+		var dragPan;
+		map.getInteractions().forEach(function(interaction){
+			if (interaction instanceof ol.interaction.DragPan) {
+				dragPan = interaction;  
+		  }
+		});
+
+		marker_el.addEventListener('mousedown', function(evt) {
+		  dragPan.setActive(false);
+		  infomarker.set('dragging', true);
+		});
+
+		map.on('pointermove', function(evt) {
+			if (infomarker.get('dragging') === true) {
+		  	infomarker.setPosition(evt.coordinate);
+		  }
+		});
+
+		map.on('pointerup', function(evt) {
+			if (infomarker.get('dragging') === true) {
+		    dragPan.setActive(true);
+		    infomarker.set('dragging', false);
 			var coordinate = evt.coordinate;
 			var lonlat = ol.proj.toLonLat(coordinate);
 			$('.venomaps-get-lat').val(lonlat[1]);
 			$('.venomaps-get-lon').val(lonlat[0]);
-			infomarker.setPosition(coordinate);
+		  }
 		});
 
 		// Update lat lon fields
