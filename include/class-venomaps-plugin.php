@@ -28,12 +28,14 @@ class Venomaps_Plugin {
 			'name' => 'Default',
 			'url' => 'default',
 		),
-		// 'trans-dark' => array(
-		// 	'name' => 'Transport Dark',
-		// 	// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
-		// 	'url' => '//tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=xxx',
-		// 	'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-		// ),
+		/*
+		'trans-dark' => array(
+		'name' => 'Transport Dark',
+		// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
+		'url' => '//tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=xxx',
+		'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+		),
+		*/
 		'terrain' => array(
 			'name' => 'Terrain',
 			// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
@@ -255,8 +257,8 @@ class Venomaps_Plugin {
 		$zoom_scroll = get_post_meta( $map_id, 'venomaps_zoom_scroll', true );
 
 		// General settings.
-		$settings = get_option( 'venomaps_settings' );
-		$custom_styles = is_array( $settings['style'] ) ? $settings['style'] : array();
+		$settings = get_option( 'venomaps_settings', array() );
+		$custom_styles = isset( $settings['style'] ) && is_array( $settings['style'] ) ? $settings['style'] : array();
 		$styles = array_merge( $this->styles_default, $custom_styles );
 
 		$stylekey = get_post_meta( $map_id, 'venomaps_style', true );
@@ -504,8 +506,9 @@ class Venomaps_Plugin {
 
 		// Map style.
 		$stylekey = get_post_meta( $post->ID, 'venomaps_style', true );
-		$settings = get_option( 'venomaps_settings' );
-		$custom_styles = is_array( $settings['style'] ) ? $settings['style'] : array();
+		$settings = get_option( 'venomaps_settings', array() );
+
+		$custom_styles = isset( $settings['style'] ) && is_array( $settings['style'] ) ? $settings['style'] : array();
 
 		$zoom_scroll = get_post_meta( $post->ID, 'venomaps_zoom_scroll', true );
 

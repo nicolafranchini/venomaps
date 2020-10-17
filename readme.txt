@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0.4
-Stable tag: 1.0.4
+Version: 1.0.5
+Stable tag: 1.0.5
 Tested up to: 5.5
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -110,6 +110,9 @@ Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
 
 == Changelog ==
 
+= 1.0.5 =
+* Fix: PHP error before saving settings
+
 = 1.0.4 =
 * Update: Drag and drop marker to get geolocation inside map edit
 
@@ -117,7 +120,7 @@ Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
 * Update: exclude venomaps cpt from public query
 
 = 1.0.2 =
-* Update: small fix on save setings
+* Update: small fix on save settings
 
 = 1.0.1 =
 * Update: Hide VenoMaps CPT from nav menu items
