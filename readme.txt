@@ -2,9 +2,9 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0.5
-Stable tag: 1.0.5
-Tested up to: 5.5
+Version: 1.0.6
+Stable tag: 1.0.6
+Tested up to: 5.7
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps
@@ -109,6 +109,9 @@ Stamen Design [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use)
 
 == Changelog ==
+
+= 1.0.6 =
+* Update: move marker position changing coordinates inside geolocation 
 
 = 1.0.5 =
 * Fix: PHP error before saving settings

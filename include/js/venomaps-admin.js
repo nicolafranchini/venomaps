@@ -89,6 +89,10 @@
 	 */
 	function loadGeolocator(geomap_id, geomarker_id) {
 
+		var timer;
+		var latinput = $('.venomaps-get-lat');
+		var loninput = $('.venomaps-get-lon');
+
         if (typeof ol === 'undefined' || ol === null) {
           console.log('WARNING: OpenLayers Library not loaded');
           return false;
@@ -165,14 +169,20 @@
 
 		// Update lat lon fields
 		function georesponse(response){
-			var lat = response[0].lat;
-			var lon = response[0].lon;
-			var newcoord = ol.proj.fromLonLat([lon, lat]);
-			infomarker.setPosition(newcoord);
-			
-			view.setCenter(newcoord);
-			view.setZoom(6);
-
+			var lat, lon;
+			$('.venomaps-response').html('');
+			if (response[0]) {
+				lat = response[0].lat;
+				lon = response[0].lon;
+				var newcoord = ol.proj.fromLonLat([lon, lat]);
+				infomarker.setPosition(newcoord);
+				view.setCenter(newcoord);
+				view.setZoom(6);
+			} else {
+				lat = '';
+				lon = '';
+				$('.venomaps-response').html('Nothing Found');
+			}
 			$('.venomaps-get-lat').val(lat);
 			$('.venomaps-get-lon').val(lon);
 		}
@@ -192,10 +202,25 @@
 			    }).done(function(res) {
 				    georesponse(res);
 				})
+				.fail(function() {
+				    button.fadeIn();
+				})
 				.always(function() {
 				    button.fadeIn();
 				});
 			}
+		});
+
+		$('.venomaps-get-lat, .venomaps-get-lon').on('input', function(){
+			clearTimeout(timer);
+			timer = setTimeout(function(){
+				var lat = latinput.val();
+				var lon = loninput.val();
+				var newcoord = ol.proj.fromLonLat([lon, lat]);
+				infomarker.setPosition(newcoord);
+				view.setCenter(newcoord);
+				view.setZoom(6);
+			}, 1000);
 		});
 	}
 

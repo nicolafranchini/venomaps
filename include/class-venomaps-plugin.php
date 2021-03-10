@@ -441,6 +441,7 @@ class Venomaps_Plugin {
 					<input type="text" class="widefat venomaps-set-address" value="" placeholder="Type a place address"> 
 				</div>
 				<div class="wpol-form-group">
+					<div class="venomaps-response"></div>
 					<div class="button venomaps-get-coordinates"><span class="dashicons dashicons-search"></span> <?php esc_html_e( 'Search', 'venomaps' ); ?></div>
 				</div>
 			</fieldset>
