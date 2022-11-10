@@ -6,7 +6,6 @@ jQuery(document).ready(function($) {
           console.log('WARNING: OpenLayers Library not loaded');
           return false;
         }
-
         var mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, customStyle, attribution, getsource;
 
         mapid = infomap.mapid;
@@ -55,8 +54,8 @@ jQuery(document).ready(function($) {
                 source: getsource
               })
             ],
-                controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
-           interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
+            controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
+            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
         } else {
           // Custom Styles
@@ -69,8 +68,8 @@ jQuery(document).ready(function($) {
               maxZoom: 22,
               minZoom: 1
             }),
-                controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
-           interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
+            controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
+            interactions: ol.interaction.defaults({mouseWheelZoom:zoom_scroll})
           });
           olms.apply(map, styleUrl);
         }
@@ -83,25 +82,25 @@ jQuery(document).ready(function($) {
             var labeloffset = (markerint + 12) * -1;
 
             var marker_el = document.getElementById('infomarker_' + mapid + '_' + key);
-            
-            // Add Marker
-            var infomarker = new ol.Overlay({
-              position: markerpos,
-              positioning: 'center-center',
-              offset: [0, markeroffset],
-              element: marker_el,
-              stopEvent: true
-            });
 
-            map.addOverlay(infomarker);
+            if (marker_el) {
+              // Add Marker
+              var infomarker = new ol.Overlay({
+                position: markerpos,
+                positioning: 'center-center',
+                offset: [0, markeroffset],
+                element: marker_el,
+                stopEvent: true
+              });
 
+              map.addOverlay(infomarker);
 
-            // Block marker dragging,
-            marker_el.addEventListener('mousedown', function(evt) {
-                evt.preventDefault();
-                return false;
-            });
-
+              // Block marker dragging,
+              marker_el.addEventListener('mousedown', function(evt) {
+                  evt.preventDefault();
+                  return false;
+              });
+            }
 
             // Add infoPanel
             var infolabel = new ol.Overlay({
@@ -119,6 +118,7 @@ jQuery(document).ready(function($) {
                 map.addOverlay(infolabel);
                 $('.wpol-infopanel').closest('.ol-overlay-container').addClass('wpol-infopanel-overlay');
             });
+
         });
     }
 

@@ -19,6 +19,13 @@ class Venomaps_Plugin {
 	private static $instance = null;
 
 	/**
+	 * Counts decks on page
+	 *
+	 * @var $mapscounter
+	 */
+	private static $mapscounter = 0;
+
+	/**
 	 * Default map styles.
 	 *
 	 * @var $styles_default
@@ -218,6 +225,8 @@ class Venomaps_Plugin {
 	 */
 	public function venomaps_do_shortcode( $atts = array() ) {
 
+		self::$mapscounter++;
+
 		$args = shortcode_atts(
 			array(
 				'id' => 0,
@@ -238,7 +247,7 @@ class Venomaps_Plugin {
 		$height = esc_attr( $args['height'] );
 		$map_height = strlen( $height ) ? $height : '500px';
 
-		$html_map_id = $map_id;
+		$html_map_id = $map_id . '_' . self::$mapscounter;
 
 		if ( strlen( $widget ) ) {
 			$html_map_id .= '_' . $widget;
