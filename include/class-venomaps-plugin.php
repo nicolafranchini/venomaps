@@ -725,7 +725,7 @@ class Venomaps_Plugin {
 	 */
 	public function save_metaboxes( $post_id, $post ) {
 
-		$nonce = filter_input( INPUT_POST, 'venomaps_nonce', FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_POST, 'venomaps_nonce', FILTER_SANITIZE_SPECIAL_CHARS );
 
 		// Check if our nonce is set.
 		if ( ! isset( $_POST['venomaps_nonce'] ) ) {
@@ -745,22 +745,22 @@ class Venomaps_Plugin {
 
 		$allowed = wp_kses_allowed_html();
 
-		$lat = filter_input( INPUT_POST, 'venomaps_lat', FILTER_SANITIZE_STRING );
+		$lat = filter_input( INPUT_POST, 'venomaps_lat', FILTER_SANITIZE_SPECIAL_CHARS );
 		$lat = $lat ? esc_attr( $lat ) : '40.712776';
 		update_post_meta( $post_id, 'venomaps_lat', $lat );
 
-		$lon = filter_input( INPUT_POST, 'venomaps_lon', FILTER_SANITIZE_STRING );
+		$lon = filter_input( INPUT_POST, 'venomaps_lon', FILTER_SANITIZE_SPECIAL_CHARS );
 		$lon = $lon ? esc_attr( $lon ) : '-74.005974';
 		update_post_meta( $post_id, 'venomaps_lon', $lon );
 
-		$style = filter_input( INPUT_POST, 'venomaps_style', FILTER_SANITIZE_STRING );
+		$style = filter_input( INPUT_POST, 'venomaps_style', FILTER_SANITIZE_SPECIAL_CHARS );
 		update_post_meta( $post_id, 'venomaps_style', $style );
 
-		$height = filter_input( INPUT_POST, 'venomaps_height', FILTER_SANITIZE_STRING );
+		$height = filter_input( INPUT_POST, 'venomaps_height', FILTER_SANITIZE_SPECIAL_CHARS );
 		$height = $height ? esc_attr( $height ) : '500';
 		update_post_meta( $post_id, 'venomaps_height', $height );
 
-		$height_um = filter_input( INPUT_POST, 'venomaps_height_um', FILTER_SANITIZE_STRING );
+		$height_um = filter_input( INPUT_POST, 'venomaps_height_um', FILTER_SANITIZE_SPECIAL_CHARS );
 		$height_um = $height_um ? esc_attr( $height_um ) : 'px';
 		update_post_meta( $post_id, 'venomaps_height_um', $height_um );
 

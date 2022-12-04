@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0.7
-Stable tag: 1.0.7
+Version: 1.0.8
+Stable tag: 1.0.8
 Tested up to: 6.1
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -109,6 +109,9 @@ Stamen Design [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use)
 
 == Changelog ==
+
+= 1.0.8 =
+* Update: Support PHP 8.1 
 
 = 1.0.7 =
 * Update: Support new block widgets 
