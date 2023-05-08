@@ -110,6 +110,9 @@ Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
 
 == Changelog ==
 
+= 1.1.0 =
+* Update: Minor CSS fixes
+
 = 1.0.9 =
 * Update: Support WP 6.2
 * Update: Minor fixes
