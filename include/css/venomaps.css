@@ -117,8 +117,9 @@
 }
 
 .ol-control button{
-  padding: 0;
-  line-height: 1;
+  padding: 0 !important;
+  line-height: 1 !important;
+  border: none !important;
 }
 
 .ol-control button,
