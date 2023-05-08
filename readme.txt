@@ -2,9 +2,9 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.0.8
-Stable tag: 1.0.8
-Tested up to: 6.1
+Version: 1.0.9
+Stable tag: 1.0.9
+Tested up to: 6.2
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps
@@ -109,6 +109,10 @@ Stamen Design [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use)
 
 == Changelog ==
+
+= 1.0.9 =
+* Update: Support WP 6.2
+* Update: Minor fixes
 
 = 1.0.8 =
 * Update: Support PHP 8.1 

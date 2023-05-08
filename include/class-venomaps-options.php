@@ -11,6 +11,13 @@ class Venomaps_Options {
 	private static $instance = null;
 
 	/**
+	 * Plugin options
+	 *
+	 * @var $options
+	 */
+	private $options = null;
+
+	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @return  Venomaps_Options A single instance of this class.
@@ -217,7 +224,6 @@ class Venomaps_Options {
 	/**
 	 * Geolocation
 	 */
-	/*
 	public function geo_settings_field() {
 		?>
 		<h2><?php esc_html_e( 'Geolocation', 'venomaps' ); ?></h2>
@@ -243,7 +249,6 @@ class Venomaps_Options {
 			</div>
 		<?php
 	}
-	*/
 
 } // end class
 

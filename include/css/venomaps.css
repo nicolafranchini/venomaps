@@ -116,6 +116,11 @@
   z-index: 9;
 }
 
+.ol-control button{
+  padding: 0;
+  line-height: 1;
+}
+
 .ol-control button,
 .ol-control button:focus, .ol-control button:hover{
   background-color: #393939;

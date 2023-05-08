@@ -725,16 +725,14 @@ class Venomaps_Plugin {
 	 */
 	public function save_metaboxes( $post_id, $post ) {
 
-		$nonce = filter_input( INPUT_POST, 'venomaps_nonce', FILTER_SANITIZE_SPECIAL_CHARS );
-
 		// Check if our nonce is set.
 		if ( ! isset( $_POST['venomaps_nonce'] ) ) {
 			return $post_id;
 		}
 
-		if ( ! $nonce
-			|| ! wp_verify_nonce( $nonce, 'venomaps_metaboxes' )
-		) {
+		$nonce = filter_input( INPUT_POST, 'venomaps_nonce', FILTER_SANITIZE_SPECIAL_CHARS );
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'venomaps_metaboxes' ) ) {
 			return $post_id;
 		}
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
