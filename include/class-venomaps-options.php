@@ -57,10 +57,8 @@ class Venomaps_Options {
 		if ( 'settings_page_venomaps' !== $hook ) {
 			return;
 		}
-
-		$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
-		wp_enqueue_script( 'venomaps-box-image', plugins_url( 'js/venomaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), VENOMAPS_VERSION );
-		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin' . $min . '.css', __FILE__ ), array(), VENOMAPS_VERSION );
+		wp_enqueue_script( 'venomaps-box-image', plugins_url( 'js/venomaps-admin.js', __FILE__ ), array( 'jquery' ), VENOMAPS_VERSION );
+		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin.css', __FILE__ ), array(), VENOMAPS_VERSION );
 	}
 
 	/**
@@ -200,7 +198,7 @@ class Venomaps_Options {
 					?>
 					<div class="wpol-repeatable-item wpol-form-group" data-number="<?php echo esc_attr( $key ); ?>">
 						<input type="text" class="all-options" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][name]" value="<?php echo esc_attr( $value['name'] ); ?>" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>"> 
-						<input type="url" class="regular-text" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][url]" value="<?php echo esc_attr( $value['url'] ); ?>" placeholder="hhttps://tile.openstreetmap.org/{z}/{x}/{y}.png">
+						<input type="url" class="regular-text" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][url]" value="<?php echo esc_attr( $value['url'] ); ?>" placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png">
 					</div>
 					<?php
 				}

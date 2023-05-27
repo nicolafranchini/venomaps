@@ -74,8 +74,7 @@ No, this plugin borns as an alternative to Google Maps, and is based on OpenStre
 2. Custom map with markers
 3. Map page settings
 4. Block
-5. Widget
-6. General settings
+5. General settings
 
 == Other Notes ==
 
@@ -118,6 +117,7 @@ Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
 * Update: tested up to PHP 8.2
 * Update: OpenLayers library 7.3.0
 * Update: `Initial Zoom` and `Zoom Scroll` custom settings to each map
+* Update: dropped support for vector maps, now custom maps only support raster tiles in png format
 
 = 1.1.0 =
 * Update: Minor CSS fixes
