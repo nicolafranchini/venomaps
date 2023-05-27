@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.1.0
-Stable tag: 1.1.0
+Version: 1.2.0
+Stable tag: 1.2.0
 Tested up to: 6.2
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -27,19 +27,19 @@ Select a custom style and a size for the map, upload your custom markers, set th
 The VenoMaps page also offers some geolocation utilities to get the coordinates typing an address, or placing the marker in a specific position on the map. VenoMaps Block available.
 
 VenoMaps is an alternative to Google Maps, it is based on OpenLayers and OpenStreetMap, doesn't require API keys and offers different custom maps.
-You can also add your own styles with a free account at Maptiler.
+You can also add your own custom styles from external services.
 
 ### Features
 
 * **Easy to install and setup**
 * **Ability to add Maps on pages / posts**
 * **Gutenberg Block**
-* **Widget**
 * **Ability to set custom options for each Map**
 * **Manage custom markers with the WP media library**
 * **Rich text editor for the Info Boxes**
+* **Clusters**
 * **5 Default styles**
-* **Custom map styles, pixel perfect vector maps**
+* **Custom map styles**
 * **Geolocation utility to get Latitude / Longitude from address**
 * **Responsive design**
 
@@ -49,7 +49,7 @@ Upload the plugin folder `venomaps` to the `/wp-content/plugins/` directory
 Activate the plugin through the Plugins menu in WordPress
 Create a new map under VenoMaps > Add New
 Select the generated shortcode and insert it inside any post or page, or search VenoMaps among Blocks
-Use the VenoMaps widget to select a map and insert it inside your sidebars
+Use the VenoMaps block to select a map and insert it inside your sidebars
 Optionally add new styles inside Settings > VenoMaps
 
 == Frequently Asked Questions ==
@@ -109,6 +109,15 @@ Stamen Design [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use)
 
 == Changelog ==
+
+= 1.2.0 =
+* New: Dynamic Clusters for markers too close
+* New Clusters colors setting
+* Update: dropped jQuery dependency
+* Update: removed legacy widgets
+* Update: tested up to PHP 8.2
+* Update: OpenLayers library 7.3.0
+* Update: `Initial Zoom` and `Zoom Scroll` custom settings to each map
 
 = 1.1.0 =
 * Update: Minor CSS fixes

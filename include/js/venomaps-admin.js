@@ -113,7 +113,7 @@
 			    source: new ol.source.OSM()
 			  })
 			],
-			interactions: ol.interaction.defaults({mouseWheelZoom:false})
+			interactions: ol.interaction.defaults.defaults({mouseWheelZoom:false})
 		});
 
 	    // Add Marker

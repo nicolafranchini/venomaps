@@ -86,11 +86,7 @@ class Venomaps_Plugin {
 	 * Initializes the plugin
 	 */
 	private function __construct() {
-
-		// $styles_default = $this->styles_default;
-
 		require dirname( __FILE__ ) . '/class-venomaps-options.php';
-		require dirname( __FILE__ ) . '/class-venomaps-widget.php';
 	}
 
 	/**
@@ -99,24 +95,16 @@ class Venomaps_Plugin {
 	public function hooks() {
 
 		add_filter( 'plugin_action_links_' . dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/' . $this->slug . '.php', array( $this, 'action_links' ) );
-
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
-
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 
 		// Custom posts.
 		add_action( 'init', array( $this, 'register_cpt' ) );
 		register_activation_hook( dirname( dirname( __FILE__ ) ) . '/' . $this->slug . '.php', array( $this, 'rewrite_flush' ) );
-
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_scripts' ), 10, 1 );
-
 		add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 		add_action( 'save_post', array( $this, 'save_metaboxes' ), 10, 2 );
-
 		add_shortcode( 'venomap', array( $this, 'venomaps_do_shortcode' ) );
-
-		add_action( 'widgets_init', array( $this, 'register_widget' ) );
-
 		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_block' ) );
 
 	}
@@ -154,17 +142,15 @@ class Venomaps_Plugin {
 			'_select_map' => __( 'Select a map to display', 'venomaps' ),
 			'_map_height' => __( 'Map Height', 'venomaps' ),
 			'_units' => __( 'units', 'venomaps' ),
+			'_clusters_background' => __( 'Clusters background', 'venomaps' ),
+			'_clusters_color' => __( 'Clusters color', 'venomaps' ),
+			'_zoom_scroll' => __( 'Enable mouse wheel zoom', 'venomaps' ),
+			'_initial_zoom' => __( 'Initial zoom', 'venomaps' ),
 		);
 		wp_localize_script( 'venomaps-block', 'venomapsBlockVars', $venomaps_vars );
 		wp_enqueue_script( 'venomaps-block' );
 	}
 
-	/**
-	 * Register widget
-	 */
-	public function register_widget() {
-		register_widget( 'venomaps_Widget' );
-	}
 	/**
 	 * Load text domain
 	 *
@@ -181,14 +167,16 @@ class Venomaps_Plugin {
 	 */
 	public function register_scripts() {
 
-		$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
+		if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
+			wp_enqueue_style( 'venomaps-ol', plugins_url( 'dev/ol/ol.css', __FILE__ ), array(), '7.3.0' );
+			wp_enqueue_style( 'venomaps', plugins_url( 'dev/venomaps/venomaps.css', __FILE__ ), array(), VENOMAPS_VERSION );
 
-		wp_enqueue_style( 'venomaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
-		wp_register_script( 'venomaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
-		wp_register_script( 'venomaps-olms', plugins_url( 'ol/olms.js', __FILE__ ), array( 'venomaps-ol' ), '6.1.1', true );
-
-		wp_enqueue_style( 'venomaps-style', plugins_url( 'css/venomaps' . $min . '.css', __FILE__ ), array(), VENOMAPS_VERSION );
-		wp_register_script( 'venomaps-script', plugins_url( 'js/venomaps' . $min . '.js', __FILE__ ), array( 'jquery', 'venomaps-ol' ), VENOMAPS_VERSION, true );
+			wp_register_script( 'venomaps-ol', plugins_url( 'dev/ol/ol.js', __FILE__ ), array(), '7.3.0', true );
+			wp_register_script( 'venomaps', plugins_url( 'dev/venomaps/venomaps.js', __FILE__ ), array( 'venomaps-ol' ), VENOMAPS_VERSION, true );
+		} else {
+			wp_enqueue_style( 'venomaps', plugins_url( 'css/venomaps-bundle.min.css', __FILE__ ), array(), VENOMAPS_VERSION );
+			wp_register_script( 'venomaps', plugins_url( 'js/venomaps-bundle.min.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
+		}
 	}
 
 	/**
@@ -200,19 +188,17 @@ class Venomaps_Plugin {
 
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ) ) ) {
 			$screen = get_current_screen();
-			$min = defined( 'WP_DEBUG' ) && true === WP_DEBUG ? '' : '.min';
 
-			wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin' . $min . '.css', __FILE__ ), array(), VENOMAPS_VERSION );
+			wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin.css', __FILE__ ), array(), VENOMAPS_VERSION );
 
 			if ( is_object( $screen ) && 'venomaps' == $screen->post_type ) {
-
 				wp_enqueue_media();
 				wp_enqueue_editor();
 
-				wp_enqueue_style( 'venomaps-ol', plugins_url( 'ol/ol.css', __FILE__ ), array(), '6.3.1' );
-				wp_enqueue_script( 'venomaps-ol', plugins_url( 'ol/ol.js', __FILE__ ), array(), '6.3.1', true );
+				wp_enqueue_style( 'venomaps-ol', plugins_url( 'dev/ol/ol.css', __FILE__ ), array(), '7.3.0' );
+				wp_enqueue_script( 'venomaps-ol', plugins_url( 'dev/ol/ol.js', __FILE__ ), array(), '7.3.0', true );
 
-				wp_enqueue_script( 'venomaps-admin', plugins_url( 'js/venomaps-admin' . $min . '.js', __FILE__ ), array( 'jquery' ), VENOMAPS_VERSION );
+				wp_enqueue_script( 'venomaps-admin', plugins_url( 'js/venomaps-admin.js', __FILE__ ), array( 'jquery', 'venomaps-ol' ), VENOMAPS_VERSION );
 			}
 		}
 	}
@@ -232,6 +218,10 @@ class Venomaps_Plugin {
 				'id' => 0,
 				'height' => '',
 				'widget' => 0,
+				'cluster_bg' => '#009CD7',
+				'cluster_color' => '#FFFFFF',
+				'zoom' => 12,
+				'scroll' => 0,
 			),
 			$atts
 		);
@@ -246,6 +236,11 @@ class Venomaps_Plugin {
 		$widget = esc_attr( $args['widget'] );
 		$height = esc_attr( $args['height'] );
 		$map_height = strlen( $height ) ? $height : '500px';
+		$cluster_color = esc_attr( $args['cluster_color'] );
+		$cluster_bg = esc_attr( $args['cluster_bg'] );
+
+		$zoom = esc_attr( $args['zoom'] );
+		$zoom_scroll = (int) esc_attr( $args['scroll'] );
 
 		$html_map_id = $map_id . '_' . self::$mapscounter;
 
@@ -256,14 +251,8 @@ class Venomaps_Plugin {
 		// Map Coordinates.
 		$lat = get_post_meta( $map_id, 'venomaps_lat', true );
 		$lat = $lat ? $lat : '40.712776';
-
 		$lon = get_post_meta( $map_id, 'venomaps_lon', true );
 		$lon = $lon ? $lon : '-74.005974';
-
-		$zoom = get_post_meta( $map_id, 'venomaps_zoom', true );
-		$zoom = $zoom ? $zoom : 12;
-
-		$zoom_scroll = get_post_meta( $map_id, 'venomaps_zoom_scroll', true );
 
 		// General settings.
 		$settings = get_option( 'venomaps_settings', array() );
@@ -279,10 +268,7 @@ class Venomaps_Plugin {
 		$attribution = isset( $styles[ $stylekey ]['attribution'] ) ? $styles[ $stylekey ]['attribution'] : 0;
 
 		// Load front-end scripts.
-		if ( 0 !== $styleurl ) {
-			wp_enqueue_script( 'venomaps-olms' );
-		}
-		wp_enqueue_script( 'venomaps-script' );
+		wp_enqueue_script( 'venomaps' );
 
 		$map_data = array(
 			'mapid' => $html_map_id,
@@ -294,6 +280,8 @@ class Venomaps_Plugin {
 			'zoom_scroll' => $zoom_scroll,
 			'stylekey' => $stylekey,
 			'attribution' => $attribution,
+			'cluster_color' => $cluster_color,
+			'cluster_bg' => $cluster_bg,
 		);
 
 		$output = '<div class="wrap-venomaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
@@ -317,7 +305,7 @@ class Venomaps_Plugin {
 				$marker_data['lon'] = $marker['lon'];
 				$marker_data['size'] = $marker_size;
 
-				$infobox_open = 1 === $marker['infobox_open'] ? '' : ' infobox-closed';
+				$infobox_open = 1 === $marker['infobox_open'] ? ' was-open' : ' infobox-closed';
 
 				if ( strlen( $infobox ) ) {
 					$output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
@@ -325,7 +313,7 @@ class Venomaps_Plugin {
 					$output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><img src="' . plugins_url( '/images/close-x.svg', __FILE__ ) . '"></div></div>';
 				}
 
-				$output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px;"></div>';
+				$output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px; opacity:0.2"></div>';
 			}
 		}
 		$output .= '</div></div>';
@@ -398,7 +386,6 @@ class Venomaps_Plugin {
 	 * Adds the meta boxes.
 	 */
 	public function add_metaboxes() {
-
 		add_meta_box(
 			'venomaps_copy_shortcode',
 			__( 'Map Shortcode', 'venomaps' ),
@@ -425,7 +412,6 @@ class Venomaps_Plugin {
 			'normal', // normal, side.
 			'default' // high, default, low.
 		);
-
 		add_meta_box(
 			'venomaps_geolocation_box',
 			__( 'Geolocation', 'venomaps' ),
@@ -466,13 +452,6 @@ class Venomaps_Plugin {
 			<div id="wpol-admin-map" class="venomap"></div>
 			<div style="display:none;">
 				<div class="wpol-infomarker" id="infomarker_admin"></div>
-				<?php
-
-				/*
-				<div class="wpol-infomarker" id="infomarker_admin"><img src="<?php // echo esc_url( plugins_url( '/images/marker.svg', __FILE__ ) ); ?>" style="height: 40px;"></div>
-				<?php
-				*/
-				?>
 			</div>	
 		<?php
 	}
@@ -483,19 +462,11 @@ class Venomaps_Plugin {
 	 * @param WP_Post $post Post object.
 	 */
 	public function render_venomaps_shortcode_metabox( $post ) {
-
-		$height = get_post_meta( $post->ID, 'venomaps_height', true );
-		$height = $height ? $height : '500';
-
-		$height_um = get_post_meta( $post->ID, 'venomaps_height_um', true );
-		$height_um = $height_um ? $height_um : 'px';
-		$map_height = $height . $height_um;
 		?>
 		<fieldset>
-			<input type="text" class="large-text" name="" value='[venomap id="<?php echo esc_attr( $post->ID ); ?>" height="<?php echo esc_attr( $map_height ); ?>"]' readonly>
+			<input type="text" class="large-text" name="" value='[venomap id="<?php echo esc_attr( $post->ID ); ?>" height="500px" zoom="12"]' readonly>
 		</fieldset>
-		<p><?php esc_html_e( 'Copy the shortcode and paste it inside your Post or Page', 'venomaps' ); ?><br>
-		<?php esc_html_e( 'You will also find VenoMaps among Blocks and Widgets', 'venomaps' ); ?></p>
+		<p><?php esc_html_e( 'Copy the shortcode and paste it inside your Posts or Pages, or search VenoMaps among Blocks to set more options', 'venomaps' ); ?></p>
 		<?php
 	}
 
@@ -517,20 +488,7 @@ class Venomaps_Plugin {
 		// Map style.
 		$stylekey = get_post_meta( $post->ID, 'venomaps_style', true );
 		$settings = get_option( 'venomaps_settings', array() );
-
 		$custom_styles = isset( $settings['style'] ) && is_array( $settings['style'] ) ? $settings['style'] : array();
-
-		$zoom_scroll = get_post_meta( $post->ID, 'venomaps_zoom_scroll', true );
-
-		$zoom = get_post_meta( $post->ID, 'venomaps_zoom', true );
-		$zoom = $zoom ? $zoom : 12;
-
-		$height = get_post_meta( $post->ID, 'venomaps_height', true );
-		$height = $height ? $height : '500';
-
-		$height_um = get_post_meta( $post->ID, 'venomaps_height_um', true );
-		$height_um = $height_um ? $height_um : 'px';
-
 		?>
 
 		<div class="wpol-form-group">
@@ -567,33 +525,6 @@ class Venomaps_Plugin {
 					<span class="description"><?php esc_html_e( 'Longitude', 'venomaps' ); ?></span>
 				</div>
 				<p><?php esc_html_e( 'Get coordinates from the Geolocation box', 'venomaps' ); ?></p>
-			</fieldset>
-		</div>
-
-		<div class="wpol-form-group">
-			<strong><?php esc_html_e( 'Map Height', 'venomaps' ); ?></strong>
-			<fieldset>
-				<div class="wpol-form-group">
-					<input type="text" class="all-options" name="venomaps_height" value="<?php echo esc_attr( $height ); ?>"> 
-					<select name="venomaps_height_um">
-						<option <?php selected( $height_um, 'px' ); ?> value="px">px</option>
-						<option <?php selected( $height_um, 'vh' ); ?> value="vh">vh</option>
-					</select>
-				</div>
-			</fieldset>
-		</div>
-
-		<div class="wpol-form-group">
-			<strong><?php esc_html_e( 'Zoom', 'venomaps' ); ?></strong>
-			<fieldset>
-				<div class="wpol-form-group">
-					<input type="number" min="1" max="24" class="all-options" name="venomaps_zoom" value="<?php echo esc_attr( $zoom ); ?>"> 
-
-					<label>
-						<input type="checkbox" name="venomaps_zoom_scroll" value="1" <?php checked( $zoom_scroll, 1 ); ?> />
-						<span class="description"><?php esc_html_e( 'Enable mouse wheel zoom', 'venomaps' ); ?></span>
-					</label>
-				</div>
 			</fieldset>
 		</div>
 		<?php
@@ -739,8 +670,6 @@ class Venomaps_Plugin {
 			return $post_id;
 		}
 
-		/* OK, it's safe for us to save the data now. */
-
 		$allowed = wp_kses_allowed_html();
 
 		$lat = filter_input( INPUT_POST, 'venomaps_lat', FILTER_SANITIZE_SPECIAL_CHARS );
@@ -754,36 +683,24 @@ class Venomaps_Plugin {
 		$style = filter_input( INPUT_POST, 'venomaps_style', FILTER_SANITIZE_SPECIAL_CHARS );
 		update_post_meta( $post_id, 'venomaps_style', $style );
 
-		$height = filter_input( INPUT_POST, 'venomaps_height', FILTER_SANITIZE_SPECIAL_CHARS );
-		$height = $height ? esc_attr( $height ) : '500';
-		update_post_meta( $post_id, 'venomaps_height', $height );
-
-		$height_um = filter_input( INPUT_POST, 'venomaps_height_um', FILTER_SANITIZE_SPECIAL_CHARS );
-		$height_um = $height_um ? esc_attr( $height_um ) : 'px';
-		update_post_meta( $post_id, 'venomaps_height_um', $height_um );
-
-		$venomaps_zoom_scroll = filter_input( INPUT_POST, 'venomaps_zoom_scroll', FILTER_SANITIZE_NUMBER_INT );
-		update_post_meta( $post_id, 'venomaps_zoom_scroll', $venomaps_zoom_scroll );
-
-		$venomaps_zoom = filter_input( INPUT_POST, 'venomaps_zoom', FILTER_SANITIZE_NUMBER_INT );
-		update_post_meta( $post_id, 'venomaps_zoom', $venomaps_zoom );
-
-		$postvar = isset( $_POST['venomaps_marker'] ) ? wp_unslash( $_POST['venomaps_marker'] ) : array();
+		$postvar = isset( $_POST['venomaps_marker'] ) ? wp_unslash( $_POST['venomaps_marker'] ) : array(); // XSS ok.
 
 		$newmarkervars = array();
 
 		foreach ( $postvar as $key => $value ) {
 
-			$markervars['lat'] = esc_attr( $value['lat'] );
-			$markervars['lon'] = esc_attr( $value['lon'] );
-			$markervars['size'] = esc_attr( $value['size'] );
-			$markervars['icon'] = esc_url_raw( $value['icon'] );
-			$markervars['infobox'] = wp_kses_post( $value['infobox'] );
-			$markervars['infobox_open'] = isset( $value['infobox_open'] ) ? 1 : 0;
+			if ( isset( $value['lat'] ) && isset( $value['lon'] ) ) {
 
-			// $markervars = filter_var_array( $value, $markerargs, true );
-			if ( strlen( $markervars['lat'] ) && strlen( $markervars['lon'] ) ) {
-				$newmarkervars[ $key ] = $markervars;
+				$markervars['lat'] = esc_attr( $value['lat'] );
+				$markervars['lon'] = esc_attr( $value['lon'] );
+				$markervars['size'] = isset( $value['size'] ) ? esc_attr( $value['size'] ) : '30';
+				$markervars['icon'] = isset( $value['icon'] ) ? esc_url_raw( $value['icon'] ) : '';
+				$markervars['infobox'] = wp_kses_post( $value['infobox'] );
+				$markervars['infobox_open'] = isset( $value['infobox_open'] ) ? 1 : 0;
+
+				if ( strlen( $markervars['lat'] ) && strlen( $markervars['lon'] ) ) {
+					$newmarkervars[ $key ] = $markervars;
+				}
 			}
 		}
 		update_post_meta( $post_id, 'venomaps_marker', $newmarkervars );

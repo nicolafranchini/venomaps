@@ -54,7 +54,7 @@ class Venomaps_Options {
 	 * @param string $hook page hook.
 	 */
 	public function load_scripts( $hook ) {
-		if ( 'settings_page_venomaps' != $hook ) {
+		if ( 'settings_page_venomaps' !== $hook ) {
 			return;
 		}
 
@@ -180,8 +180,7 @@ class Venomaps_Options {
 		<h2><?php esc_html_e( 'Custom Maps', 'venomaps' ); ?></h2>
 		<p>
 		<?php
-		// translators: "maptiler" is the website where to get custom maps.
-		printf( __( 'Select a standard map or create your custom map at %1$sMapTiler%2$s and paste here the %3$sVector Style%4$s.', 'venomaps' ), '<a target="_blank" href="' . esc_url( 'https://cloud.maptiler.com/maps/' ) . '">', '</a>', '<strong>', '</strong>' ); // XSS ok.
+		esc_html_e( 'Paste here your custom raster tile url.', 'venomaps' );
 		?>
 		</p>
 
@@ -201,7 +200,7 @@ class Venomaps_Options {
 					?>
 					<div class="wpol-repeatable-item wpol-form-group" data-number="<?php echo esc_attr( $key ); ?>">
 						<input type="text" class="all-options" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][name]" value="<?php echo esc_attr( $value['name'] ); ?>" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>"> 
-						<input type="url" class="regular-text" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][url]" value="<?php echo esc_attr( $value['url'] ); ?>" placeholder="https://api.maptiler.com/maps/.../style.json?key=...">
+						<input type="url" class="regular-text" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][url]" value="<?php echo esc_attr( $value['url'] ); ?>" placeholder="hhttps://tile.openstreetmap.org/{z}/{x}/{y}.png">
 					</div>
 					<?php
 				}
@@ -209,7 +208,7 @@ class Venomaps_Options {
 				?>
 				<div class="wpol-repeatable-item wpol-form-group" data-number="0">
 					<input type="text" class="all-options" name="venomaps_settings[style][0][name]" value="map style" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>"> 
-					<input type="url" class="regular-text" name="venomaps_settings[style][0][url]" value="" placeholder="https://api.maptiler.com/maps/.../style.json?key=...">
+					<input type="url" class="regular-text" name="venomaps_settings[style][0][url]" value="" placeholder="https://tile.openstreetmap.org/{z}/{x}/{y}.png">
 				</div>
 				<?php
 			}

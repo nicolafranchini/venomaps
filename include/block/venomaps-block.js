@@ -3,7 +3,12 @@
     Placeholder = components.Placeholder,
     SelectControl = components.SelectControl,
     PanelBody = wp.components.PanelBody,
-    TextControl = components.TextControl;
+    TextControl = components.TextControl,
+    ColorPalette = wp.components.ColorPalette,
+    ColorPicker = wp.components.ColorPicker,
+    CheckboxControl = components.CheckboxControl,
+    ToggleControl = components.ToggleControl,
+    InspectorControls = blockEditor.InspectorControls;
 
     var el = element.createElement;
     var templates_active = [];
@@ -32,13 +37,22 @@
           },
           map_id: { type: 'string', default: '' },
           height: { type: 'string', default: '500' },
-          height_um: { type: 'string', default: 'px' }
+          height_um: { type: 'string', default: 'px' },
+          cluster_color: { type: 'string', default: '#ffffff' },
+          cluster_bg: { type: 'string', default: '#009CD7' },
+          zoom: { type: 'string', default: '12' },
+          zoom_scroll: { type: 'integer', default: 0 },
         },
 
         edit: function( props ) {
             var map_id_init = props.attributes.map_id || '';
             var height_init = props.attributes.height || '500';
             var height_um_init = props.attributes.height_um || 'px';
+            var cluster_color_init = props.attributes.cluster_color || '#ffffff';
+            var cluster_bg_init = props.attributes.cluster_bg || '#009CD7';
+            var zoom_init = props.attributes.zoom || 12;
+            var zoom_scroll_init = props.attributes.zoom_scroll || 0;
+
             return [
                 el(
                     Placeholder, 
@@ -65,10 +79,11 @@
                         {
                             label: venomapsBlockVars._map_height,
                             type: 'number',
+                            min: '0.1',
+                            step: '0.1',
                             value: height_init,
                             onChange: function(value) {
-                                var state = value ? value : 500;
-                                props.setAttributes({height: state});
+                                props.setAttributes({height: value});
                             },
                             className: 'venomaps_block_map_height'
                         },
@@ -80,18 +95,84 @@
                             options: unit_list,
                             value: height_um_init,
                             onChange: function(value) {
-                                var state = value ? value : 'px';
-                                props.setAttributes({height_um: state});
+                                props.setAttributes({height_um: value});
                             },
                             className: 'venomaps_block_map_units'
                         }
+                    ),
+
+                    el(
+                        TextControl,
+                        {
+                            label: venomapsBlockVars._initial_zoom,
+                            type: 'number',
+                            value: zoom_init,
+                            min: '1',
+                            max: '24',
+                            step: '1',
+                            onChange: function(value) {
+                                props.setAttributes({zoom: value});
+                            },
+                            className: 'venomaps_block_zoom'
+                        },
+                    ),
+
+                    el(
+                        ToggleControl,
+                        {
+                            label: venomapsBlockVars._zoom_scroll,
+                            checked: zoom_scroll_init,
+                            onChange: function(value) {
+                                var state = value ? 1 : 0;
+                                props.setAttributes({zoom_scroll: state});
+                            }
+                        }
+                    ),
+
+                ),
+
+                el(
+                    InspectorControls,
+                    {key: 'venomaps-block-controls'},
+                    el(
+                        PanelBody, {},
+                        el(
+                            'p',
+                            {},
+                            venomapsBlockVars._clusters_background,
+                        ),
+                        el(
+                            ColorPalette,
+                            {
+                                value: cluster_bg_init,
+                                onChange: function(value) {
+                                    props.setAttributes({cluster_bg: value});
+                                }
+                            }
+                        ),
+                        el(
+                            'p',
+                            {},
+                            venomapsBlockVars._clusters_color,
+                        ),
+                        el(
+                            ColorPalette,
+                            {
+                                value: cluster_color_init,
+                                onChange: function(value) {
+                                    props.setAttributes({cluster_color: value});
+                                }
+                            }
+                        ),
                     )
                 )
+
+
             ]; // return 
         },
         save: function (props) {
             return el(
-                'div', {}, '[venomap id="' + props.attributes.map_id + '" height="' + props.attributes.height + props.attributes.height_um + '"]'
+                'div', {}, '[venomap id="' + props.attributes.map_id + '" height="' + props.attributes.height + props.attributes.height_um + '" cluster_bg="' + props.attributes.cluster_bg + '" cluster_color="' + props.attributes.cluster_color + '" zoom="' + props.attributes.zoom + '" scroll="' + props.attributes.zoom_scroll + '"]'
             )
         }
     } );
