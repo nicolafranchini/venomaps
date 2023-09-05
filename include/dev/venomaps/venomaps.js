@@ -38,7 +38,6 @@
             const allclosepanel = document.querySelectorAll('#wrap-overlay-' + mapid + ' .wpol-infopanel-close');
             const allpanels = document.querySelectorAll('#wrap-overlay-' + mapid + ' .wpol-infopanel');
 
-
             function setUp() {
                 // Setup markers
                 allinfomarkers.forEach(function(infomarkerdom, key) {
@@ -205,6 +204,10 @@
 
                 getsource = new ol.source.OSM(sourcesettings);
 
+                var baselayer = new ol.layer.Tile({
+                    source: getsource
+                });
+
                 map = new ol.Map({
                     target: 'venomaps_' + mapid,
                     view: new ol.View({
@@ -214,13 +217,24 @@
                         minZoom: 1,
                     }),
                     layers: [
-                        new ol.layer.Tile({
-                            source: getsource
-                        }),
-                       clusters
+                        baselayer,
+                        clusters
                     ],
                     controls: ol.control.defaults.defaults({ attributionOptions: { collapsible: true } }),
                     interactions: ol.interaction.defaults.defaults({mouseWheelZoom:zoom_scroll})
+                });
+
+                baselayer.on("postrender", function (event) {
+                  var vectorContext = ol.render.getVectorContext(event);
+                  vectorContext.setStyle(
+                    new ol.style.Style({
+                      fill: new ol.style.Fill({
+                        color: "rgba(100, 100, 100, 0.2)"
+                      })
+                    })
+                  );
+                  var polygon = ol.geom.Polygon.fromExtent(map.getView().getProjection().getExtent());
+                  vectorContext.drawGeometry(polygon);
                 });
 
                 setupdata.forEach(marker => {
@@ -282,8 +296,12 @@
             // Init Maps
             var allmaps = document.querySelectorAll('.wrap-venomaps');
             allmaps.forEach(thismap => {
-                var datamap = thismap.dataset.infomap;
-                initVenoMaps(datamap);
+                if (!thismap.hasAttribute("data-venomap-init")) {
+                    thismap.setAttribute("data-venomap-init", "1");
+                    var datamap = thismap.dataset.infomap;
+                    initVenoMaps(datamap);
+                }
+
             });
         }
 

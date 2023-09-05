@@ -4,7 +4,7 @@ Author: Nicola Franchini
 Contributors: nicolafranchini
 Version: 1.2.0
 Stable tag: 1.2.0
-Tested up to: 6.2
+Tested up to: 6.3
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps
@@ -110,8 +110,7 @@ Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
 == Changelog ==
 
 = 1.2.0 =
-* New: Dynamic Clusters for markers too close
-* New Clusters colors setting
+* New: Dynamic Clusters with custom colors
 * Update: dropped jQuery dependency
 * Update: removed legacy widgets
 * Update: tested up to PHP 8.2
