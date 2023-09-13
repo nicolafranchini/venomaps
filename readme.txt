@@ -2,7 +2,7 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.2.0
+Version: 1.2.1
 Stable tag: 1.2.0
 Tested up to: 6.3
 Requires at least: 4.0
@@ -109,6 +109,9 @@ Stamen Design [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
 Wikimedia [Terms of use](https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use)
 
 == Changelog ==
+
+= 1.2.1 =
+* Update: sync missing files
 
 = 1.2.0 =
 * New: Dynamic Clusters with custom colors
