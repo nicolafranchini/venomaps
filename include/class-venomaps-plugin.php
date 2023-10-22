@@ -35,38 +35,30 @@ class Venomaps_Plugin {
 			'name' => 'Default',
 			'url' => 'default',
 		),
-		/*
-		'trans-dark' => array(
-		'name' => 'Transport Dark',
-		// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
-		'url' => '//tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=xxx',
-		'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-		),
-		*/
-		'terrain' => array(
-			'name' => 'Terrain',
-			// 'url' => 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png',
-			'url' => '//stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
-			'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-		),
-		'toner' => array(
-			'name' => 'Toner',
-			// 'url' => 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
-			'url' => '//stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
-			'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://www.openstreetmap.org/copyright">ODbL</a>',
-		),
-		'watercolor' => array(
-			'name' => 'Watercolor',
-			// 'url' => 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
-			'url' => '//stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
-			'attribution' => 'Map tiles by <a target="_blank" href="http://stamen.com">Stamen Design</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_blank" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+		// 'terrain' => array(
+		// 	'name' => 'Terrain',
+		// 	'url' => 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}@2x.png',
+		// 	'attribution' => '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>',
+		// ),
+		// 'toner' => array(
+		// 	'name' => 'Toner',
+		// 	// 'url' => 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
+		// 	// 'url' => '//stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+		// 	'url' => 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}@2x.png',
+		// 	'attribution' => '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>',
+		// ),
+		// 'watercolor' => array(
+		// 	'name' => 'Watercolor',
+		// 	// 'url' => 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+		// 	'url' => 'https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg',
+		// 	'attribution' => '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>',
 
-		),
-		'wiki' => array(
-			'name' => 'WikiMedia',
-			'url' => '//maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
-			'attribution' => '<a target="_blank" href="https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		),
+		// ),
+		// 'wiki' => array(
+		// 	'name' => 'WikiMedia',
+		// 	'url' => 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+		// 	'attribution' => '<a target="_blank" href="https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a> &copy; <a target="_blank" href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		// ),
 	);
 	/**
 	 * Creates or returns an instance of this class.

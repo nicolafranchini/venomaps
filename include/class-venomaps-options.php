@@ -150,38 +150,12 @@ class Venomaps_Options {
 
 		$style = isset( $this->options['style'] ) ? $this->options['style'] : false;
 		?>
-
-		<h2><?php esc_html_e( 'Default Maps', 'venomaps' ); ?></h2>
-		<div class="venomaps-default-maps">
-			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/default.jpg', __FILE__ ) ); ?>">
-				<p>Default</p>
-			</div>
-			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/terrain.jpg', __FILE__ ) ); ?>">
-				<p>Terrain</p>
-			</div>
-			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/toner.jpg', __FILE__ ) ); ?>">
-				<p>Toner</p>
-			</div>
-			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/watercolor.jpg', __FILE__ ) ); ?>">
-				<p>Watercolor</p>
-			</div>
-			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/wikimedia.jpg', __FILE__ ) ); ?>">
-				<p>Wikimedia</p>
-			</div>
-		</div>
-
 		<h2><?php esc_html_e( 'Custom Maps', 'venomaps' ); ?></h2>
 		<p>
 		<?php
 		esc_html_e( 'Paste here your custom raster tile url.', 'venomaps' );
 		?>
 		</p>
-
 		<fieldset class="wpol-repeatable-group">
 			<?php
 			$cleanstyles = array();
@@ -215,6 +189,8 @@ class Venomaps_Options {
 		<div class="wpol-form-group">
 			<div class="button wpol-call-repeat"><span class="dashicons dashicons-plus"></span> <?php esc_html_e( 'New style', 'venomaps' ); ?></div>
 		</div>
+		<p><?php esc_html_e( 'Free custom map tiles are available at', 'venomaps' ); ?>: <a target="_blank" href="https://cloud.maptiler.com/maps/">Maptiler</a>, <a target="_blank" href="https://stadiamaps.com/stamen/">Stadia Maps</a>, <a target="_blank" href="https://www.thunderforest.com/maps/">Thunderforest</a></p>
+
 		<?php
 	}
 
