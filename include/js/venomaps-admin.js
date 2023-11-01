@@ -235,7 +235,7 @@
 		var repgroup = $('.wpol-repeatable-group');
 		var lastitemnum = $('.wpol-repeatable-item').last().data('number');
 		var newnum = parseFloat(lastitemnum) + 1;
-		var newitem = '<div class="wpol-repeatable-item wpol-form-group" data-number="'+newnum+'"><input type="text" class="all-options" name="venomaps_settings[style]['+newnum+'][name]" value="map style '+newnum+'"> <input type="url" class="regular-text" name="venomaps_settings[style]['+newnum+'][url]" value="" placeholder="https://api.maptiler.com/maps/.../style.json?key=..."></div>';
+		var newitem = '<div class="wpol-repeatable-item wpol-form-group" data-number="'+newnum+'"><input type="text" class="all-options" name="venomaps_settings[style]['+newnum+'][name]" value="map style '+newnum+'"> <input type="url" class="regular-text" name="venomaps_settings[style]['+newnum+'][url]" value="" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=..."></div>';
 		$('.wpol-repeatable-group').append(newitem);
 	});
 

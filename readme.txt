@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.2.2
-Stable tag: 1.2.2
+Version: 1.2.3
+Stable tag: 1.2.3
 Tested up to: 6.3
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -14,7 +14,7 @@ Tags: map, maps, openlayers, location, places
 Author URI: https://veno.es/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
-Donate link: https://www.paypal.me/venoes
+Donate link: https://www.paypal.com/donate/?hosted_button_id=BXVJVBJ2BZUQL
 
 Create maps with custom styles, multiple markers, info windows with rich text editors. Widget and Block available. Vector maps supported.
 
@@ -78,6 +78,7 @@ No, this plugin borns as an alternative to Google Maps, and is based on OpenStre
 2. Clusters
 3. Map page settings
 4. Block
+5. General settings
 
 == Other Notes ==
 
@@ -96,7 +97,7 @@ Under Appearance > Widgets you will find a new widget **VenoMaps**. Add it to yo
 
 ### Custom styles available
 
-Under Settings > Venomaps you can add custom map tiles
+Under Settings > Venomaps you can add custom map tiles and set the api keys for the following services: Stadiamaps, Thunderforest, Maptiler
 
 ### Licenses and copyrights
 
@@ -105,6 +106,11 @@ Under Settings > Venomaps you can add custom map tiles
 OpenStreetMap [ODbL](https://www.openstreetmap.org/copyright)
 
 == Changelog ==
+
+= 1.2.3 =
+* Update: Included maps from Stadiamaps, Thunderforest, Maptiler
+* Update: Center map on marker when clicked
+* Update: Cursor pointer on markers
 
 = 1.2.2 =
 * Update: Removed default styles, now Stamen maps require an api key

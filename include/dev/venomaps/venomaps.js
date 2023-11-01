@@ -14,13 +14,12 @@
               console.log('WARNING: OpenLayers Library not loaded');
               return false;
             }
-            var map, mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, customStyle, attribution, getsource, cluster_color, cluster_bg;
+            var map, mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, attribution, getsource, cluster_color, cluster_bg;
 
             mapid = infomap.mapid;
             maplat = infomap.lat;
             maplon = infomap.lon;
             styleUrl = infomap.style_url;
-            customStyle = infomap.custom_style;
             attribution = infomap.attribution;
             zoom = infomap.zoom;
             zoom_scroll = infomap.zoom_scroll;
@@ -147,8 +146,7 @@
                                     fill: new ol.style.Fill({
                                         color: cluster_bg_array,
                                     }),
-
-                                }),
+                                })
                             }),
                             new ol.style.Style({
                                 image: new ol.style.Circle({
@@ -167,8 +165,7 @@
                                     }),
                                 }),
                                 zIndex: 9999
-                            }),
-
+                            })
                         ];
 
                         var style = false;
@@ -247,12 +244,12 @@
                     clusters.getFeatures(event.pixel).then((features) => {
                         if (features.length > 0) {
                             const clusterMembers = features[0].get('features');
-            
+                                const view = map.getView();
                                 if (clusterMembers.length > 1) {
                                     // Calculate the extent of the cluster members.
                                     const extent = ol.extent.createEmpty();
                                     clusterMembers.forEach((feature) => ol.extent.extend(extent, feature.getGeometry().getExtent()));
-                                    const view = map.getView();
+                                    
                                     const resolution = map.getView().getResolution();
 
                                     if ( view.getZoom() !== view.getMaxZoom() && (ol.extent.getWidth(extent) > resolution || ol.extent.getHeight(extent) > resolution)) {
@@ -260,33 +257,33 @@
                                     }
                                 }
                                 if (clusterMembers.length === 1) { {
-
                                     var allinfopanels = document.querySelectorAll('.wpol-infopanel');
                                     var alloverlays = document.querySelectorAll('.ol-overlay-container');
-                                    // var paneltarget_id = infomarkerdom.dataset.paneltarget;
                                     var paneltarget = clusterMembers[0].get('panel');
-
-                                    // var paneltarget = document.querySelector('#' + paneltarget_id);
-
                                     if (paneltarget) {
-
                                         alloverlays.forEach(thisoverlay => {
                                             thisoverlay.classList.remove('wpol-infopanel-active');
                                         });
-
                                         paneltarget.parentNode.classList.add('wpol-infopanel-active');
-                                        // paneltarget.style.display = 'block';
                                         paneltarget.classList.remove('infobox-closed', 'was-open');
-
+                                        // Center map to marker
+                                        const point = clusterMembers[0].getGeometry();
+                                        view.animate({center: point.getCoordinates()});
                                     }
-
                                 }
-
                             }
                         }
                     });
                 });
 
+                // change mouse cursor when over marker
+                map.on('pointermove', function (e) {
+                    const pixel = map.getEventPixel(e.originalEvent);
+                    const pixelFeatures = map.getFeaturesAtPixel(pixel);
+                    const features = pixelFeatures.length > 0 ? pixelFeatures[0].get('features') : false;
+                    const hit = map.hasFeatureAtPixel(pixel) && (features.length > 1 || (features.length === 1 && features[0].get('panel')));
+                    map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+                });
             }
             setUp(); 
         }
