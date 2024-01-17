@@ -337,11 +337,12 @@ class Venomaps_Plugin {
 		$stylekey = get_post_meta( $map_id, 'venomaps_style', true );
 
 		$pieces = explode( '_', $stylekey );
+		$styleurl = 'default';
 
-		$style_group = $pieces[0];
-		$style_key = $pieces[1];
+		$style_group = isset( $pieces[0] ) ? $pieces[0] : false;
+		$style_key = isset( $pieces[1] ) ? $pieces[1] : false;
 
-		$styleurl = isset( $styles[ $style_group ][ $stylekey ]['url'] ) ? $styles[ $style_group ][ $stylekey ]['url'] : 'default';
+		$styleurl = ( $style_group && $style_key && isset( $styles[ $style_group ][ $stylekey ]['url'] ) ) ? $styles[ $style_group ][ $stylekey ]['url'] : 'default';
 		$styleurl = strlen( $styleurl ) ? $styleurl : 'default';
 		$attribution = isset( $styles[ $style_group ][ $stylekey ]['attribution'] ) ? $styles[ $style_group ][ $stylekey ]['attribution'] : 0;
 
@@ -558,11 +559,13 @@ class Venomaps_Plugin {
 		);
 
 		// Get styles from providers with api key.
-		foreach ( $settings['map_key'] as $provider => $api_key ) {
-			if ( strlen( $api_key ) ) {
-				foreach ( $this->all_styles[ $provider ] as $provider_key => $map_style ) {
-					$map_style['url'] .= $api_key;
-					$provider_styles[ $provider ][ $provider . '_' . $provider_key ] = $map_style;
+		if ( isset( $settings['map_key'] ) && is_array( $settings['map_key'] ) ) {
+			foreach ( $settings['map_key'] as $provider => $api_key ) {
+				if ( strlen( $api_key ) ) {
+					foreach ( $this->all_styles[ $provider ] as $provider_key => $map_style ) {
+						$map_style['url'] .= $api_key;
+						$provider_styles[ $provider ][ $provider . '_' . $provider_key ] = $map_style;
+					}
 				}
 			}
 		}

@@ -310,7 +310,6 @@
     function VenoMaps(){
         return VenoMapsPlugin.init();
     }
-
     return VenoMaps;
 })));
 

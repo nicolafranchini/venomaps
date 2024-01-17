@@ -4,7 +4,7 @@ Author: Nicola Franchini
 Contributors: nicolafranchini
 Version: 1.2.3
 Stable tag: 1.2.3
-Tested up to: 6.3
+Tested up to: 6.4
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps

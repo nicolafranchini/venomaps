@@ -81,6 +81,7 @@ class Venomaps_Options {
 			<form method="post" action="options.php">     
 				<?php
 				settings_fields( __FILE__ );
+				settings_errors();
 				do_settings_sections( __FILE__ );
 				submit_button();
 				?>
