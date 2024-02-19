@@ -217,7 +217,7 @@
                         baselayer,
                         clusters
                     ],
-                    controls: ol.control.defaults.defaults({ attributionOptions: { collapsible: true } }),
+                    controls: ol.control.defaults.defaults({ attributionOptions: { collapsible: true } }).extend([new ol.control.FullScreen()]),
                     interactions: ol.interaction.defaults.defaults({mouseWheelZoom:zoom_scroll})
                 });
 

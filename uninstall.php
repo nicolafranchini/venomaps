@@ -1,1 +1,5 @@
-<?php delete_option( 'venomaps_settings' );
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+delete_option( 'venomaps_settings' );

@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.2.3
-Stable tag: 1.2.3
+Version: 1.2.4
+Stable tag: 1.2.4
 Tested up to: 6.4
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -106,6 +106,9 @@ Under Settings > Venomaps you can add custom map tiles and set the api keys for 
 OpenStreetMap [ODbL](https://www.openstreetmap.org/copyright)
 
 == Changelog ==
+
+= 1.2.4 =
+* New: Fullscreen control
 
 = 1.2.3 =
 * Update: Included maps from Stadiamaps, Thunderforest, Maptiler
