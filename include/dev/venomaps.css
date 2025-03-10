@@ -133,3 +133,21 @@
 .ol-control button:focus, .ol-control button:hover{
   opacity: .8;
 }
+
+.venomaps-search{
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: inherit;
+  background-clip: padding-box;
+  border: 1px solid #495057;
+  border-radius: 0;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
