@@ -1,5 +1,6 @@
 cd `dirname $0`
 
-cleancss ol/ol.css venomaps/venomaps.css -o ../css/venomaps-bundle.min.css
+cleancss node_modules/ol/ol.css venomaps.css -o ../css/venomaps-bundle.css
+cleancss node_modules/ol/ol.css venomaps-admin.css -o ../css/venomaps-admin-bundle.css
 
-uglifyjs ol/ol.js venomaps/venomaps.js --comments --compress --mangle -o ../js/venomaps-bundle.min.js
+npm run build
