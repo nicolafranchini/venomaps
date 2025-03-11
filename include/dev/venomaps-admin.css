@@ -13,11 +13,6 @@
 	margin: 0;
 	padding: 0;
 }
-.wpol-form-group{
-	display: block;
-	margin: 4px 0;
-	clear: both;
-}
 .ol-attribution{
   font-size: 9px;
 }
@@ -28,6 +23,16 @@
 	display: block;
 	margin: 4px 0;
 	clear: both;
+	width: 100%;
+}
+.venomaps-form-group{
+	display: flex;
+	margin: 4px 0;
+	clear: both;
+	width: 100%;
+}
+.venomaps-form-group > *{
+	flex: 1 1 auto;
 }
 .wrap-marker{
 	margin-bottom: 1em;

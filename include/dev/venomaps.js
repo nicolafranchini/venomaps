@@ -21,21 +21,15 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
 
     var VenoMapsPlugin = (function(){
 
-        function initVenoMaps(getinfomap){
+        function initVenoMaps(mapblock){
 
-            var infomap = JSON.parse(getinfomap);
-
-            // if (typeof ol === 'undefined' || ol === null) {
-            //   console.log('WARNING: OpenLayers Library not loaded');
-            //   return false;
-            // }
+            var infomap =  JSON.parse(mapblock.dataset.infomap);
             var map, mapid, maplat, maplon, zoom, zoom_scroll, styleUrl, attribution, getsource, cluster_color, cluster_bg;
-
             mapid = infomap.mapid;
             maplat = infomap.lat;
             maplon = infomap.lon;
-            styleUrl = infomap.style_url;
-            attribution = infomap.attribution;
+            styleUrl =  decodeURIComponent(infomap.style_url);
+
             zoom = infomap.zoom;
             zoom_scroll = infomap.zoom_scroll;
             cluster_color = infomap.cluster_color;
@@ -43,19 +37,21 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
 
             zoom_scroll = Boolean(infomap.zoom_scroll);
 
+            const wrapoverlay = mapblock.querySelector('#wrap-overlay-' + mapid );
+
+            const allclosepanel = wrapoverlay.querySelectorAll(".wpol-infopanel-close");
+            const allpanels = wrapoverlay.querySelectorAll(".wpol-infopanel");
+            const attributionel = wrapoverlay.querySelector(".venomaps-get-attribution");
+            attribution = attributionel ? attributionel.innerHTML : '';
+
             var pos = fromLonLat([parseFloat(maplon), parseFloat(maplat)]);
 
             const setupdata = new Array();
             let features = new Array();
-
-            const allclosepanel = document.querySelectorAll('#wrap-overlay-' + mapid + ' .wpol-infopanel-close');
-            const allpanels = document.querySelectorAll('#wrap-overlay-' + mapid + ' .wpol-infopanel');
-
+            let source, clusterSource;
 
             function setUpMarkers() {
-
-console.log('setUpMarkers')
-                const allinfomarkers = document.querySelectorAll('#wrap-overlay-' + mapid + ' .wpol-infomarker');
+                const allinfomarkers = wrapoverlay.querySelectorAll(".wpol-infomarker");
 
                 // Setup markers
                 allinfomarkers.forEach(function(infomarkerdom, key) {
@@ -71,12 +67,11 @@ console.log('setUpMarkers')
 
                         var labelDom = document.getElementById('infopanel_' + mapid + '_' + key);
                         var infolabel = false;
-var labeltext = false;
+                        var labeltext = false;
+                        
                         if (labelDom) {
-
-
-var infolabelDom = labelDom.querySelector('.wpol-infolabel');
-labeltext = infolabelDom ? infolabelDom.innerText : false;
+                            var infolabelDom = labelDom.querySelector('.wpol-infolabel');
+                            labeltext = infolabelDom ? infolabelDom.innerText : false;
 
                             // Add infoPanel
                             infolabel = new Overlay({
@@ -86,17 +81,15 @@ labeltext = infolabelDom ? infolabelDom.innerText : false;
                               element: labelDom,
                               // stopEvent: true,
                             });
-
-
                         }
 
                         setupdata[key] = {};
                         setupdata[key].label = infolabel;
 
-setupdata[key].text = labeltext;
+                        setupdata[key].text = labeltext;
 
                         let feature = new Feature(new Point(markerpos));
-setupdata[key].key = key;
+                        setupdata[key].key = key;
 
                         var style = new Style({
                             image: new Icon({
@@ -111,7 +104,8 @@ setupdata[key].key = key;
 
                         feature.set('stile', style);
                         feature.set('panel', labelDom);
-feature.set('visible', true);
+                        feature.set('visible', true);
+                        
                         allclosepanel.forEach(thisclosepanel => {
                             thisclosepanel.addEventListener('click', function(){
                                 var infobox = thisclosepanel.parentNode;
@@ -123,10 +117,7 @@ feature.set('visible', true);
                         });
                     }
                 }); // END SETUP MARKERS
-
             }
-
-
 
             function setUp() {
                 setUpMarkers();
@@ -150,28 +141,24 @@ feature.set('visible', true);
             }
 
             function setupClusters(){
-    console.log("setupClusters")
                 // Setup clusters
-                const source = new sourceVector({
+                source = new sourceVector({
                     features: features,
                 });
 
                 const mindistance = 20;
                 const distanceinput = 40;
 
-                const clusterSource = new Cluster({
+                clusterSource = new Cluster({
                     distance: parseInt(distanceinput, 10),
                     minDistance: parseInt(mindistance, 10),
                     source: source,
-
-geometryFunction: (feature) => {
-closepanels(feature.get('panel'));
-if (feature.get('visible')) {
-
-    return feature.getGeometry();
-}
-      },
-
+                    geometryFunction: (feature) => {
+                        closepanels(feature.get('panel'));
+                        if (feature.get('visible')) {
+                            return feature.getGeometry();
+                        }
+                    },
                 });
                 
                 // Get rgba color
@@ -186,7 +173,7 @@ if (feature.get('visible')) {
                         const clusterstyle = [
                             new Style({
                                 image: new Circle({
-                                    radius: 22,
+                                    radius: 27,
                                     fill: new Fill({
                                         color: cluster_bg_array,
                                     }),
@@ -194,7 +181,7 @@ if (feature.get('visible')) {
                             }),
                             new Style({
                                 image: new Circle({
-                                    radius: 15,
+                                    radius: 20,
                                     stroke: new Stroke({
                                         color: cluster_color,
                                     }),
@@ -207,6 +194,7 @@ if (feature.get('visible')) {
                                     fill: new Fill({
                                         color: cluster_color,
                                     }),
+                                    font: "12px sans-serif"
                                 }),
                                 zIndex: 9999
                             })
@@ -217,16 +205,11 @@ if (feature.get('visible')) {
                             style = clusterstyle;
                             feature.get('features').forEach(feature => {
                                 closepanels(feature.get('panel'));
-                                // style = clusterstyle;
                             });
                         } else {
-
                             const originalFeature = feature.get('features')[0];
-
                             openpanels(originalFeature.get('panel'));
-
                             style = originalFeature.get('stile');
-
                         }
 
                         return style;
@@ -236,9 +219,37 @@ if (feature.get('visible')) {
             }
             // END SETUP Clusters
 
-            function loadMap() {
-    console.log("loadMap")
 
+
+            function updateSearch(term) {
+                if (setupdata) {
+                    setupdata.forEach(marker => {
+                        if (term.length > 1 ) {
+                            if (marker.text) {
+                                if (marker.text.toLowerCase().includes(term.toLowerCase())) {
+                                    // Found marker
+                                    features[marker.key].set('visible', true);
+                                } else {
+                                    features[marker.key].set('visible', false);
+                                }
+                            } else {
+                                // Hide markers without text
+                                features[marker.key].set('visible', false);
+                            }
+                        } else {
+                            // Reset search
+                            features[marker.key].set('visible', true);
+                        }
+                    });
+                }
+
+                if (setupdata && term.length > 1) { 
+                    // Zoom out to show all the markers
+                    map.getView().fit(source.getExtent(), {duration: 500, padding: [100, 100, 100, 100]});
+                }  
+            }
+
+            function loadMap() {
                 const clusters = setupClusters();
                 let sourcesettings = {};
                 if ( styleUrl !== 'default' ) {
@@ -289,62 +300,27 @@ if (feature.get('visible')) {
                     }
                 });
 
+                var searchmap = document.getElementById("search-venomap-"+mapid);
+                if (searchmap) {
+                    searchmap.value = "";
+                    searchmap.addEventListener("input", function(){
+                        if (searchterms) {
+                            searchterms.value = "";
+                        }
+                        updateSearch(searchmap.value);
+                    });                    
+                }
 
-//         console.log("getsource")
-
-// console.log(getsource)
-
-//         console.log("baselayer")
-
-// console.log(baselayer)
-
-
-
-var searchmap = document.getElementById("search-venomap-"+mapid);
-searchmap.value = "";
-searchmap.addEventListener("input", function(){
-
- if (setupdata) { 
-    setupdata.forEach(marker => {
-
-    if (searchmap.value.length > 1 ) {
-        if (marker.text) {
-            // Found marker
-            if (marker.text.toLowerCase().includes(searchmap.value.toLowerCase())) {
-                console.log("FOUND")
-                features[marker.key].set('visible', true);
-            } else {
-                features[marker.key].set('visible', false);
-            }
-        } else {
-            // Hide markers without text
-            features[marker.key].set('visible', false);
-        }
-    } else {
-        // Reset search
-        features[marker.key].set('visible', true);
-    }
-
-        // if (marker.text && searchmap.value.length > 1 ) {
-
-        //     features[marker.key].set('visible', false);
-
-        //     if (marker.text.search(searchmap.value) !== -1) {
-        //         console.log("FOUND")
-        //         features[marker.key].set('visible', true);
-        //     } else {
-        //         features[marker.key].set('visible', false);
-        //     }
-        // } else {
-        //     features[marker.key].set('visible', false);
-        // }
-    });
-}
-
-
-
-})
-
+                var searchterms = document.getElementById("search-venomap-term-"+mapid);
+                if (searchterms) {
+                    searchterms.value = "";
+                    searchterms.addEventListener("change", function(){
+                        if (searchmap) {
+                            searchmap.value = "";
+                        }
+                        updateSearch(searchterms.value);
+                    });                    
+                }
 
                 map.on('click', (event) => {
                     clusters.getFeatures(event.pixel).then((features) => {
@@ -359,7 +335,7 @@ searchmap.addEventListener("input", function(){
                                     const resolution = map.getView().getResolution();
 
                                     if ( view.getZoom() !== view.getMaxZoom() && (getWidth(extent) > resolution || getHeight(extent) > resolution)) {
-                                        view.fit(extent, {duration: 500, padding: [60, 60, 60, 60]});
+                                        view.fit(extent, {duration: 500, padding: [100, 100, 100, 100]});
                                     }
                                 }
                                 if (clusterMembers.length === 1) { {
@@ -402,8 +378,7 @@ searchmap.addEventListener("input", function(){
             allmaps.forEach(thismap => {
                 if (!thismap.hasAttribute("data-venomap-init")) {
                     thismap.setAttribute("data-venomap-init", "1");
-                    var datamap = thismap.dataset.infomap;
-                    initVenoMaps(datamap);
+                    initVenoMaps(thismap);
                 }
 
             });
@@ -419,7 +394,5 @@ searchmap.addEventListener("input", function(){
     }
     return VenoMaps;
 })));
-
-// console.log(VenoMaps);
 
 VenoMaps();

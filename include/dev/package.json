@@ -1,7 +1,7 @@
 {
-  "name": "ol-rollup",
+  "name": "venomaps-rollup",
   "version": "1.0.0",
-  "description": "Example using OpenLayers with Rollup",
+  "description": "Compile Venomaps files",
   "scripts": {
     "start": "rollup --config rollup.config.js --watch",
     "build": "rollup --config rollup.config.js"
@@ -10,7 +10,7 @@
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.79.2",
-    "@rollup/plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "ol": "latest"

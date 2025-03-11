@@ -1,3 +1,6 @@
+.wrap-venomaps, .wrap-venomaps *{
+  box-sizing: border-box;
+}
 .venomap {
   height: 500px;
   width: 100%;
@@ -134,10 +137,13 @@
   opacity: .8;
 }
 
-.venomaps-search{
+input[type="text"].venomaps-search{
   display: block;
   width: 100%;
   padding: .375rem .75rem;
+  padding-right: 3em;
+  margin: 0;
+  margin-bottom: 0.6rem;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -147,7 +153,34 @@
   appearance: none;
   background-color: inherit;
   background-clip: padding-box;
-  border: 1px solid #495057;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0;
+  position: relative;
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221em%22%20height%3D%221em%22%20fill%3D%22currentColor%22%20class%3D%22bi%20bi-search%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M11.742%2010.344a6.5%206.5%200%201%200-1.397%201.398h-.001q.044.06.098.115l3.85%203.85a1%201%200%200%200%201.415-1.414l-3.85-3.85a1%201%200%200%200-.115-.1zM12%206.5a5.5%205.5%200%201%201-11%200%205.5%205.5%200%200%201%2011%200%22%2F%3E%3C%2Fsvg%3E');
+  background-position: center right 1em;
+  background-repeat: no-repeat;
+}
+
+.venomaps-search-tags {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  display: block;
+  width: 100%;
+  padding: .375rem 2.25rem .375rem .75rem;
+  margin: 0;
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: inherit;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"), none;
+  background-repeat: no-repeat;
+  background-position: right .75rem center;
+  background-size: 16px 12px;
+  border:1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }

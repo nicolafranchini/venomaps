@@ -60,8 +60,8 @@ class Venomaps_Options {
 		if ( 'settings_page_venomaps' !== $hook ) {
 			return;
 		}
-		wp_enqueue_script( 'venomaps-box-image', plugins_url( 'js/venomaps-admin.js', __FILE__ ), array( 'jquery' ), VENOMAPS_VERSION );
-		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin.css', __FILE__ ), array(), VENOMAPS_VERSION );
+		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin-bundle.css', __FILE__ ), array(), VENOMAPS_VERSION );
+		wp_enqueue_script( 'venomaps-admin', plugins_url( 'js/venomaps-admin-bundle.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
 	}
 
 	/**

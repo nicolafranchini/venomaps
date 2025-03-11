@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.2.5
-Stable tag: 1.2.5
+Version: 1.2.6
+Stable tag: 1.2.6
 Tested up to: 6.7
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -106,6 +106,16 @@ Under Settings > Venomaps you can add custom map tiles and set the api keys for 
 OpenStreetMap [ODbL](https://www.openstreetmap.org/copyright)
 
 == Changelog ==
+
+= 1.2.6 =
+* New: Search markers
+* New: Filter markers by term
+* Update: UI improvements
+* Update: Code Optimization. Lighter. Faster!
+* Update: Openlayers v10.4
+
+= 1.2.5 =
+* Tested up to WP 6.7
 
 = 1.2.4 =
 * New: Fullscreen control
