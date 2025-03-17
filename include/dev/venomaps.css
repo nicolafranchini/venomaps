@@ -29,9 +29,20 @@
 .wpol-infopanel{
   position: relative;
   width: auto;
-  max-width: 400px;
+  max-width: 320px;
+/*  opacity: 1;
+  transform: translateY(0);
+  transition: transform .2s, opacity .2s;
+  pointer-events: auto;
+  width: auto;
+  height: auto;*/
 }
 .wpol-infopanel.infobox-closed{
+/*  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-16px);
+  width: 0;
+  height: 0;*/
   display: none;
 }
 .wpol-infopanel-close{
@@ -41,10 +52,10 @@
   right: 0px;
   width: 20px;
   height: 20px;
-  padding: 5px;
+  padding: 0;
   cursor: pointer;
 }
-.wpol-infopanel-close img{
+.wpol-infopanel-close img, .wpol-infopanel-close svg{
   display: block;
   width: 100%;
   height: auto;
@@ -62,10 +73,12 @@
   -webkit-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
   -moz-box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
   box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.63);
-  border-radius: 2px;
+  border-radius: 4px;
   display: block;
   font-size: 14px;
   line-height: 1.2;
+  max-height: 200px;
+  overflow-y: auto;
 }
 .wpol-infopanel .wpol-infolabel *{
   margin: 0;
@@ -137,7 +150,7 @@
   opacity: .8;
 }
 
-input[type="text"].venomaps-search{
+input[type="text"].venomaps-form-control{
   display: block;
   width: 100%;
   padding: .375rem .75rem;
@@ -161,7 +174,7 @@ input[type="text"].venomaps-search{
   background-repeat: no-repeat;
 }
 
-.venomaps-search-tags {
+.venomaps-custom-select {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   display: block;
   width: 100%;

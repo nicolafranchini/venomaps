@@ -8,7 +8,7 @@
     ColorPicker = wp.components.ColorPicker,
     CheckboxControl = components.CheckboxControl,
     ToggleControl = components.ToggleControl,
-    FormTokenField = components.FormTokenField,
+    // FormTokenField = components.FormTokenField,
     InspectorControls = blockEditor.InspectorControls;
 
     var el = element.createElement;
@@ -31,22 +31,21 @@
         icon: 'location-alt',
         category: 'widgets',
         attributes: {
-          content: {
-            type: 'array',
-            source: 'children',
-            selector: 'div',
-          },
-          map_id: { type: 'string', default: '' },
-          height: { type: 'string', default: '500' },
-          height_um: { type: 'string', default: 'px' },
-          cluster_color: { type: 'string', default: '#ffffff' },
-          cluster_bg: { type: 'string', default: '#009CD7' },
-          zoom: { type: 'string', default: '12' },
-          zoom_scroll: { type: 'integer', default: 0 },
-          search: { type: 'integer', default: 0 },
-          search_for: { type: 'array', default: [] }
+            content: {
+                type: 'array',
+                source: 'children',
+                selector: 'div',
+            },
+            map_id: { type: 'string', default: '' },
+            height: { type: 'string', default: '500' },
+            height_um: { type: 'string', default: 'px' },
+            cluster_color: { type: 'string', default: '#ffffff' },
+            cluster_bg: { type: 'string', default: '#009CD7' },
+            zoom: { type: 'string', default: '12' },
+            zoom_scroll: { type: 'integer', default: 0 },
+            search: { type: 'integer', default: 0 },
+            // search_for: { type: 'array', default: [] }
         },
-
         edit: function( props ) {
             var map_id_init = props.attributes.map_id || '';
             var height_init = props.attributes.height || '500';
@@ -56,7 +55,7 @@
             var zoom_init = props.attributes.zoom || 12;
             var zoom_scroll_init = props.attributes.zoom_scroll || 0;
             var search_init = props.attributes.search || 0;
-            var search_for_init = props.attributes.search_for || [];
+            // var search_for_init = props.attributes.search_for || [];
             return [
                 el(
                     Placeholder, 
@@ -65,7 +64,6 @@
                         icon: 'location-alt',
                         label: "VenoMap",
                     },
-
                     el(
                         'div',
                         {
@@ -87,7 +85,6 @@
 
                     )
                 ),
-
                 el(
                     InspectorControls,
                     {key: 'venomaps-block-controls'},
@@ -132,8 +129,8 @@
                                 label: venomapsBlockVars._initial_zoom,
                                 type: 'number',
                                 value: zoom_init,
-                                min: '1',
-                                max: '24',
+                                min: '2',
+                                max: '18',
                                 step: '1',
                                 onChange: function(value) {
                                     props.setAttributes({zoom: value});
@@ -163,18 +160,18 @@
                                 }
                             }
                         ),
-                        el(
-                            FormTokenField,
-                            {
-                                label: 'SEARCH FOR',
-                                value: search_for_init,
-                                onChange: function(tokens) {
-                                    var state = tokens ? tokens : [];
-                                    // var state = value ? 1 : 0;
-                                    props.setAttributes({search_for: tokens});
-                                }
-                            }
-                        ),
+                        // el(
+                        //     FormTokenField,
+                        //     {
+                        //         label: venomapsBlockVars._search_suggestions,
+                        //         value: search_for_init,
+                        //         onChange: function(tokens) {
+                        //             var state = tokens ? tokens : [];
+                        //             // var state = value ? 1 : 0;
+                        //             props.setAttributes({search_for: tokens});
+                        //         }
+                        //     }
+                        // ),
                         el(
                             'p',
                             {},
@@ -205,32 +202,29 @@
                         ),
                     )
                 )
-
-
             ]; // return 
         },
         save: function (props) {
             return el(
-                'div', {}, '[venomap id="' + props.attributes.map_id + '" height="' + props.attributes.height + props.attributes.height_um + '" cluster_bg="' + props.attributes.cluster_bg + '" cluster_color="' + props.attributes.cluster_color + '" zoom="' + props.attributes.zoom + '" scroll="' + props.attributes.zoom_scroll + '" search="' + props.attributes.search + '" tags="' + props.attributes.search_for + '" ]'
+                'div', {}, '[venomap id="' + props.attributes.map_id + '" height="' + props.attributes.height + props.attributes.height_um + '" cluster_bg="' + props.attributes.cluster_bg + '" cluster_color="' + props.attributes.cluster_color + '" zoom="' + props.attributes.zoom + '" scroll="' + props.attributes.zoom_scroll + '" search="' + props.attributes.search + '" ]'
             )
         },
 
         deprecated: [
             {
-
                 attributes: {
-                  content: {
-                    type: 'array',
-                    source: 'children',
-                    selector: 'div',
-                  },
-                  map_id: { type: 'string', default: '' },
-                  height: { type: 'string', default: '500' },
-                  height_um: { type: 'string', default: 'px' },
-                  cluster_color: { type: 'string', default: '#ffffff' },
-                  cluster_bg: { type: 'string', default: '#009CD7' },
-                  zoom: { type: 'string', default: '12' },
-                  zoom_scroll: { type: 'integer', default: 0 },
+                        content: {
+                        type: 'array',
+                        source: 'children',
+                        selector: 'div',
+                    },
+                    map_id: { type: 'string', default: '' },
+                    height: { type: 'string', default: '500' },
+                    height_um: { type: 'string', default: 'px' },
+                    cluster_color: { type: 'string', default: '#ffffff' },
+                    cluster_bg: { type: 'string', default: '#009CD7' },
+                    zoom: { type: 'string', default: '12' },
+                    zoom_scroll: { type: 'integer', default: 0 },
                 },
                 save: function (props) {
                     return el(

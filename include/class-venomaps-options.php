@@ -287,17 +287,21 @@ class Venomaps_Options {
 			if ( ! empty( $cleanstyles ) ) {
 				foreach ( $cleanstyles as $key => $value ) {
 					?>
-					<div class="wpol-repeatable-item wpol-form-group" data-number="<?php echo esc_attr( $key ); ?>">
+					<div class="wpol-repeatable-item wpol-form-group vmap-flex vmap-flex-collapse" data-number="<?php echo esc_attr( $key ); ?>">
 						<input type="text" class="all-options" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][name]" value="<?php echo esc_attr( $value['name'] ); ?>" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>"> 
-						<input type="url" class="regular-text" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][url]" value="<?php echo esc_attr( $value['url'] ); ?>" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=...">
+						<div class="vmap-flex-grow-1">
+							<input type="url" class="large-text" name="venomaps_settings[style][<?php echo esc_attr( $key ); ?>][url]" value="<?php echo esc_attr( $value['url'] ); ?>" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=...">
+						</div>
 					</div>
 					<?php
 				}
 			} else {
 				?>
-				<div class="wpol-repeatable-item wpol-form-group" data-number="0">
+				<div class="wpol-repeatable-item wpol-form-group vmap-flex vmap-flex-collapse" data-number="0">
 					<input type="text" class="all-options" name="venomaps_settings[style][0][name]" value="map style" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>"> 
-					<input type="url" class="regular-text" name="venomaps_settings[style][0][url]" value="" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=...">
+					<div class="vmap-flex-grow-1">
+						<input type="url" class="large-text" name="venomaps_settings[style][0][url]" value="" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=...">
+					</div>
 				</div>
 				<?php
 			}

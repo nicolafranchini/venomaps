@@ -1,7 +1,13 @@
 .venomap {
-	height: 450px;
+	height: 250px;
 	width: 100%;
 	font-family: arial, helvetica, sans-serif;
+}
+.venomap-mini {
+	height: 250px;
+	width: 100%;
+	font-family: arial, helvetica, sans-serif;
+	min-height: 100%;
 }
 .wpol-infomarker{
 	display: block;
@@ -38,9 +44,21 @@
 	margin-bottom: 1em;
 }
 .wrap-clone{
-	border-top: 4px solid #46B450;
+/*	border-top: 4px solid #46B450;*/
 	margin-top: 1em;
 	position: relative;
+}
+.vmap-marker-box{
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 8px 0px;
+	position: relative;
+	margin-bottom: 1em;
+}
+.vmap-marker-box-header{
+	background-color: #F1F1F1;
+	padding: 0.5em 1em;
+}
+.vmap-marker-box-body{
+	padding: 1em;
 }
 .wpol-remove-marker{
 	position: absolute;
@@ -50,13 +68,19 @@
 .wpol-btn-link .dashicons{
 	vertical-align: middle;
 }
-.wpol-badge{
-	background-color: #00A0D2;
+.vmap-badge{
+	background: #2271b1;
 	color: #fff;
 	border-radius: 5em;
-	padding: .5em 1em;
-	margin: .5em 0;
+	padding: .2em .8em;
+	margin: 0;
+	margin-right: 2px;
 	display: inline-block;
+	white-space: nowrap;
+}
+.vmap-edit-marker{
+	display: inline-block;
+	cursor: pointer;
 }
 .wpol-btn-link{
     display: inline-block;
@@ -73,6 +97,160 @@
     box-sizing: border-box;
     background:none;
 }
+
+textarea.vmap-form-control {
+  min-height: 220px;
+}
+.vmap-form-control {
+	display: block;
+	  width: 100%;
+	  padding: .375rem .75rem;
+	  font-size: 1rem;
+	  font-weight: 400;
+	  line-height: 1.5;
+	  color: inherit;
+	  -webkit-appearance: none;
+	  -moz-appearance: none;
+	  appearance: none;
+	  background-color: inherit;
+}
+
+.vmap-form-range {
+  width: 100%;
+  height: 1.5rem;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  margin: 0;
+}
+
+.vmap-form-range::-moz-range-thumb{
+	width: 1rem;
+  height: 1rem;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #0d6efd;
+  border: 0;
+  border-radius: 1rem;
+  -moz-transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.vmap-form-range::-moz-range-track {
+  width: 100%;
+  height: .5rem;
+  color: transparent;
+  cursor: pointer;
+  background-color: rgba(120,120,120,0.3);
+  border-color:transparent;
+	border-radius: 1rem;
+}
+
+
+
+.vmap-invisible{
+	opacity: 0;
+	pointer-events: none;
+
+}
+.vmap-hidden{
+	display: none;
+}
+.vmap-inline-block{
+	display: inline-block;
+}
+
+.vmap-inline{
+	display: inline;
+}
+.vmap-flex{
+	display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.vmap-align-center{
+	align-items: center;
+}
+.vmap-flex-collapse{
+	flex-direction: row;
+}
+
+.vmap-flex-grow-1{
+	flex-grow: 1;
+}
+.wpol-form-group, .wpol-form-group *,
+.wrap-marker, .wrap-marker *,
+.vmap-flex *{
+	box-sizing: border-box;
+}
+.vmap-marker-box-left,
+.vmap-marker-box-right{
+		width: 100%;
+		position: relative;
+}
+.vmap-flex-collapse-md,
+.vmap-flex-collapse-lg,
+.vmap-flex-collapse-xl{
+	flex-direction: column;
+}
+
+@media only screen and (min-width: 768px) {
+	.vmap-flex-collapse-md{
+		flex-direction: row;
+	}
+
+	.vmap-flex-collapse-md .vmap-marker-box-left{
+		width: 50%;
+	}
+
+	.vmap-flex-collapse-md .vmap-marker-box-right{
+		width: 50%;
+		padding-left: 1em;
+	}
+}
+
+@media only screen and (min-width: 992px) {
+	.vmap-flex-collapse-md,
+	.vmap-flex-collapse-lg{
+		flex-direction: row;
+	}
+	.vmap-flex-collapse-md .vmap-marker-box-left,
+	.vmap-flex-collapse-lg .vmap-marker-box-left{
+		width: 50%;
+	}
+
+	.vmap-flex-collapse-md .vmap-marker-box-right,
+	.vmap-flex-collapse-lg .vmap-marker-box-right{
+		width: 50%;
+		padding-left: 1em;
+	}
+}
+
+@media only screen and (min-width: 1200px) {
+
+
+	.vmap-flex-collapse-md,
+	.vmap-flex-collapse-lg,
+	.vmap-flex-collapse-xl{
+		flex-direction: row;
+	}
+
+	.vmap-flex-collapse-md .vmap-marker-box-left,
+	.vmap-flex-collapse-lg .vmap-marker-box-left,
+	.vmap-flex-collapse-xl .vmap-marker-box-left{
+		width: 50%;
+	}
+
+	.vmap-flex-collapse-md .vmap-marker-box-right,
+	.vmap-flex-collapse-lg .vmap-marker-box-right,
+	.vmap-flex-collapse-xl .vmap-marker-box-right{
+		width: 50%;
+		padding-left: 1em;
+	}
+}
+
 @media only screen and (max-width: 782px) {
 	.wpol-btn-link{
 		padding: 0 14px;
@@ -83,22 +261,25 @@
 		margin-bottom: 4px;
 	}
 }
-.wpol-btn-link:hover{
-	color: #DC3232;
-}
-.venomaps_custom_marker-wrap{
-	position: relative;
-	display: inline-block;
-}
 
-input.all-options.venomaps_custom_marker{
+
+.vmap-input-group > input{
 	padding-right: 3em;
+	width: 100%;
 }
 
-.venomaps_custom_marker-wrap .venomaps_marker_remove_btn{
+.vmap-input-group{
+	position: relative;
+	display: block;
+	width: 100%;
+}
+
+.vmap-input-group > button{
 	position: absolute;
 	right: 0;
+	top: 0;
 }
+
 .venomaps_block_map_units select{
 	margin-top: 0;
 }
@@ -140,6 +321,128 @@ input.all-options.venomaps_custom_marker{
 	cursor: move;
 }
 
-.hidden{
-	display: none;
+.vmap-icon-default,
+.vmap-icon-image{
+	margin: 1em;
+ border: 1px solid #d2d2d2;
 }
+.vmap-icon-image img,
+.vmap-icon-default svg{
+	width: 100%;
+	height: auto;
+	max-width: 100%;
+	height: auto;
+}
+.venomaps_marker_upload_btn{
+	cursor: pointer;
+}
+
+@media only screen and (min-width: 851px) {
+	.post-type-venomaps #side-sortables{
+		height: 100%;
+	  position: absolute;
+	}
+	#venomaps_geolocation_box{
+		position: sticky;
+	  top: 0;
+	}
+}
+
+.vmap-marker-row{
+	border-bottom: 1px solid rgba(100,100,100,0.2);
+	padding: 0.8em 0;
+}
+
+.vmap-modal-header{
+	border-bottom: 1px solid rgba(100,100,100,0.2);
+}
+.vmap-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, .5);
+  transition: all ease 0.5s;
+   display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.vmap-modal-helper{
+	display: none;
+	position: absolute;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+}
+.vmap-modal.active  .vmap-modal-helper{
+	display: block;
+}
+
+.vmap-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 9991;
+}
+.vmap-modal-dialog{
+	width: 80%;
+	max-width: 800px;
+	max-height: 75vh;
+	background-color: #fff;
+	padding: 1rem;
+	overflow-y:auto;
+	z-index: 3;
+	transform: translateY(-5em);
+	transition: transform 0.5s;
+}
+.vmap-modal.active .vmap-modal-dialog{
+	transform: translateY(0);
+}
+.modal-content {
+ vmap-modal-content:auto;
+}
+.vmap-left-auto{
+	margin-left: auto;
+}
+.vmap-right-auto{
+	margin-right: auto;
+}
+.vmap-cursor-pointer{
+	cursor: pointer;
+}
+.vmap-form-control-color {
+  width: 6rem;
+  height: calc(1.5em + .75rem + 2px);
+  padding:0;
+}
+.vmap-form-control-color::-moz-color-swatch {
+  border:0 !important;
+  border-radius: 0;
+}
+
+.vmap-response-message{
+	border-left: 4px solid #456D95;
+	display: none;
+	font-size: 13px;
+  line-height: 2.15384615;
+ 	min-height: 30px;
+  margin: 0 1em;
+  padding: 0 10px;
+}
+.vmap-response-error{
+	border-color: #FF0042;
+}
+
+.vmap-response-success{
+	border-color: #45C26A;
+}
+.vmap-response-message.active{
+	display: block;
+}
+
+

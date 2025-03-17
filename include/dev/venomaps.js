@@ -1,17 +1,20 @@
 import {Map, View, Overlay, Feature} from 'ol';
 
-import {fromLonLat} from 'ol/proj';
-import {Point} from 'ol/geom';
-import {Style, Icon, Circle, Fill, Stroke, Text} from 'ol/style';
-import {Vector as sourceVector, Cluster, OSM} from 'ol/source';
-import {asArray} from 'ol/color';
-import {Vector as LayerVector, Tile} from 'ol/layer';
-import {defaults as controlDefaults} from 'ol/control/defaults';
-import {FullScreen} from 'ol/control';
-import {defaults as interactionDefaults} from 'ol/interaction/defaults';
-import {getVectorContext} from 'ol/render';
-import {fromExtent} from 'ol/geom/Polygon';
-import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
+import { fromLonLat } from 'ol/proj';
+import { Point } from 'ol/geom';
+import { Style, Icon, Circle, Fill, Stroke, Text } from 'ol/style';
+import { Vector as sourceVector, Cluster, OSM} from 'ol/source';
+import { asArray } from 'ol/color';
+import { Vector as LayerVector, Tile } from 'ol/layer';
+import { defaults as controlDefaults } from 'ol/control/defaults';
+import { FullScreen } from 'ol/control';
+import { defaults as interactionDefaults } from 'ol/interaction/defaults';
+import { MouseWheelZoom } from 'ol/interaction';
+
+
+import { getVectorContext } from 'ol/render';
+import { fromExtent } from 'ol/geom/Polygon';
+import { createEmpty, extend, getWidth, getHeight } from 'ol/extent';
 
  (function (global, factory) {
    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -40,7 +43,6 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
             const wrapoverlay = mapblock.querySelector('#wrap-overlay-' + mapid );
 
             const allclosepanel = wrapoverlay.querySelectorAll(".wpol-infopanel-close");
-            const allpanels = wrapoverlay.querySelectorAll(".wpol-infopanel");
             const attributionel = wrapoverlay.querySelector(".venomaps-get-attribution");
             attribution = attributionel ? attributionel.innerHTML : '';
 
@@ -75,11 +77,11 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
 
                             // Add infoPanel
                             infolabel = new Overlay({
-                              position: markerpos,
-                              positioning: 'bottom-center',
-                              offset: [0, labeloffset],
-                              element: labelDom,
-                              // stopEvent: true,
+                                position: markerpos,
+                                positioning: 'bottom-center',
+                                offset: [0, labeloffset],
+                                element: labelDom,
+                                // stopEvent: true,
                             });
                         }
 
@@ -146,12 +148,9 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                     features: features,
                 });
 
-                const mindistance = 20;
-                const distanceinput = 40;
-
                 clusterSource = new Cluster({
-                    distance: parseInt(distanceinput, 10),
-                    minDistance: parseInt(mindistance, 10),
+                    distance: 50,
+                    minDistance: 20,
                     source: source,
                     geometryFunction: (feature) => {
                         closepanels(feature.get('panel'));
@@ -169,39 +168,59 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                     source: clusterSource,
                     style: function(feature) {
                         const size = feature.get('features').length;
+                        
+                       // const radius = parseInt(Math.sqrt(size)*0.8);
+// const pigreco = 3.14;
+// const raggio = (size/2)
+// // const area = raggio*raggio*pigreco;
 
-                        const clusterstyle = [
-                            new Style({
-                                image: new Circle({
-                                    radius: 27,
-                                    fill: new Fill({
-                                        color: cluster_bg_array,
-                                    }),
-                                })
-                            }),
-                            new Style({
-                                image: new Circle({
-                                    radius: 20,
-                                    stroke: new Stroke({
-                                        color: cluster_color,
-                                    }),
-                                    fill: new Fill({
-                                        color: cluster_bg,
-                                    }),
-                                }),
-                                text: new Text({
-                                    text: size.toString(),
-                                    fill: new Fill({
-                                        color: cluster_color,
-                                    }),
-                                    font: "12px sans-serif"
-                                }),
-                                zIndex: 9999
-                            })
-                        ];
+// const area = raggio*raggio;
+// // let radius = parseInt(Math.sqrt(area/pigreco) + 16);
+// // console.log("size: " + size);
+// // console.log("radius"+radius);
 
+
+// let radius = parseInt(Math.sqrt(area/pigreco));
+
+// radius = Math.min(Math.max(radius, 0), 25);
+// radius = radius + 16;
+
+// console.log("radius: "+radius);
                         var style = false;
                         if (size > 1) {
+const radius = Math.min(parseInt(Math.sqrt(size) + 16), 25);
+
+                            const clusterstyle = [
+                                new Style({
+                                    image: new Circle({
+                                        radius: (7 + radius),
+                                        fill: new Fill({
+                                            color: cluster_bg_array,
+                                        }),
+                                    })
+                                }),
+                                new Style({
+                                    image: new Circle({
+                                        radius: radius,
+                                        stroke: new Stroke({
+                                            color: cluster_color,
+                                        }),
+                                        fill: new Fill({
+                                            color: cluster_bg,
+                                        }),
+                                    }),
+                                    text: new Text({
+                                        text: size.toString(),
+                                        fill: new Fill({
+                                            color: cluster_color,
+                                        }),
+                                        font: "12px sans-serif"
+                                    }),
+                                    zIndex: 9999
+                                })
+                            ];
+
+
                             style = clusterstyle;
                             feature.get('features').forEach(feature => {
                                 closepanels(feature.get('panel'));
@@ -219,12 +238,14 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
             }
             // END SETUP Clusters
 
-
-
+            function filteredFeats(feature) {
+                return feature.get('visible');
+            }
+            
             function updateSearch(term) {
                 if (setupdata) {
                     setupdata.forEach(marker => {
-                        if (term.length > 1 ) {
+                        if (term.length > 3 ) {
                             if (marker.text) {
                                 if (marker.text.toLowerCase().includes(term.toLowerCase())) {
                                     // Found marker
@@ -244,8 +265,13 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                 }
 
                 if (setupdata && term.length > 1) { 
-                    // Zoom out to show all the markers
-                    map.getView().fit(source.getExtent(), {duration: 500, padding: [100, 100, 100, 100]});
+                    const filtered_features = features.filter(filteredFeats);
+                    const activesource = new sourceVector({
+                        features: filtered_features,
+                    });
+
+                    // Zoom out to show all the visible markers
+                    map.getView().fit(activesource.getExtent(), {duration: 500, padding: [100, 100, 100, 100]});
                 }  
             }
 
@@ -270,15 +296,15 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                     view: new View({
                         center: pos,
                         zoom: zoom,
-                        maxZoom: 22,
-                        minZoom: 1,
+                        maxZoom: 18,
+                        minZoom: 2,
                     }),
                     layers: [
                         baselayer,
                         clusters
                     ],
                     controls: controlDefaults({ attributionOptions: { collapsible: true } }).extend([new FullScreen()]),
-                    interactions: interactionDefaults({mouseWheelZoom:zoom_scroll})
+                    interactions: interactionDefaults({ mouseWheelZoom: zoom_scroll })
                 });
 
                 baselayer.on("postrender", function (event) {
@@ -304,23 +330,23 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                 if (searchmap) {
                     searchmap.value = "";
                     searchmap.addEventListener("input", function(){
-                        if (searchterms) {
-                            searchterms.value = "";
-                        }
+                        // if (searchterms) {
+                        //     searchterms.value = "";
+                        // }
                         updateSearch(searchmap.value);
                     });                    
                 }
 
-                var searchterms = document.getElementById("search-venomap-term-"+mapid);
-                if (searchterms) {
-                    searchterms.value = "";
-                    searchterms.addEventListener("change", function(){
-                        if (searchmap) {
-                            searchmap.value = "";
-                        }
-                        updateSearch(searchterms.value);
-                    });                    
-                }
+// var searchterms = document.getElementById("search-venomap-term-"+mapid);
+// if (searchterms) {
+//     searchterms.value = "";
+//     searchterms.addEventListener("change", function(){
+//         if (searchmap) {
+//             searchmap.value = "";
+//         }
+//         updateSearch(searchterms.value);
+//     });                    
+// }
 
                 map.on('click', (event) => {
                     clusters.getFeatures(event.pixel).then((features) => {
@@ -335,7 +361,12 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                                     const resolution = map.getView().getResolution();
 
                                     if ( view.getZoom() !== view.getMaxZoom() && (getWidth(extent) > resolution || getHeight(extent) > resolution)) {
-                                        view.fit(extent, {duration: 500, padding: [100, 100, 100, 100]});
+                                        // mouseWheelInt.setActive(false);
+                                        view.fit(extent, {duration: 500, padding: [100, 100, 100, 100], callback: function(){
+                                                // mouseWheelInt.setActive(zoom_scroll)
+                                            }
+                                        });
+                                       
                                     }
                                 }
                                 if (clusterMembers.length === 1) { {
@@ -350,7 +381,11 @@ import {createEmpty, extend, getWidth, getHeight} from 'ol/extent';
                                         paneltarget.classList.remove('infobox-closed', 'was-open');
                                         // Center map to marker
                                         const point = clusterMembers[0].getGeometry();
-                                        view.animate({center: point.getCoordinates()});
+
+                                        // mouseWheelInt.setActive(false);
+                                        view.animate({center: point.getCoordinates()}, function(){
+                                            // mouseWheelInt.setActive(zoom_scroll);
+                                        });
                                     }
                                 }
                             }
