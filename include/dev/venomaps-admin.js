@@ -114,6 +114,7 @@ const VenomapsAdmin = function(){
 			const upimage = upmarker.querySelector( '.vmap-icon-image' );
 			const defaultimage = upmarker.querySelector( '.vmap-icon-default' );
 			const removemarkers = upmarker.querySelectorAll( '.venomaps_marker_remove_btn' );
+			const color_component = upmarker.querySelector(".vmap-color-component");
 
 			if (url) {
 				const img = new Image();
@@ -126,6 +127,7 @@ const VenomapsAdmin = function(){
 					defaultimage.innerHTML = "";
 					removemarkers.forEach(function(removemarker){
 						removemarker.classList.remove("vmap-invisible");
+						color_component.classList.add("vmap-hidden");
 					});
 				}
 				field.value = url;
@@ -136,6 +138,7 @@ const VenomapsAdmin = function(){
 				defaultimage.classList.remove("vmap-hidden");
 				removemarkers.forEach(function(removemarker){
 					removemarker.classList.add("vmap-invisible");
+					color_component.classList.remove("vmap-hidden");
 				});
 			}
 			// set_icon.value = media_attachment.url;
@@ -157,6 +160,9 @@ const VenomapsAdmin = function(){
 			const upimage = upmarker.querySelector( '.vmap-icon-image' );
 			const defaultimage = upmarker.querySelector( '.vmap-icon-default' );
 			const removemarkers = upmarker.querySelectorAll( '.venomaps_marker_remove_btn' );
+
+const color_component = modal_component.querySelector(".vmap-color-component");
+
 			let get_target;
 
 			var om_metaImageFrame;
@@ -165,6 +171,7 @@ const VenomapsAdmin = function(){
 				removemarker.addEventListener("click", function(e){
 					e.preventDefault();
 					removemarker.classList.add("vmap-invisible");
+					color_component.classList.remove("vmap-hidden");
 					loadIconImage(upmarker, false);
 					rowdata.icon = "";
 				 	get_target = modal_component.dataset.rowTarget;
@@ -574,18 +581,18 @@ const VenomapsAdmin = function(){
 		 */
 		function loadGeolocator() {
 
-			const geomap_id = "wpol-admin-map";
+			// const geomap_id = "wpol-admin-map";
 			const geomarker_id = "infomarker_admin";
 
 			var timer;
-			const adminmap = document.getElementById(geomap_id);
-			const adminmarker = document.getElementById(geomarker_id);
+			// const adminmap = document.getElementById(geomap_id);
+			// const adminmarker = document.getElementById(geomarker_id);
 			const latinput = document.querySelector(".venomaps-get-lat");
 			const loninput = document.querySelector(".venomaps-get-lon");
 			const responseinput = document.querySelector(".venomaps-response");
 			const getcoords = document.querySelector(".venomaps-get-coordinates");
 
-			if (!adminmap || !adminmarker || !latinput || !loninput || !responseinput || !getcoords) {
+			if (!latinput || !loninput || !responseinput || !getcoords) {
 				console.log('Missing something...');
 				return false;
 			}
@@ -610,6 +617,10 @@ const VenomapsAdmin = function(){
 
 		    // Add Marker
 		    var marker_el = document.getElementById(geomarker_id);
+console.log('marker_el');
+
+console.log(marker_el);
+
 		    var infomarker = new Overlay({
 				position: om_map_pos,
 				positioning: 'center-center',

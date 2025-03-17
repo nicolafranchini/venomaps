@@ -314,34 +314,6 @@ class Venomaps_Options {
 		<?php
 	}
 
-	/**
-	 * Geolocation
-	 */
-	public function geo_settings_field() {
-		?>
-		<h2><?php esc_html_e( 'Geolocation', 'venomaps' ); ?></h2>
-		<p><?php esc_html_e( 'Search an address or click on the map to adjust the marker position and get the coordinates', 'venomaps' ); ?></p>
-			<fieldset>
-				<div class="wpol-form-group">
-					<input type="text" class="regular-text venomaps-set-address" value="" placeholder="Type a place address">
-					<div class="button venomaps-get-coordinates"><span class="dashicons dashicons-search"></span> <?php esc_html_e( 'Search', 'venomaps' ); ?></div>
-				</div>
-			</fieldset>
-			<fieldset>
-				<div class="wpol-form-group">
-					<input type="text" class="all-options venomaps-get-lat" value="" placeholder="Latitude">
-					<span class="description"><?php esc_html_e( 'Latitude', 'venomaps' ); ?></span>
-					<input type="text" class="all-options venomaps-get-lon" value="" placeholder="Longitude">
-					<span class="description"><?php esc_html_e( 'Longitude', 'venomaps' ); ?></span>
-				</div>
-			</fieldset>
-
-			<div id="wpol-admin-map" class="venomap"></div>
-			<div style="display:none;">
-				<div class="wpol-infomarker" id="infomarker_admin"><img src="<?php echo esc_url( plugins_url( '/images/marker.svg', __FILE__ ) ); ?>" style="height: 40px;"></div>
-			</div>
-		<?php
-	}
 } // end class
 
 // Call options.

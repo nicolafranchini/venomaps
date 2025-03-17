@@ -1,30 +1,30 @@
-=== VenoMaps - geo map and custom markers ===
+=== VenoMaps - Geo maps and custom markers ===
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 1.2.6
-Stable tag: 1.2.6
+Version: 2.0.0
+Stable tag: 2.0.0
 Tested up to: 6.7
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps
 Plugin URI: https://veno.es/venomaps/
-Description: Create maps with custom styles, multiple markers, info windows with rich text editors. Widget and Block available. Vector maps supported.
+Description: Create maps with custom styles, multiple markers, clusters, info windows and search option. Block available.
 Tags: map, maps, openlayers, location, places
 Author URI: https://veno.es/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://www.paypal.com/donate/?hosted_button_id=BXVJVBJ2BZUQL
 
-Create maps with custom styles, multiple markers, info windows with rich text editors. Widget and Block available. Vector maps supported.
+Create maps with custom styles, multiple markers, info windows and search option. Block available.
 
 == Description ==
 
-This plugin creates custom maps which can be placed anywhere: Contact pages, posts, sidebars, footer widgets, or directly into your theme's files! 
+This plugin creates custom maps which can be placed anywhere: Contact pages, posts, widgets, or directly into your theme's files! 
 
 Select a custom style and a size for the map, upload your custom markers, set the map's and the markers' coordinates, insert some html content for the popup info boxes and publish your map.
 
-The VenoMaps page also offers some geolocation utilities to get the coordinates typing an address, or placing the marker in a specific position on the map. VenoMaps Block available.
+The VenoMaps page also has some geolocation utilities to get the coordinates typing an address, or placing the marker in a specific position on the map. VenoMaps Block available.
 
 VenoMaps is an alternative to Google Maps, it is based on OpenLayers and OpenStreetMap, doesn't require API keys and offers different custom maps.
 You can also add your own custom styles from external services.
@@ -36,11 +36,12 @@ You can also add your own custom styles from external services.
 * **Gutenberg Block**
 * **Ability to set custom options for each Map**
 * **Manage custom markers with the WP media library**
-* **Rich text editor for the Info Boxes**
 * **Clusters**
+* **Search**
 * **Custom map styles**
 * **Geolocation utility to get Latitude / Longitude from address**
 * **Responsive design**
+* **Import large sets of markers via CSV**
 
 == Installation ==
 
@@ -74,11 +75,12 @@ No, this plugin borns as an alternative to Google Maps, and is based on OpenStre
 
 == Screenshots ==
  
-1. Custom map with markers
-2. Clusters
-3. Map page settings
-4. Block
-5. General settings
+1. Custom maps with markers, clusters, search field
+2. Map page settings
+3. Marker options
+4. Custom marker image
+5. Block
+6. General settings
 
 == Other Notes ==
 
@@ -89,11 +91,11 @@ You can add one or more markers with various options and attach a infobox to eac
 
 ### Adding into posts/pages
 
-Insert the Block VenoMaps inside your posts or page, or copy the shortcode from the field below the map's title and paste it anywhere inside your posts or pages, that's it.
+Insert the Block **VenoMaps** inside your posts or page, or copy the shortcode from the field below the map's title and paste it anywhere inside your posts or pages, that's it.
 
 ### Adding into widget
 
-Under Appearance > Widgets you will find a new widget **VenoMaps**. Add it to your sidebar, select the desired map from the dropdown menu and save.
+The block **VenoMaps** is available also for sidebars and footer.
 
 ### Custom styles available
 
@@ -107,10 +109,16 @@ OpenStreetMap [ODbL](https://www.openstreetmap.org/copyright)
 
 == Changelog ==
 
-= 1.2.6 =
-* New: Search markers
-* New: Filter markers by term
-* Update: UI improvements
+= 2.0.0 =
+* New: Map style preview
+* New: Drag preview to set the map center
+* New: Marker size range
+* New: Custom colors for default markers
+* New: Search markers by infobox content
+* New: Autocomplete search
+* New: Batch upload markers via .csv
+* New: Duplicate maps
+* Update: UI/UX improvements
 * Update: Code Optimization. Lighter. Faster!
 * Update: Openlayers v10.4
 

@@ -248,10 +248,158 @@ class Venomaps_Plugin {
 		add_action( 'save_post', array( $this, 'save_metaboxes' ), 10, 2 );
 		add_shortcode( 'venomap', array( $this, 'venomaps_do_shortcode' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_block' ) );
-
 		add_action( 'wp_ajax_vmap_set_csv', array( $this, 'set_csv' ) );
+		add_filter( 'post_row_actions', array( $this, 'duplicate_post_link' ), 25, 2 );
+		add_action( 'admin_action_vmaps_duplicate_post_as_draft', array( $this, 'duplicate_post_as_draft' ) );
+		add_action( 'admin_notices', array( $this, 'duplication_admin_notice' ) );
 	}
 
+	/**
+	 * Duplicate post
+	 * https://github.com/rudrastyh/rudr-duplicate-post/blob/main/rudr-duplicate-post.php
+	 */
+
+	/**
+	 * Set duplicate link in post edit
+	 * https://github.com/rudrastyh/rudr-duplicate-post/blob/main/rudr-duplicate-post.php
+	 *
+	 * @param string $actions actions.
+	 * @param obj    $post    the post.
+	 *
+	 * @return parsed file
+	 */
+	public function duplicate_post_link( $actions, $post ) {
+
+		if ( ! current_user_can( 'edit_posts' ) || 'venomaps' !== $post->post_type ) {
+			return $actions;
+		}
+
+		$url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'action' => 'vmaps_duplicate_post_as_draft',
+					'post' => $post->ID,
+					'post_type' => 'venomaps',
+				),
+				'admin.php'
+			),
+			basename( __FILE__ ),
+		);
+
+		$actions['duplicate'] = '<a href="' . esc_url( $url ) . '" title="Duplicate this item">Duplicate</a>';
+
+		return $actions;
+	}
+
+	/**
+	 * Duplicate post
+	 */
+	public function duplicate_post_as_draft() {
+
+		if ( empty( $_GET['post'] ) ) {
+			wp_die( 'No post to duplicate has been provided!' );
+		}
+
+		// Nonce verification.
+		check_admin_referer( basename( __FILE__ ) );
+
+		$post_id = absint( $_GET['post'] );
+		$post = get_post( $post_id );
+
+		// $current_user = wp_get_current_user();
+		// $new_post_author = $current_user->ID;
+		$new_post_author = $post->post_author;
+
+		if ( $post ) {
+			// new post data array.
+			$args = array(
+				// 'comment_status' => $post->comment_status,
+				// 'ping_status'    => $post->ping_status,
+				'post_author'    => $new_post_author,
+				'post_content'   => $post->post_content,
+				// 'post_excerpt'   => $post->post_excerpt,
+				'post_name'      => $post->post_name,
+				'post_parent'    => $post->post_parent,
+				'post_password'  => $post->post_password,
+				'post_status'    => 'draft', // $post->post_status,
+				'post_title'     => $post->post_title . ' (' . __( 'Copy', 'venomaps' ) . ')',
+				'post_type'      => $post->post_type,
+				'to_ping'        => $post->to_ping,
+				'menu_order'     => $post->menu_order,
+			);
+
+			// insert the post by wp_insert_post() function.
+			$new_post_id = wp_insert_post( $args );
+
+			/*
+			$taxonomies = get_object_taxonomies( $post->post_type ); // returns array of taxonomy names for post type, ex array("category", "post_tag");.
+			if ( $taxonomies ) {
+				foreach ( $taxonomies as $taxonomy ) {
+					$post_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'slugs' ) );
+					wp_set_object_terms( $new_post_id, $post_terms, $taxonomy, false );
+				}
+			}
+			*/
+
+			// duplicate all post meta.
+			$post_meta = get_post_meta( $post_id );
+			if ( $post_meta ) {
+				foreach ( $post_meta as $meta_key => $meta_values ) {
+					// we need to exclude some system meta keys.
+					if ( in_array( $meta_key, array( '_edit_lock', '_wp_old_slug' ) ) ) {
+						continue;
+					}
+					// do not forget that each meta key can have multiple values.
+					foreach ( $meta_values as $meta_value ) {
+						add_post_meta( $new_post_id, $meta_key, maybe_unserialize( $meta_value ) );
+					}
+				}
+			}
+
+			/*
+			// finally, redirect to the edit post screen for the new draft.
+			wp_safe_redirect(
+				add_query_arg(
+					array(
+						'action' => 'edit',
+						'post' => $new_post_id
+					),
+					admin_url( 'post.php' )
+				)
+			);
+			exit;
+			*/
+			// or we can redirect to all posts with a message.
+			wp_safe_redirect(
+				add_query_arg(
+					array(
+						'post_type' => 'venomaps',
+						'saved' => 'post_duplicate_created', // just a custom slug here.
+					),
+					admin_url( 'edit.php' )
+				)
+			);
+			exit;
+
+		} else {
+			wp_die( 'We can not duplicate the post because we can not find it.' );
+		}
+	}
+
+	/**
+	 * Post duplicated message
+	 */
+	public function duplication_admin_notice() {
+		$screen = get_current_screen();
+		if ( 'edit' !== $screen->base ) {
+			return;
+		}
+
+		if ( isset( $_GET['saved'] ) && 'post_duplicate_created' === $_GET['saved'] ) { ?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Copy created', 'venomaps' ); ?></p></div>;
+			<?php
+		}
+	}
 
 	/**
 	 * Update post meta from CSV
@@ -534,17 +682,14 @@ class Venomaps_Plugin {
 		$output = '<div class="wrap-venomaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
 
 		if ( $search ) {
-			$output .= '<input type="text" utocomplete="off" class="venomaps-search venomaps-form-control" list="vmap-suggestions-' . $html_map_id . '" id="search-venomap-' . $html_map_id . '" placeholder="' . __( 'Search', 'venomaps' ) . '">';
-		}
+			$output .= '<div class="vmap-input-group">';
 
-		// if ( strlen( $taglist ) ) {
-		// 	$output .= '<select class="venomaps-search-tags" id="search-venomap-term-' . $html_map_id . '">';
-		// 	$output .= '<option value="">--</option>';
-		// 	foreach ( $tags as $tag ) {
-		// 		$output .= '<option>' . $tag . '</option>';
-		// 	}
-		// 	$output .= '</select>';
-		// }
+			$output .= '<div class="vmap-flex-grow"><input type="text" utocomplete="off" class="venomaps-search venomaps-form-control" list="vmap-suggestions-' . $html_map_id . '" id="search-venomap-' . $html_map_id . '" placeholder="' . __( 'Search', 'venomaps' ) . '"></div>';
+			$output .= '<div class="vmap-input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+</svg></div>';
+			$output .= '</div><!-- end group -->';
+		}
 
 		$output .= '<div id="venomaps_' . $html_map_id . '" class="venomap" style="height: ' . $map_height . ';"></div>';
 		$output .= '<div style="display: none;" id="wrap-overlay-' . $html_map_id . '">';
@@ -861,7 +1006,7 @@ class Venomaps_Plugin {
 	 */
 	public function render_venomaps_marker_metabox( $post ) {
 
-		$marker_settings = get_post_meta( $post->ID, 'venomaps_marker', true );
+		$marker_settings = get_post_meta( $post->ID, 'venomaps_marker', true ); // return array.
 
 		$output_settings = array();
 
@@ -928,7 +1073,7 @@ class Venomaps_Plugin {
 				<div class="vmap-marker-box-left"> 
 					<div class="wpol-form-group vmap-icon-uploader">
 						
-						<div>
+						<div class="vmap-color-component">
 							<div class="wpol-form-group">
 								<strong><?php esc_html_e( 'Color', 'venomaps' ); ?></strong>
 							</div>
@@ -936,13 +1081,14 @@ class Venomaps_Plugin {
 								<input type="color" value="" class="vmap-modal-get-color vmap-input vmap-form-control-color" data-default-color="<?php echo esc_attr( $this->default_settings['color'] ); ?>" />
 								<input type="text" value="" class="vmap-modal-set-color vmap-inputr" />
 							</div>
-						</div><!-- vmap-flex -->
-							<div class="vmap-flex-grow-1" style="padding-left: 0.5em;">
-								<div class="wpol-form-group">
-									<strong><?php esc_html_e( 'Size', 'venomaps' ); ?></strong>
-								</div>
-								<input type="range" name="" class="vmap-modal-get-size vmap-icon-set-size vmap-form-range" min="30" max="100">
+						</div>
+
+						<div class="vmap-flex-grow-1" style="padding-left: 0.5em;">
+							<div class="wpol-form-group">
+								<strong><?php esc_html_e( 'Size', 'venomaps' ); ?></strong>
 							</div>
+							<input type="range" name="" class="vmap-modal-get-size vmap-icon-set-size vmap-form-range" min="30" max="100">
+						</div>
 						
 		<?php
 		$default_icon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';

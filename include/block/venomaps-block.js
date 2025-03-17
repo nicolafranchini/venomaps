@@ -101,8 +101,8 @@
                                 {
                                     label: venomapsBlockVars._map_height,
                                     type: 'number',
-                                    min: '0.1',
-                                    step: '0.1',
+                                    min: '1',
+                                    step: '1',
                                     value: height_init,
                                     onChange: function(value) {
                                         props.setAttributes({height: value});
