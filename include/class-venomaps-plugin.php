@@ -10,9 +10,16 @@ class Venomaps_Plugin {
 	/**
 	 * Plugin name
 	 *
-	 * @var slug
+	 * @var string
 	 */
 	private $slug = 'venomaps';
+
+	/**
+	 * Plugin's public display name.
+	 *
+	 * @var string
+	 */
+	private $plugin_name = 'VenoMaps';
 
 	/**
 	 * Refers to a single instance of this class.
@@ -24,7 +31,7 @@ class Venomaps_Plugin {
 	/**
 	 * Counts decks on page
 	 *
-	 * @var $mapscounter
+	 * @var number
 	 */
 	private static $mapscounter = 0;
 
@@ -252,16 +259,11 @@ class Venomaps_Plugin {
 		add_filter( 'post_row_actions', array( $this, 'duplicate_post_link' ), 25, 2 );
 		add_action( 'admin_action_vmaps_duplicate_post_as_draft', array( $this, 'duplicate_post_as_draft' ) );
 		add_action( 'admin_notices', array( $this, 'duplication_admin_notice' ) );
-
+		// Review notice.
 		add_action( 'admin_init', array( $this, 'check_installation_date' ) );
 		add_action( 'admin_notices', array( $this, 'display_review_notice' ) );
-		add_action( 'wp_ajax_venomaps_dismiss_review_notice', array( $this, 'dismiss_review_notice' ) );
+		add_action( 'wp_ajax_' . $this->slug . '_dismiss_review_notice', array( $this, 'dismiss_review_notice' ) );
 	}
-
-	/**
-	 * Duplicate post
-	 * https://github.com/rudrastyh/rudr-duplicate-post/blob/main/rudr-duplicate-post.php
-	 */
 
 	/**
 	 * Set duplicate link in post edit
@@ -808,18 +810,6 @@ class Venomaps_Plugin {
 	}
 
 	/**
-	 * Rewrite permalinks on activation, after cpt registration
-	 */
-	public function activate_plugin() {
-		$this->register_cpt();
-		flush_rewrite_rules();
-		// Set activation date for new installations.
-		if ( false === get_option( 'venomaps_activation_date' ) ) {
-			add_option( 'venomaps_activation_date', time() );
-		}
-	}
-
-	/**
 	 * Adds the meta boxes.
 	 */
 	public function add_metaboxes() {
@@ -1249,14 +1239,29 @@ class Venomaps_Plugin {
 	}
 
 	/**
+	 * Rewrite permalinks on activation, after cpt registration
+	 */
+	public function activate_plugin() {
+		$this->register_cpt();
+		flush_rewrite_rules();
+
+		// Set activation date for new installations.
+		$option_name = $this->slug . '_activation_date';
+		if ( false === get_option( $option_name ) ) {
+			add_option( $option_name, time() );
+		}
+	}
+
+	/**
 	 * Check and set the installation date if it doesn't exist.
 	 * This ensures that the notice timer starts for existing users who update the plugin.
 	 *
 	 * @return void
 	 */
 	public function check_installation_date() {
-		if ( false === get_option( 'venomaps_activation_date' ) ) {
-			add_option( 'venomaps_activation_date', time() );
+		$option_name = $this->slug . '_activation_date';
+		if ( false === get_option( $option_name ) ) {
+			add_option( $option_name, time() );
 		}
 	}
 
@@ -1266,18 +1271,22 @@ class Venomaps_Plugin {
 	 * @return void
 	 */
 	public function display_review_notice() {
-		// Only show notice to admins.
+		// Only show notice to users who can manage options.
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
+		$dismissed_option = $this->slug . '_review_notice_dismissed';
+		$activation_option = $this->slug . '_activation_date';
+
 		// Check if the notice has been dismissed.
-		if ( get_option( 'venomaps_review_notice_dismissed' ) ) {
+		if ( get_option( $dismissed_option ) ) {
 			return;
 		}
 
-		$activation_date = get_option( 'venomaps_activation_date' );
-		// Do not show the notice if the activation date is not set or if less than 14 days have passed.
+		$activation_date = get_option( $activation_option );
+
+		// Show notice only after 14 days of usage.
 		if ( ! $activation_date || ( time() - $activation_date < 14 * DAY_IN_SECONDS ) ) {
 			return;
 		}
@@ -1285,30 +1294,29 @@ class Venomaps_Plugin {
 		// Enqueue the script for the notice.
 		$this->enqueue_review_notice_script();
 
-		$dismiss_url = wp_nonce_url(
-			add_query_arg( 'venomaps_action', 'dismiss_review_notice' ),
-			'venomaps_dismiss_review_notice_nonce',
-			'_venomaps_nonce'
-		);
+		// Dynamic CSS IDs and classes.
+		$notice_id     = $this->slug . '-review-notice';
+		$dismiss_class = $this->slug . '-dismiss-notice';
+		$review_url    = 'https://wordpress.org/support/plugin/' . $this->slug . '/reviews/?filter=5';
 		?>
-		<div id="venomaps-review-notice" class="notice notice-info is-dismissible">
+		<div id="<?php echo esc_attr( $notice_id ); ?>" class="notice notice-info is-dismissible">
 			<p>
 				<?php
 				printf(
 					/* translators: %s is the plugin name */
-					esc_html__( 'Enjoying %s? Please consider leaving a 5-star review. It helps us grow and support the plugin!', 'venomaps' ),
-					'<strong>VenoMaps</strong>'
+					esc_html__( 'Enjoying %s? Please consider leaving a 5-star review ⭐⭐⭐⭐⭐. It helps us grow and support the plugin!', 'venomaps' ),
+					'<strong>' . esc_html( $this->plugin_name ) . '</strong>'
 				);
 				?>
 			</p>
 			<p>
-				<a href="https://wordpress.org/support/plugin/venomaps/reviews/?filter=5" class="button button-primary" target="_blank">
+				<a href="<?php echo esc_url( $review_url ); ?>" class="button button-primary" target="_blank">
 					<?php esc_html_e( 'Sure, I’d love to!', 'venomaps' ); ?>
 				</a>
-				<a href="#" class="button button-secondary venomaps-dismiss-notice" data-reason="later">
+				<a href="#" class="button button-secondary <?php echo esc_attr( $dismiss_class ); ?>">
 					<?php esc_html_e( 'Maybe Later', 'venomaps' ); ?>
 				</a>
-				<a href="#" class="button button-secondary venomaps-dismiss-notice" data-reason="already_rated">
+				<a href="#" class="button button-secondary <?php echo esc_attr( $dismiss_class ); ?>">
 					<?php esc_html_e( 'I Already Rated It', 'venomaps' ); ?>
 				</a>
 			</p>
@@ -1322,24 +1330,31 @@ class Venomaps_Plugin {
 	 * @return void
 	 */
 	private function enqueue_review_notice_script() {
-		// Create a unique handle to avoid conflicts.
-		$handle = 'venomaps-review-notice';
+		// Dynamic script handle.
+		$handle     = $this->slug . '-review-notice';
 		$plugin_url = plugin_dir_url( __DIR__ );
 
 		wp_enqueue_script(
 			$handle,
-			$plugin_url . 'include/js/admin-review-notice.js',
+			$plugin_url . 'include/js/admin-review-notice.js', // Adjust path if necessary.
 			array(),
 			VENOMAPS_VERSION,
 			true
 		);
 
+		// Create a unique, JS-friendly object name from the slug.
+		$camel_case_slug = lcfirst( str_replace( ' ', '', ucwords( str_replace( '-', ' ', $this->slug ) ) ) );
+		$object_name     = $camel_case_slug . 'ReviewNoticeData';
+
 		wp_localize_script(
 			$handle,
-			'venomapsReviewNotice',
+			$object_name, // Use the unique object name here.
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'venomaps_dismiss_review_notice_nonce' ),
+				'ajax_url'    => admin_url( 'admin-ajax.php' ),
+				'nonce'       => wp_create_nonce( $this->slug . '_dismiss_review_notice_nonce' ),
+				'action'      => $this->slug . '_dismiss_review_notice',
+				'notice_id'   => $this->slug . '-review-notice',
+				'dismiss_class' => $this->slug . '-dismiss-notice',
 			)
 		);
 	}
@@ -1350,10 +1365,9 @@ class Venomaps_Plugin {
 	 * @return void
 	 */
 	public function dismiss_review_notice() {
-		check_ajax_referer( 'venomaps_dismiss_review_notice_nonce', 'nonce' );
-
-		update_option( 'venomaps_review_notice_dismissed', true );
-
+		// Dynamic nonce check and option update.
+		check_ajax_referer( $this->slug . '_dismiss_review_notice_nonce', 'nonce' );
+		update_option( $this->slug . '_review_notice_dismissed', true );
 		wp_send_json_success();
 	}
 } // end class

@@ -1,35 +1,42 @@
 /**
  * Handles the dismissal of the VenoMaps admin review notice.
+ * Data is passed from the server via the 'venomapsReviewNoticeData' object.
  */
 document.addEventListener('DOMContentLoaded', function () {
-    const notice = document.getElementById('venomaps-review-notice');
+    // Use the UNIQUE object name for this specific plugin.
+    const noticeData = window.venomapsReviewNoticeData;
+
+    // Check if the localized data object exists.
+    if (typeof noticeData === 'undefined') {
+        return;
+    }
+
+    const notice = document.getElementById(noticeData.notice_id);
 
     if (!notice) {
         return;
     }
 
-    const dismissButtons = notice.querySelectorAll('.venomaps-dismiss-notice, .notice-dismiss');
+    const dismissButtons = notice.querySelectorAll(
+        '.' + noticeData.dismiss_class + ', .notice-dismiss'
+    );
 
     dismissButtons.forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault();
 
-            // Prepare data for AJAX request
             const formData = new FormData();
-            formData.append('action', 'venomaps_dismiss_review_notice');
-            formData.append('nonce', venomapsReviewNotice.nonce);
+            formData.append('action', noticeData.action);
+            formData.append('nonce', noticeData.nonce);
 
-            // Hide the notice immediately for better UX
             notice.style.display = 'none';
 
-            // Send AJAX request to the server to save the dismissed state
-            fetch(venomapsReviewNotice.ajax_url, {
+            fetch(noticeData.ajax_url, {
                 method: 'POST',
                 body: formData
             })
             .catch(error => {
-                console.error('Error dismissing VenoMaps review notice:', error);
-                // If the request fails, show the notice again
+                console.error('Error dismissing review notice:', error);
                 notice.style.display = 'block';
             });
         });
