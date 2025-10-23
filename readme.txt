@@ -2,8 +2,8 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 2.0.2
-Stable tag: 2.0.2
+Version: 2.0.3
+Stable tag: 2.0.3
 Tested up to: 6.8
 Requires at least: 4.0
 Requires PHP: 5.3
@@ -82,12 +82,15 @@ Default maps data provided by: OpenStreetMap [ODbL](https://www.openstreetmap.or
 
 == Changelog ==
 
+= 2.0.3 =
+* Update: Minor fix
+
 = 2.0.2 =
-* Update: minor improvements
+* Update: Minor improvements
 
 = 2.0.1 =
 * Tested up to WP 6.8
-* Fix: set default marker color
+* Fix: Set default marker color
 
 = 2.0.0 =
 * New: Map style preview

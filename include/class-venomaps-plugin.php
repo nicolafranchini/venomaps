@@ -1343,8 +1343,7 @@ class Venomaps_Plugin {
 		);
 
 		// Create a unique, JS-friendly object name from the slug.
-		$camel_case_slug = lcfirst( str_replace( ' ', '', ucwords( str_replace( '-', ' ', $this->slug ) ) ) );
-		$object_name     = $camel_case_slug . 'ReviewNoticeData';
+		$object_name = 'venomapsReviewNoticeData';
 
 		wp_localize_script(
 			$handle,
