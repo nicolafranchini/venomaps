@@ -49,19 +49,19 @@ Based on OpenLayers and OpenStreetMap (OSM) data, VenoMaps ensures quick setup a
 
 == Frequently Asked Questions ==
 
-**= Does this plugin support Google Maps? =**
+** Does this plugin support Google Maps? **
 
 No. VenoMaps was built specifically as a robust, lightweight, and privacy-friendly alternative to Google Maps, relying on OpenStreetMap and OpenLayers for core functionality.
 
-**= Do I need an API key to use VenoMaps? =**
+** Do I need an API key to use VenoMaps? **
 
 **No.** The default map styles are loaded without the need for any API key, registration, or cost. If you wish to use premium or custom map styles from third-party services like Maptiler or Stadia Maps, you will need to obtain a key from those services.
 
-**= Can I use it to create a Store Locator? =**
+** Can I use it to create a Store Locator? **
 
 **Yes, absolutely.** With features like CSV import for multiple locations, marker clustering, and a search field, VenoMaps is a perfect tool for building a "Store Locator" map or any map with multiple points of interest.
 
-**= How do I place a map inside my template file? =**
+** How do I place a map inside my template file? **
 
 To display a map outside the post editor or widgets, use the following PHP code inside your template file:
 `<?php echo do_shortcode('[venomap id="xxx" height="xxx"]'); ?>`
