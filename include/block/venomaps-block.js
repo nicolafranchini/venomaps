@@ -90,7 +90,6 @@
                     {key: 'venomaps-block-controls'},
                     el(
                         PanelBody, {},
-
                         el(
                             'div',
                             {

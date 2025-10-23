@@ -617,10 +617,6 @@ const color_component = modal_component.querySelector(".vmap-color-component");
 
 		    // Add Marker
 		    var marker_el = document.getElementById(geomarker_id);
-console.log('marker_el');
-
-console.log(marker_el);
-
 		    var infomarker = new Overlay({
 				position: om_map_pos,
 				positioning: 'center-center',

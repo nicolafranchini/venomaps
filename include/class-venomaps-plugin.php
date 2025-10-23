@@ -676,14 +676,12 @@ class Venomaps_Plugin {
 			'stylekey' => $style_key,
 			'cluster_color' => $cluster_color,
 			'cluster_bg' => $cluster_bg,
-
 		);
 
 		$output = '<div class="wrap-venomaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
 
 		if ( $search ) {
 			$output .= '<div class="vmap-input-group">';
-
 			$output .= '<div class="vmap-flex-grow"><input type="text" utocomplete="off" class="venomaps-search venomaps-form-control" list="vmap-suggestions-' . $html_map_id . '" id="search-venomap-' . $html_map_id . '" placeholder="' . __( 'Search', 'venomaps' ) . '"></div>';
 			$output .= '<div class="vmap-input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -709,8 +707,9 @@ class Venomaps_Plugin {
 				$marker_data = array();
 
 				$marker_size = isset( $marker['size'] ) && strlen( $marker['size'] ) ? $marker['size'] : $this->default_settings['size'];
+				$marker_color = isset( $marker['color'] ) && strlen( $marker['color'] ) ? $marker['color'] : '#000000';
 
-				$svgicon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path fill="#ffffff" d="M15,0C8.1,0,2.5,5.5,2.5,12.3S8,23.9,15,30c7-6.1,12.5-10.9,12.5-17.7S21.9,0,15,0z"/><path fill="' . $marker['color'] . '" d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
+				$svgicon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path fill="#ffffff" d="M15,0C8.1,0,2.5,5.5,2.5,12.3S8,23.9,15,30c7-6.1,12.5-10.9,12.5-17.7S21.9,0,15,0z"/><path fill="' . $marker_color . '" d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
 
 				$svgicon_encoded = 'data:image/svg+xml;base64,' . base64_encode( $svgicon );
 
