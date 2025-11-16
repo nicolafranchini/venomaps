@@ -187,6 +187,17 @@ import { createEmpty, extend } from 'ol/extent';
                     
                     const labelDom = document.getElementById('infopanel_' + mapid + '_' + key);
                     if (labelDom) {
+
+                        const closeButton = labelDom.querySelector('.wpol-infopanel-close');
+                        if (closeButton) {
+                            closeButton.addEventListener('click', function(e) {
+                                // Ferma la propagazione per evitare che il click sulla mappa apra un altro pannello
+                                e.stopPropagation(); 
+                                labelDom.classList.add('infobox-closed');
+                                labelDom.classList.remove('was-open'); 
+                            });
+                        }
+
                         overlays.push(new Overlay({
                             position: fromLonLat(lonLatCoords),
                             positioning: 'bottom-center',
