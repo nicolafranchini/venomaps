@@ -41,14 +41,14 @@ class Venomaps_Plugin {
 	 * @var $default_settings
 	 */
 	private $default_settings = array(
-		'lat' => '',
-		'lon' => '',
-		'size' => '40',
-		'icon' => '',
-		'color' => '#000000',
-		'infobox_open' => 0,
-		'infobox' => '',
-		'title' => '',
+		'lat'            => '',
+		'lon'            => '',
+		'size'           => '40',
+		'icon'           => '',
+		'color'          => '#000000',
+		'infobox_open'   => 0,
+		'infobox'        => '',
+		'title'          => '',
 	);
 
 	/**
@@ -67,155 +67,156 @@ class Venomaps_Plugin {
 	 * @var $all_styles
 	 */
 	private $all_styles = array(
-		'default' => array(
+		'default'      => array(
 			'attribution' => array(
 				'osm' => array(
-					'link' => 'https://www.openstreetmap.org/copyright/',
+					'link'  => 'https://www.openstreetmap.org/copyright/',
 					'title' => 'OpenStreetMap',
 				),
 			),
-			'maps' => array(
+			'maps'        => array(
 				'default' => array(
 					'name' => 'Default',
-					'url' => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+					'url'  => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 				),
 			),
 		),
-		'maptiler' => array(
+		'maptiler'     => array(
 			'attribution' => array(
 				'maptiler' => array(
-					'link' => 'https://www.maptiler.com/copyright/',
+					'link'  => 'https://www.maptiler.com/copyright/',
 					'title' => 'MapTiler',
 				),
-				'osm' => array(
-					'link' => 'https://www.openstreetmap.org/about/',
+				'osm'      => array(
+					'link'  => 'https://www.openstreetmap.org/about/',
 					'title' => 'OpenStreetMap contributors',
 				),
 			),
-			'maps' => array(
-				'backdrop' => array(
+			'maps'        => array(
+				'backdrop'  => array(
 					'name' => 'Backdrop',
-					'url' => 'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/backdrop/{z}/{x}/{y}.png?key=',
 				),
-				'basic' => array(
+				'basic'     => array(
 					'name' => 'Basic',
-					'url' => 'https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=',
 				),
-				'ocean' => array(
+				'ocean'     => array(
 					'name' => 'Ocean',
-					'url' => 'https://api.maptiler.com/maps/ocean/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/ocean/{z}/{x}/{y}.png?key=',
 				),
 				'satellite' => array(
 					'name' => 'Satellite',
-					'url' => 'https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=',
+					'url'  => 'https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=',
 				),
-				'streets' => array(
+				'streets'   => array(
 					'name' => 'Streets',
-					'url' => 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=',
 				),
-				'toner' => array(
+				'toner'     => array(
 					'name' => 'Toner',
-					'url' => 'https://api.maptiler.com/maps/toner-v2/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/toner-v2/{z}/{x}/{y}.png?key=',
 				),
-				'topo' => array(
+				'topo'      => array(
 					'name' => 'Topo',
-					'url' => 'https://api.maptiler.com/maps/topo-v2/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/topo-v2/{z}/{x}/{y}.png?key=',
 				),
-				'winter' => array(
+				'winter'    => array(
 					'name' => 'Winter',
-					'url' => 'https://api.maptiler.com/maps/winter-v2/{z}/{x}/{y}.png?key=',
+					'url'  => 'https://api.maptiler.com/maps/winter-v2/{z}/{x}/{y}.png?key=',
 				),
 			),
 		),
-		'stadiamaps' => array(
+		'stadiamaps'   => array(
 			'attribution' => array(
 				'stadia' => array(
-					'link' => 'https://www.stadiamaps.com/',
+					'link'  => 'https://www.stadiamaps.com/',
 					'title' => 'Stadia Maps',
 				),
 				'stamen' => array(
-					'link' => 'https://stamen.com/',
+					'link'  => 'https://stamen.com/',
 					'title' => 'Stamen Design',
 				),
-				'omt' => array(
-					'link' => 'https://openmaptiles.org/',
+				'omt'    => array(
+					'link'  => 'https://openmaptiles.org/',
 					'title' => 'OpenMapTiles',
 				),
-				'osm' => array(
-					'link' => 'https://www.openstreetmap.org/about/',
+				'osm'    => array(
+					'link'  => 'https://www.openstreetmap.org/about/',
 					'title' => 'OpenStreetMap contributors',
 				),
 			),
-			'maps' => array(
-				'terrain' => array(
+			'maps'        => array(
+				'terrain'     => array(
 					'name' => 'Terrain',
-					'url' => 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}@2x.png?api_key=',
+					'url'  => 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}@2x.png?api_key=',
 				),
-				'toner' => array(
+				'toner'       => array(
 					'name' => 'Toner',
-					'url' => 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}@2x.png?api_key=',
+					'url'  => 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}@2x.png?api_key=',
 				),
-				'watercolor' => array(
+				'watercolor'  => array(
 					'name' => 'Watercolor',
-					'url' => 'https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=',
+					'url'  => 'https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=',
 				),
 			),
 		),
 		'thunderforest' => array(
 			'attribution' => array(
 				'thunderforest' => array(
-					'link' => 'https://www.thunderforest.com/',
+					'link'  => 'https://www.thunderforest.com/',
 					'title' => 'Thunderforest',
 				),
-				'osm' => array(
-					'link' => 'https://www.openstreetmap.org/about/',
+				'osm'           => array(
+					'link'  => 'https://www.openstreetmap.org/about/',
 					'title' => 'OpenStreetMap contributors',
 				),
 			),
-			'maps' => array(
-				'atlas' => array(
+			'maps'        => array(
+				'atlas'          => array(
 					'name' => 'Atlas',
-					'url' => 'https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=',
 				),
-				'landscape' => array(
+				'landscape'      => array(
 					'name' => 'Landscape',
-					'url' => 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=',
 				),
-				'mobile_atlas' => array(
+				'mobile_atlas'   => array(
 					'name' => 'Mobile Atlas',
-					'url' => 'https://tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png?apikey=',
 				),
-				'neighbourhood' => array(
+				'neighbourhood'  => array(
 					'name' => 'Neighbourhood',
-					'url' => 'https://tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png?apikey=',
 				),
-				'opencyclemap' => array(
+				'opencyclemap'   => array(
 					'name' => 'Open Cycle',
-					'url' => 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=',
 				),
-				'outdoors' => array(
+				'outdoors'       => array(
 					'name' => 'Outdoors',
-					'url' => 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=',
 				),
-				'pioneer' => array(
+				'pioneer'        => array(
 					'name' => 'Pioneer',
-					'url' => 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=',
 				),
-				'spinal' => array(
+				'spinal'         => array(
 					'name' => 'Spinal',
-					'url' => 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=',
 				),
-				'transport' => array(
+				'transport'      => array(
 					'name' => 'Transport',
-					'url' => 'https://tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=',
 				),
 				'transport_dark' => array(
 					'name' => 'Transport Dark',
-					'url' => 'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=',
+					'url'  => 'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey=',
 				),
 			),
 		),
 	);
+
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -223,7 +224,6 @@ class Venomaps_Plugin {
 	 * @return  Venomaps_Plugin a single instance of this class.
 	 */
 	public static function get_instance() {
-
 		if ( null == self::$instance ) {
 			self::$instance = new self();
 			self::$instance->hooks();
@@ -236,13 +236,35 @@ class Venomaps_Plugin {
 	 */
 	private function __construct() {
 		require __DIR__ . '/class-venomaps-options.php';
+
+		// Include and instantiate the edit class.
+		require __DIR__ . '/class-venomaps-edit.php';
+		$venomaps_edit = new Venomaps_Edit( $this );
+		$venomaps_edit->init_hooks();
+	}
+
+	/**
+	 * Getter for default_settings.
+	 *
+	 * @return array
+	 */
+	public function get_default_settings() {
+		return $this->default_settings;
+	}
+
+	/**
+	 * Getter for default_coords.
+	 *
+	 * @return array
+	 */
+	public function get_default_coords() {
+		return $this->default_coords;
 	}
 
 	/**
 	 * Initiate hooks
 	 */
 	public function hooks() {
-
 		add_filter( 'plugin_action_links_' . dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/' . $this->slug . '.php', array( $this, 'action_links' ) );
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
@@ -250,9 +272,6 @@ class Venomaps_Plugin {
 		// Custom posts.
 		add_action( 'init', array( $this, 'register_cpt' ) );
 		register_activation_hook( dirname( __DIR__ ) . '/' . $this->slug . '.php', array( $this, 'activate_plugin' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'load_post_edit_scripts' ), 10, 1 );
-		add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
-		add_action( 'save_post', array( $this, 'save_metaboxes' ), 10, 2 );
 		add_shortcode( 'venomap', array( $this, 'venomaps_do_shortcode' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_block' ) );
 		add_action( 'wp_ajax_vmap_set_csv', array( $this, 'set_csv' ) );
@@ -263,6 +282,47 @@ class Venomaps_Plugin {
 		add_action( 'admin_init', array( $this, 'check_installation_date' ) );
 		add_action( 'admin_notices', array( $this, 'display_review_notice' ) );
 		add_action( 'wp_ajax_' . $this->slug . '_dismiss_review_notice', array( $this, 'dismiss_review_notice' ) );
+
+		// Check routes.
+		add_action( 'wp_ajax_vmap_fetch_osrm_routes', array( $this, 'fetch_osrm_routes_ajax' ) );
+	}
+
+	/**
+	 * AJAX handler to fetch routes from OSRM.
+	 */
+	public function fetch_osrm_routes_ajax() {
+		check_ajax_referer( 'vmap-ajax-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( 'Permission denied.' );
+		}
+
+		$coords_string = isset( $_POST['coords'] ) ? wp_unslash( $_POST['coords'] ) : '';
+
+		if ( ! preg_match( '/^[0-9.,;\-]+$/', $coords_string ) ) {
+			wp_send_json_error( 'Invalid characters in coordinates string.' );
+		}
+
+		if ( empty( $coords_string ) ) {
+			wp_send_json_error( 'No coordinates provided.' );
+		}
+
+		$url = "https://router.project-osrm.org/route/v1/driving/{$coords_string}?overview=full&geometries=geojson&alternatives=true&steps=true";
+
+		$response = wp_remote_get( $url, array( 'timeout' => 15 ) );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( $response->get_error_message() );
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body, true );
+
+		if ( ! $data || 'Ok' !== ( $data['code'] ?? 'Error' ) ) {
+			wp_send_json_error( 'OSRM API error: ' . ( $data['message'] ?? 'Unknown error from OSRM' ) );
+		}
+
+		wp_send_json_success( $data['routes'] );
 	}
 
 	/**
@@ -337,16 +397,6 @@ class Venomaps_Plugin {
 			// insert the post by wp_insert_post() function.
 			$new_post_id = wp_insert_post( $args );
 
-			/*
-			$taxonomies = get_object_taxonomies( $post->post_type ); // returns array of taxonomy names for post type, ex array("category", "post_tag");.
-			if ( $taxonomies ) {
-				foreach ( $taxonomies as $taxonomy ) {
-					$post_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'slugs' ) );
-					wp_set_object_terms( $new_post_id, $post_terms, $taxonomy, false );
-				}
-			}
-			*/
-
 			// duplicate all post meta.
 			$post_meta = get_post_meta( $post_id );
 			if ( $post_meta ) {
@@ -362,19 +412,6 @@ class Venomaps_Plugin {
 				}
 			}
 
-			/*
-			// finally, redirect to the edit post screen for the new draft.
-			wp_safe_redirect(
-				add_query_arg(
-					array(
-						'action' => 'edit',
-						'post' => $new_post_id
-					),
-					admin_url( 'post.php' )
-				)
-			);
-			exit;
-			*/
 			// or we can redirect to all posts with a message.
 			wp_safe_redirect(
 				add_query_arg(
@@ -520,7 +557,7 @@ class Venomaps_Plugin {
 			'_clusters_color' => __( 'Clusters color', 'venomaps' ),
 			'_zoom_scroll' => __( 'Mouse wheel zoom', 'venomaps' ),
 			'_initial_zoom' => __( 'Initial zoom', 'venomaps' ),
-			'_search' => __( 'Search', 'venomaps' ),
+			'_search' => __( 'Search markers', 'venomaps' ),
 			// '_search_suggestions' => __( 'Search suggestions', 'venomaps' ),
 		);
 		wp_localize_script( 'venomaps-block', 'venomapsBlockVars', $venomaps_vars );
@@ -544,37 +581,6 @@ class Venomaps_Plugin {
 	public function register_scripts() {
 		wp_enqueue_style( 'venomaps', plugins_url( 'css/venomaps-bundle.css', __FILE__ ), array(), VENOMAPS_VERSION );
 		wp_register_script( 'venomaps', plugins_url( 'js/venomaps-bundle.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
-	}
-
-	/**
-	 * Load custom post scripts.
-	 *
-	 * @param string $hook page hook.
-	 */
-	public function load_post_edit_scripts( $hook ) {
-
-		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin-bundle.css', __FILE__ ), array(), VENOMAPS_VERSION );
-
-		if ( in_array( $hook, array( 'post.php', 'post-new.php' ) ) ) {
-			$screen = get_current_screen();
-			if ( is_object( $screen ) && 'venomaps' == $screen->post_type ) {
-				wp_enqueue_media();
-				wp_enqueue_editor();
-				wp_register_script( 'venomaps-admin', plugins_url( 'js/venomaps-admin-bundle.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
-
-				$styles = $this->available_styles();
-
-				$venomaps_vars = array(
-					'styles' => wp_json_encode( $this->available_styles() ),
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-					'nonce' => wp_create_nonce( 'vmap-ajax-nonce' ),
-					'default_settings' => wp_json_encode( $this->default_settings ),
-				);
-
-				wp_localize_script( 'venomaps-admin', 'venomapsAdminVars', $venomaps_vars );
-				wp_enqueue_script( 'venomaps-admin' );
-			}
-		}
 	}
 
 	/**
@@ -661,6 +667,8 @@ class Venomaps_Plugin {
 		$lon = get_post_meta( $map_id, 'venomaps_lon', true );
 		$lon = $lon ? $lon : $this->default_coords['lon'];
 
+		$routes = get_post_meta( $map_id, 'venomaps_routes', true );
+
 		$stylemeta = get_post_meta( $map_id, 'venomaps_style', true );
 		$styledata = $this->get_style_data( $stylemeta );
 
@@ -671,36 +679,31 @@ class Venomaps_Plugin {
 		// Load front-end scripts.
 		wp_enqueue_script( 'venomaps' );
 
+		// ** NUOVA LOGICA: Inizializza le coordinate di destinazione **
+		$destination_coords = false;
+
+		// Ottieni i marker per trovare la destinazione
+		$marker_settings = get_post_meta( $map_id, 'venomaps_marker', true );
+
 		$map_data = array(
 			'mapid' => $html_map_id,
 			'lat' => $lat,
 			'lon' => $lon,
 			'style_url' => urlencode( $styleurl ),
-			// 'custom_style' => $custom_style,
 			'zoom' => $zoom,
 			'zoom_scroll' => $zoom_scroll,
 			'stylekey' => $style_key,
 			'cluster_color' => $cluster_color,
 			'cluster_bg' => $cluster_bg,
+			// ** NUOVO: Aggiungi le coordinate di destinazione ai dati della mappa **
+			'destination' => $destination_coords,
+			'routes' => $routes,
 		);
 
-		$output = '<div class="wrap-venomaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
-
-		if ( $search ) {
-			$output .= '<div class="vmap-input-group">';
-			$output .= '<div class="vmap-flex-grow"><input type="text" utocomplete="off" class="venomaps-search venomaps-form-control" list="vmap-suggestions-' . $html_map_id . '" id="search-venomap-' . $html_map_id . '" placeholder="' . __( 'Search', 'venomaps' ) . '"></div>';
-			$output .= '<div class="vmap-input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-</svg></div>';
-			$output .= '</div><!-- end group -->';
-		}
-
-		$output .= '<div id="venomaps_' . $html_map_id . '" class="venomap" style="height: ' . $map_height . ';"></div>';
-		$output .= '<div style="display: none;" id="wrap-overlay-' . $html_map_id . '">';
+		$infobox_index = 0;
+		$markers_output = '';
 
 		// Output markers and infoboxes.
-		$marker_settings = get_post_meta( $map_id, 'venomaps_marker', true );
-
 		if ( $marker_settings ) {
 
 			$marker_list = '<datalist id="vmap-suggestions-' . $html_map_id . '">';
@@ -731,16 +734,19 @@ class Venomaps_Plugin {
 				$infobox_open = 1 === $marker['infobox_open'] ? ' was-open' : ' infobox-closed';
 
 				if ( strlen( $infobox ) ) {
-					$output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
-					$output .= '<div class="wpol-infolabel">' . wp_kses_post( $infobox ) . '</div>';
-					$output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg></div></div>';
+
+					$infobox_index++;
+
+					$markers_output .= '<div class="wpol-infopanel' . $infobox_open . '" id="infopanel_' . $html_map_id . '_' . $key . '" >';
+					$markers_output .= '<div class="wpol-infolabel">' . wp_kses_post( $infobox ) . '</div>';
+					$markers_output .= '<div class="wpol-arrow"></div><div class="wpol-infopanel-close"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg></div></div>';
 					// sugestions.
 					$anitized_infobox = sanitize_text_field( $infobox );
 					$cut_string = 64;
 					$threedots = strlen( $anitized_infobox ) > $cut_string ? '...' : '';
 					$marker_list .= '<option value="' . $anitized_infobox . '">' . substr( $anitized_infobox, 0, $cut_string ) . $threedots . '</option>';
 				}
-				$output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px; opacity:0.2"></div>';
+				$markers_output .= '<div class="wpol-infomarker" data-paneltarget="' . $html_map_id . '_' . $key . '" data-marker=\'' . wp_json_encode( $marker_data ) . '\' id="infomarker_' . $html_map_id . '_' . $key . '"><img src="' . $marker_data['icon'] . '" style="height: ' . $marker_size . 'px; opacity:0.2"></div>';
 
 				$marker_index++;
 			}
@@ -748,6 +754,31 @@ class Venomaps_Plugin {
 			$marker_list .= '</datalist>';
 
 		}
+
+		$map_navbar = '';
+
+		if ( $search && $infobox_index > 1 ) {
+			$map_navbar .= '<div class="vmap-input-group">';
+			$map_navbar .= '<div class="vmap-flex-grow"><input type="text" utocomplete="off" class="venomaps-search venomaps-form-control" list="vmap-suggestions-' . $html_map_id . '" id="search-venomap-' . $html_map_id . '" placeholder="' . __( 'Search', 'venomaps' ) . '"></div>';
+			$map_navbar .= '<div class="vmap-input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+</svg></div>';
+
+			if ( $destination_coords ) {
+				$map_navbar .= '<button id="get-directions-' . $html_map_id . '" class="venomaps-get-directions" style="margin-left: 10px;">' . __( 'Get Directions', 'venomaps' ) . '</button>';
+			}
+			$map_navbar .= '</div><!-- end group -->';
+		}
+
+		$output = '<div class="wrap-venomaps" data-infomap=\'' . wp_json_encode( $map_data ) . '\'>';
+
+		$output .= $map_navbar;
+
+		$output .= '<div id="venomaps_' . $html_map_id . '" class="venomap" style="height: ' . $map_height . ';"></div>';
+		$output .= '<div style="display: none;" id="wrap-overlay-' . $html_map_id . '">';
+
+		$output .= $markers_output;
+
 		$output .= '<div class="venomaps-get-attribution">' . $attribution . '</div>';
 		$output .= '</div>';
 
@@ -756,7 +787,6 @@ class Venomaps_Plugin {
 
 		return $output;
 	}
-
 	/**
 	 * Add links to settings page
 	 *
@@ -810,83 +840,6 @@ class Venomaps_Plugin {
 	}
 
 	/**
-	 * Adds the meta boxes.
-	 */
-	public function add_metaboxes() {
-		add_meta_box(
-			'venomaps_map_box',
-			__( 'Map Options', 'venomaps' ),
-			array( $this, 'render_venomaps_map_metabox' ),
-			'venomaps',
-			'normal', // normal, side.
-			'high'
-		);
-
-		add_meta_box(
-			'venomaps_marker_box',
-			__( 'Markers', 'venomaps' ),
-			array( $this, 'render_venomaps_marker_metabox' ),
-			'venomaps',
-			'normal', // normal, side.
-			'default' // high, default, low.
-		);
-
-		add_meta_box(
-			'venomaps_csv_box',
-			__( 'Batch import', 'venomaps' ),
-			array( $this, 'render_venomaps_csv_metabox' ),
-			'venomaps',
-			'normal', // normal, side.
-			'default' // high, default, low.
-		);
-
-		add_meta_box(
-			'venomaps_geolocation_box',
-			__( 'Geolocation', 'venomaps' ),
-			array( $this, 'render_venomaps_geolocation_metabox' ),
-			'venomaps',
-			'side', // normal, side.
-			'default' // high, default, low.
-		);
-	}
-
-	/**
-	 * Render the metabox
-	 *
-	 * @param WP_Post $post Post object.
-	 */
-	public function render_venomaps_geolocation_metabox( $post ) {
-		?>
-		<div class="wpol-form-group">
-			<?php esc_html_e( 'Drag the marker to adjust the position and get the coordinates', 'venomaps' ); ?>
-		</div>
-			<fieldset>
-				<div class="wpol-form-group">
-					<div class="vmap-input-group">
-						<input type="text" class="large-text venomaps-set-address" value="" placeholder="<?php esc_html_e( 'Search address', 'venomaps' ); ?>"> 
-						<button type="button" class="wpol-btn-link venomaps-get-coordinates"><span class="dashicons dashicons-search"></span></button>
-					</div>
-					<p class="venomaps-response"></p>
-				</div>
-			</fieldset>
-			<fieldset>
-				<div class="wpol-form-group">
-					<span class="description"><strong><?php esc_html_e( 'Coordinates', 'venomaps' ); ?></strong> ( <?php esc_html_e( 'Latitude', 'venomaps' ); ?> / <?php esc_html_e( 'Longitude', 'venomaps' ); ?> )</span>
-				</div>
-				<div class="wpol-form-group vmap-flex vmap-flex-collapse-md">
-					<input type="text" readonly class="large-text venomaps-get-lat" value="" placeholder="Latitude">
-					<input type="text" readonly class="large-text venomaps-get-lon" value="" placeholder="Longitude">
-				</div>
-			</fieldset>
-
-			<div id="wpol-admin-map" class="venomap"></div>
-			<div style="display:none;">
-				<div class="wpol-infomarker" id="infomarker_admin"></div>
-			</div>	
-		<?php
-	}
-
-	/**
 	 * Get available map styles
 	 */
 	public function available_styles() {
@@ -917,325 +870,6 @@ class Venomaps_Plugin {
 		}
 
 		return $provider_styles;
-	}
-
-	/**
-	 * Render map metabox
-	 *
-	 * @param WP_Post $post Post object.
-	 */
-	public function render_venomaps_map_metabox( $post ) {
-
-		wp_nonce_field( 'venomaps_metaboxes', 'venomaps_nonce' );
-
-		// Map coordinates.
-		$lat = get_post_meta( $post->ID, 'venomaps_lat', true );
-		$lat = $lat ? $lat : $this->default_coords['lat'];
-		$lon = get_post_meta( $post->ID, 'venomaps_lon', true );
-		$lon = $lon ? $lon : $this->default_coords['lon'];
-
-		// Map style.
-		$stylekey = get_post_meta( $post->ID, 'venomaps_style', true );
-		$styles = $this->available_styles();
-
-		?>
-	<div class="vmap-flex vmap-flex-collapse-lg">
-		<div class="vmap-marker-box-left">
-
-			<div class="wpol-form-group">
-				<strong><?php esc_html_e( 'Map Shortcode', 'venomaps' ); ?></strong>
-				<fieldset>
-					<input type="text" class="large-text" name="" value='[venomap id="<?php echo esc_attr( $post->ID ); ?>"]' readonly>
-				</fieldset>
-				<p><?php esc_html_e( 'Copy the shortcode and paste it inside your Posts or Pages, or search VenoMaps among Blocks to set more options', 'venomaps' ); ?></p>
-			</div>
-			<hr>
-
-			<div class="wpol-form-group">
-				<strong><?php esc_html_e( 'Style', 'venomaps' ); ?></strong>
-				<div class="wpol-form-group">
-					<select name="venomaps_style" class="all-options">
-					<?php
-					foreach ( $styles as $key => $value ) {
-						if ( isset( $value['url'] ) && strlen( $value['url'] ) ) {
-							?>
-							<option <?php selected( $stylekey, $key ); ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_attr( $value['name'] ); ?></option>
-							<?php
-						} elseif ( is_array( $value ) ) {
-							echo '<optgroup label="' . esc_attr( $key ) . '">';
-							foreach ( $value['maps'] as $sub_key => $sub_value ) {
-								if ( isset( $sub_value['url'] ) && strlen( $sub_value['url'] ) ) {
-									?>
-								<option <?php selected( $stylekey, $key . '_' . $sub_key ); ?> value="<?php echo esc_attr( $key ) . '_' . esc_attr( $sub_key ); ?>"><?php echo esc_attr( $sub_value['name'] ); ?></option>
-									<?php
-								}
-							}
-							echo '</optgroup>';
-						}
-					}
-					?>
-					</select>
-				</div>
-			</div>
-			<?php // translators: "Settings Page" is the link to plugins settings page. ?>
-			<p><?php printf( __( 'Add more Map Styles inside %1$sSettings Page%2$s.', 'venomaps' ), '<a target="_blank" href="' . esc_url( get_admin_url( null, 'options-general.php?page=venomaps' ) ) . '">', '</a>' ); // XSS ok. ?></p>
-			<hr>
-
-			<div><strong><?php esc_html_e( 'Center', 'venomaps' ); ?></strong> ( <?php esc_html_e( 'Latitude', 'venomaps' ); ?> / <?php esc_html_e( 'Longitude', 'venomaps' ); ?> )</div>
-			<div class="wpol-form-group">
-				<div class="vmap-flex vmap-flex-collapse-md">
-					<input class="all-options large-text" type="text" name="venomaps_lat" value="<?php echo esc_attr( $lat ); ?>">
-					<input class="all-options large-text" type="text" name="venomaps_lon" value="<?php echo esc_attr( $lon ); ?>">
-				</div>
-			</div>
-		</div>
-		<div class="vmap-marker-box-right">
-			<div id="preview-admin-map" class="venomap-mini"></div>
-		</div>
-	</div>
-		<?php
-	}
-
-	/**
-	 * Render markers metabox
-	 *
-	 * @param WP_Post $post Post object.
-	 */
-	public function render_venomaps_marker_metabox( $post ) {
-
-		$marker_settings = get_post_meta( $post->ID, 'venomaps_marker', true ); // return array.
-
-		$output_settings = array();
-
-		if ( $marker_settings ) {
-			foreach ( $marker_settings as $key => $setting ) {
-				$full_settings = array();
-				foreach ( $this->default_settings as $key => $default_setting ) {
-					$full_settings[ $key ] = isset( $setting[ $key ] ) ? $setting[ $key ] : $default_setting;
-				}
-				$output_settings[] = $full_settings;
-
-			}
-		}
-		if ( ! isset( $output_settings[0] ) || empty( $output_settings[0] ) ) {
-			$output_settings = array( $this->default_settings );
-		}
-		?>
-
-<div class="vmap-wrap-rows">
-		<?php
-		foreach ( $output_settings as $index => $setting ) {
-			$key = $index + 1;
-			?>
-	<div class="vmap-marker-row" id="vmap-row-<?php echo esc_attr( $key ); ?>" data-row-index="<?php echo esc_attr( $key ); ?>">
-		<div class="vmap-flex vmap-flex-collapse vmap-align-center vmap-row-data">
-			<div>
-				<div class="vmap-edit-marker">
-				<span class="vmap-badge"><span class="dashicons dashicons-edit"></span> <span class="vmap-badge-text"><?php echo esc_attr( $key ); ?></span></span></div></div>
-			<div style="margin-right: 1em;">
-				<input class="vmap-modal-set-title large-text" data-update="title" type="text" value="<?php echo esc_attr( $setting['title'] ); ?>" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>">
-			</div>
-
-			<div style="margin-left:auto; margin-right: 0;">
-				<input class="vmap-modal-set-lat vmap-input large-text" data-update="lat" type="text" value="<?php echo esc_attr( $setting['lat'] ); ?>" placeholder="<?php esc_html_e( 'Latitude', 'venomaps' ); ?>">
-			</div>
-			<div style="margin-left:1em; margin-right: 0;">
-				<input class="vmap-modal-set-lon vmap-input large-text" data-update="lon" type="text" value="<?php echo esc_attr( $setting['lon'] ); ?>" placeholder="<?php esc_html_e( 'Longitude', 'venomaps' ); ?>">
-			</div>
-			<div class="vmap-del-row">
-				<div class="wpol-btn-link"><span class="dashicons dashicons-trash"></span></div>
-			</div>
-		</div>
-		<textarea class="vmap-modal-set-data vmap-hidden" name="venomaps_data[<?php echo esc_attr( $key ); ?>]" ><?php echo wp_json_encode( $setting ); ?></textarea>
-	</div>
-			<?php
-		}
-		?>
-</div>
-<!-- vmap-modal -->
-<div id="vmap-modal" class="vmap-modal">
-	<div class="vmap-modal-helper vmap-modal-dismiss"></div>
-	<div class="vmap-modal-dialog">
-		<div class="vmap-modal-content">
-			<div class="vmap-flex vmap-flex-collapse vmap-modal-header">
-				<div>
-					<h3 class="vmap-modal-title"></h3>
-				</div>
-				<div class="vmap-modal-dismiss vmap-left-auto vmap-cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
-				</div>
-			</div>
-			<div class="vmap-flex vmap-flex-collapse-md">
-				<div class="vmap-marker-box-left"> 
-					<div class="wpol-form-group vmap-icon-uploader">
-						
-						<div class="vmap-color-component">
-							<div class="wpol-form-group">
-								<strong><?php esc_html_e( 'Color', 'venomaps' ); ?></strong>
-							</div>
-							<div class="vmap-flex vmap-flex-collapse">
-								<input type="color" value="" class="vmap-modal-get-color vmap-input vmap-form-control-color" data-default-color="<?php echo esc_attr( $this->default_settings['color'] ); ?>" />
-								<input type="text" value="" class="vmap-modal-set-color vmap-inputr" />
-							</div>
-						</div>
-
-						<div class="vmap-flex-grow-1" style="padding-left: 0.5em;">
-							<div class="wpol-form-group">
-								<strong><?php esc_html_e( 'Size', 'venomaps' ); ?></strong>
-							</div>
-							<input type="range" name="" class="vmap-modal-get-size vmap-icon-set-size vmap-form-range" min="30" max="100">
-						</div>
-						
-		<?php
-		$default_icon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
-		?>
-						<div class="wpol-form-group vmap-flex vmap-align-center">
-							<div class="">
-								<div class="vmap-icon-default venomaps_marker_upload_btn" style="width:<?php echo esc_attr( $this->default_settings['size'] ); ?>px; color: <?php echo esc_attr( $this->default_settings['color'] ); ?>">
-									<?php echo wp_kses_post( $default_icon ); ?>
-								</div>
-
-								<div class="vmap-icon-image venomaps_marker_upload_btn" style="width:<?php echo esc_attr( $this->default_settings['size'] ); ?>px;">
-								</div>
-							</div>
-
-							<!-- UPDATE / DELETE -->
-							<div>
-								<div class="wpol-btn-link venomaps_marker_upload_btn"><span class="dashicons dashicons-update"></span></div>
-								<div class="wpol-btn-link venomaps_marker_remove_btn"><span class="dashicons dashicons-trash"></span></div>
-								<div class="vmap-hidden">
-									<div class="vmap-input-group">
-										<input type="text" class="vmap-modal-get-icon" value="">
-										<button type="button" class="wpol-btn-link venomaps_marker_remove_btn"><span class="dashicons dashicons-no-alt"></span></button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- vmap icon uploader -->
-				</div>
-
-				<div class="vmap-marker-box-right">
-					<div class="wpol-form-group">
-						<strong><?php esc_html_e( 'Info Box', 'venomaps' ); ?></strong>
-					</div>
-					<div class="wpol-form-group">
-						<textarea class="vmap-modal-get-infobox vmap-form-control"></textarea>
-					</div>
-					<div class="wpol-form-group">
-						<label>
-							<input class="vmap-modal-get-infobox-open vmap-input" type="checkbox" value="1" />
-							<span class="description"><?php esc_html_e( 'Default Open', 'venomaps' ); ?></span>
-						</label>
-					</div>
-				</div> 
-				<!-- vmap box right -->
-			</div>
-
-		</div>
-	</div>
-</div>
-
-<div class="button wpol-new-marker"><span class="dashicons dashicons-plus"></span> <?php esc_html_e( 'New marker', 'venomaps' ); ?></div>
-
-		<?php
-	}
-
-	/**
-	 * Render markers metabox
-	 *
-	 * @param WP_Post $post Post object.
-	 */
-	public function render_venomaps_csv_metabox( $post ) {
-		?>
-<div class="vmap-uploader">
-<div class="vmap-flex vmap-flex-collapse vmap-align-center">
-	<button class="button vmap-set-uploader"><?php esc_html_e( 'Upload CSV', 'venomaps' ); ?></button>
-	<input type="text" class="button vmap-get-uploader" readonly data-post-id="<?php echo esc_attr( $post->ID ); ?>">
-	<span class="spinner"></span>
-	<div class="vmap-import-csv vmap-hidden">
-		<div type="button" class="button button-primary button-large"><?php esc_html_e( 'Import data', 'venomaps' ); ?></div>
-	</div>
-	<span class="vmap-response-message"></span>
-</div>
-<p><?php esc_html_e( 'Select the CSV delimiter', 'venomaps' ); ?></p>
-
-<div class="wpol-form-group vmap-csv-delimiter">
-<label for="csv_delimiter_1">
-	<input name="csv_delimiter" class="" type="radio" id="csv_delimiter_1" value="," checked>
-		<?php esc_html_e( 'Comma', 'venomaps' ); ?> ( , )
-</label>
-<label for="csv_delimiter_2">
-	<input name="csv_delimiter" type="radio" id="csv_delimiter_2" value=";">
-		<?php esc_html_e( 'Semicolon', 'venomaps' ); ?> ( ; )
-</label>
-</div>
-</div>
-<p><?php esc_html_e( 'Warning: importing the CSV any previous marker of this map will be overwritten', 'venomaps' ); ?></p>
-		<?php
-	}
-
-	/**
-	 * Handles saving the meta box.
-	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
-	 * @return null
-	 */
-	public function save_metaboxes( $post_id, $post ) {
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['venomaps_nonce'] ) ) {
-			return $post_id;
-		}
-
-		$nonce = filter_input( INPUT_POST, 'venomaps_nonce', FILTER_SANITIZE_SPECIAL_CHARS );
-
-		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'venomaps_metaboxes' ) ) {
-			return $post_id;
-		}
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return $post_id;
-		}
-
-		$lat = filter_input( INPUT_POST, 'venomaps_lat', FILTER_SANITIZE_SPECIAL_CHARS );
-		$lat = $lat ? esc_attr( $lat ) : $this->default_coords['lat'];
-		update_post_meta( $post_id, 'venomaps_lat', $lat );
-
-		$lon = filter_input( INPUT_POST, 'venomaps_lon', FILTER_SANITIZE_SPECIAL_CHARS );
-		$lon = $lon ? esc_attr( $lon ) : $this->default_coords['lon'];
-		update_post_meta( $post_id, 'venomaps_lon', $lon );
-
-		$style = filter_input( INPUT_POST, 'venomaps_style', FILTER_SANITIZE_SPECIAL_CHARS );
-		update_post_meta( $post_id, 'venomaps_style', $style );
-
-		$newmarkervars = array();
-		$postdata = isset( $_POST['venomaps_data'] ) ? $_POST['venomaps_data'] : array(); // phpcs:ignore
-
-		foreach ( $postdata as $key => $json_value ) {
-
-			$value = json_decode( stripslashes( $json_value ), true );
-
-			// error_log( "json_value "); // Track log.
-			$markervars = array();
-
-			if ( isset( $value['lat'] ) && isset( $value['lon'] ) ) {
-				$markervars['title'] = isset( $value['title'] ) ? sanitize_text_field( $value['title'] ) : $this->default_settings['title'];
-				$markervars['lat'] = isset( $value['lat'] ) ? esc_attr( $value['lat'] ) : $this->default_settings['lat'];
-				$markervars['lon'] = isset( $value['lon'] ) ? esc_attr( $value['lon'] ) : $this->default_settings['lon'];
-				$markervars['size'] = isset( $value['size'] ) ? esc_attr( $value['size'] ) : $this->default_settings['size'];
-				$markervars['icon'] = isset( $value['icon'] ) ? esc_url_raw( $value['icon'] ) : $this->default_settings['icon'];
-				$markervars['color'] = isset( $value['color'] ) ? esc_attr( $value['color'] ) : $this->default_settings['color'];
-				$markervars['infobox'] = wp_kses_post( trim( $value['infobox'] ) );
-				$markervars['infobox_open'] = 1 == $value['infobox_open'] ? 1 : $this->default_settings['infobox_open'];
-
-				if ( strlen( $markervars['lat'] ) && strlen( $markervars['lon'] ) ) {
-					$newmarkervars[ $key ] = $markervars;
-				}
-			}
-		}
-		update_post_meta( $post_id, 'venomaps_marker', $newmarkervars );
 	}
 
 	/**

@@ -2,23 +2,25 @@
 
 Author: Nicola Franchini
 Contributors: nicolafranchini
-Version: 2.0.3
-Stable tag: 2.0.3
+Version: 2.1.0
+Stable tag: 2.1.0
 Tested up to: 6.8
 Requires at least: 4.0
 Requires PHP: 5.3
 Plugin Name: VenoMaps
 Plugin URI: https://veno.es/venomaps/
-Description: The fast, privacy-friendly Google Maps alternative. Create custom Geo Maps and markers using OpenStreetMap and OpenLayers, requiring no API keys for default styles.
-Tags: maps, openstreetmap, google maps alternative, store locator, privacy
+Description: The fast, privacy-friendly Google Maps alternative. Create custom Geo Maps, markers, and routes using OpenStreetMap and OpenLayers. No API keys required for default styles.
+Tags: maps, openstreetmap, routes, store locator, search, privacy, google maps alternative
 Author URI: https://veno.es/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://www.paypal.com/donate/?hosted_button_id=BXVJVBJ2BZUQL
 
+Create beautiful, searchable maps with custom markers and routes. The simple, private alternative to Google Maps.
+
 == Description ==
 
-Tired of complex Google Maps API keys, fees, and tracking cookies? VenoMaps is the lightweight, privacy-focused solution for displaying beautiful, responsive maps on your WordPress website.
+Tired of complex Google Maps API keys, fees, and tracking cookies? VenoMaps is the lightweight, privacy-focused solution for displaying beautiful, responsive, and interactive maps on your WordPress website.
 
 Based on OpenLayers and OpenStreetMap (OSM) data, VenoMaps ensures quick setup and full compliance with modern privacy standards, as the default map styles require **NO API KEY** and are free from tracking.
 
@@ -27,10 +29,12 @@ Based on OpenLayers and OpenStreetMap (OSM) data, VenoMaps ensures quick setup a
 *   🔑 **NO API KEY REQUIRED:** Use the default OpenStreetMap styles completely free and without registration.
 *   🍪 **Privacy-First:** The default maps are loaded without any tracking cookies, making GDPR compliance easier.
 *   ⚡ **Performance-Focused:** A lightweight library ensures fast loading times compared to heavy Google Maps scripts.
-*   🎨 **Fully Customizable:** Upload your custom markers and choose from multiple map styles, or add your own custom tilesets.
+*   🎨 **Fully Customizable:** Upload your custom markers, create multi-stop routes, and choose from multiple map styles, or add your own custom tilesets.
 
 ### Features
 
+*   **Live Marker Search:** Allow users to instantly filter locations by searching marker titles and infobox content. Perfect for store locators and directories.
+*   **Custom Routes:** Create and display custom routes by selecting markers as waypoints. Ideal for travel blogs, event maps, and delivery routes.
 *   **Gutenberg Block** for easy insertion into posts and pages.
 *   Manage **custom markers** using the WP Media Library.
 *   **Responsive design** ensures a perfect display on all devices.
@@ -43,30 +47,33 @@ Based on OpenLayers and OpenStreetMap (OSM) data, VenoMaps ensures quick setup a
 
 1.  Upload the plugin folder `venomaps` to the `/wp-content/plugins/` directory.
 2.  Activate the plugin through the 'Plugins' menu in WordPress.
-3.  Go to VenoMaps > Add New, give your map a title, and define basic options and markers.
+3.  Go to VenoMaps > Add New, give your map a title, and define basic options, markers, and routes.
 4.  Insert the map using the VenoMaps Gutenberg Block or the shortcode `[venomap id="xxx"]`.
 5.  (Optional) Add new custom map styles under Settings > VenoMaps.
 
 == Frequently Asked Questions ==
 
-** Does this plugin support Google Maps? **
+**Does this plugin support Google Maps?**
 
 No. VenoMaps was built specifically as a robust, lightweight, and privacy-friendly alternative to Google Maps, relying on OpenStreetMap and OpenLayers for core functionality.
 
-** Do I need an API key to use VenoMaps? **
+**Do I need an API key to use VenoMaps?**
 
 **No.** The default map styles are loaded without the need for any API key, registration, or cost. If you wish to use premium or custom map styles from third-party services like Maptiler or Stadia Maps, you will need to obtain a key from those services.
 
-** Can I use it to create a Store Locator? **
+**Can I use it to create a Store Locator?**
 
-**Yes, absolutely.** With features like CSV import for multiple locations, marker clustering, and a search field, VenoMaps is a perfect tool for building a "Store Locator" map or any map with multiple points of interest.
+**Yes, absolutely.** With features like powerful marker search, CSV import for multiple locations, and marker clustering, VenoMaps is a perfect tool for building a "Store Locator" map or any map with multiple points of interest.
 
-** How do I place a map inside my template file? **
+**How do I create a Route?**
+
+You can create a new route from the map editor screen. Simply add markers to your map to act as waypoints, then create a new Route and select the desired markers in the order you want them to appear. The plugin will automatically draw the path on the map.
+
+**How do I place a map inside my template file?**
 
 To display a map outside the post editor or widgets, use the following PHP code inside your template file:
 `echo do_shortcode('[venomap id="xxx" height="xxx"]');`
 Replace the shortcode parameters with the ones generated by the plugin on the map's edit page.
-
 == Screenshots ==
 
 1.  Custom map with markers, clusters, and search field.
@@ -81,6 +88,9 @@ Replace the shortcode parameters with the ones generated by the plugin on the ma
 Default maps data provided by: OpenStreetMap [ODbL](https://www.openstreetmap.org/copyright)
 
 == Changelog ==
+
+= 2.0.4 =
+* New: Custom Routes!
 
 = 2.0.3 =
 * Update: Minor fix
