@@ -10,7 +10,7 @@ Requires PHP: 5.3
 Plugin Name: VenoMaps
 Plugin URI: https://veno.es/venomaps/
 Description: The fast, privacy-friendly Google Maps alternative. Create custom Geo Maps, markers, and routes using OpenStreetMap and OpenLayers. No API keys required for default styles.
-Tags: maps, openstreetmap, routes, store locator, search, privacy, google maps alternative
+Tags: maps, routes, store locator, search, privacy
 Author URI: https://veno.es/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
