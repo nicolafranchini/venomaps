@@ -89,7 +89,7 @@ Default maps data provided by: OpenStreetMap [ODbL](https://www.openstreetmap.or
 
 == Changelog ==
 
-= 2.0.5 =
+= 2.0.6 =
 * Update: New wp block api v3
 * Update: Tested up to 6.9
 
