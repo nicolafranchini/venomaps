@@ -272,8 +272,10 @@ class Venomaps_Plugin {
 		// Custom posts.
 		add_action( 'init', array( $this, 'register_cpt' ) );
 		register_activation_hook( dirname( __DIR__ ) . '/' . $this->slug . '.php', array( $this, 'activate_plugin' ) );
-		add_shortcode( 'venomap', array( $this, 'venomaps_do_shortcode' ) );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_block' ) );
+
+		add_action( 'init', array( $this, 'register_venomaps_block' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'localize_venomaps_block_data' ) );
+
 		add_action( 'wp_ajax_vmap_set_csv', array( $this, 'set_csv' ) );
 		add_filter( 'post_row_actions', array( $this, 'duplicate_post_link' ), 25, 2 );
 		add_action( 'admin_action_vmaps_duplicate_post_as_draft', array( $this, 'duplicate_post_as_draft' ) );
@@ -285,6 +287,8 @@ class Venomaps_Plugin {
 
 		// Check routes.
 		add_action( 'wp_ajax_vmap_fetch_osrm_routes', array( $this, 'fetch_osrm_routes_ajax' ) );
+
+		add_shortcode( 'venomap', array( $this, 'venomaps_do_shortcode' ) );
 	}
 
 	/**
@@ -521,47 +525,57 @@ class Venomaps_Plugin {
 	}
 
 	/**
-	 * Enqueue Gutenberg block script
+	 * Registra il tipo di blocco e lo script dell'editor con le sue dipendenze.
 	 */
-	public function gutenberg_block() {
+	public function register_venomaps_block() {
+
+		// 1. Registra il tipo di blocco usando i metadati del file block.json.
+		// Assicurati che il percorso punti alla DIRECTORY che contiene block.json.
+		register_block_type( __DIR__ . '/block' );
+
+		// 2. Registra lo script dell'editor, specificando le dipendenze corrette.
+		// Questo è il passaggio chiave che risolve l'errore 'window.wp is undefined'.
 		wp_register_script(
-			'venomaps-block',
-			plugins_url( 'block/venomaps-block.js', __FILE__ ),
-			array(
-				'wp-blocks',
-				'wp-element',
-				'wp-block-editor',
-				'wp-components',
-			),
+			'venomaps-block', // Handle - DEVE corrispondere a "editorScript" in block.json
+			plugins_url( 'block/block.js', __FILE__ ),
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components' ),
 			VENOMAPS_VERSION,
 			true
 		);
+	}
 
+	/**
+	 * Passa i dati da PHP a JavaScript per l'editor di blocchi.
+	 */
+	public function localize_venomaps_block_data() {
+
+		// Prepara i dati necessari per lo script.
 		$args = array(
-			'post_type' => 'venomaps',
+			'post_type'   => 'venomaps',
 			'numberposts' => -1,
-			'fields' => 'ids',
+			'fields'      => 'ids',
 			'post_status' => 'publish',
 		);
-		$olmaps = get_posts( $args );
+		$olmaps   = get_posts( $args );
 		$templist = array();
 		foreach ( $olmaps as $mapid ) {
 			$templist[ $mapid ] = get_the_title( $mapid );
 		}
+
 		$venomaps_vars = array(
-			'templates' => wp_json_encode( $templist ),
-			'_select_map' => __( 'Select a map to display', 'venomaps' ),
-			'_map_height' => __( 'Map Height', 'venomaps' ),
-			'_units' => __( 'units', 'venomaps' ),
+			'templates'          => wp_json_encode( $templist ),
+			'_select_map'        => __( 'Select a map to display', 'venomaps' ),
+			'_map_height'        => __( 'Map Height', 'venomaps' ),
+			'_units'             => __( 'units', 'venomaps' ),
 			'_clusters_background' => __( 'Clusters background', 'venomaps' ),
-			'_clusters_color' => __( 'Clusters color', 'venomaps' ),
-			'_zoom_scroll' => __( 'Mouse wheel zoom', 'venomaps' ),
-			'_initial_zoom' => __( 'Initial zoom', 'venomaps' ),
-			'_search' => __( 'Search markers', 'venomaps' ),
-			// '_search_suggestions' => __( 'Search suggestions', 'venomaps' ),
+			'_clusters_color'    => __( 'Clusters color', 'venomaps' ),
+			'_zoom_scroll'       => __( 'Mouse wheel zoom', 'venomaps' ),
+			'_initial_zoom'      => __( 'Initial zoom', 'venomaps' ),
+			'_search'            => __( 'Search markers', 'venomaps' ),
 		);
+
+		// Attacca i dati all'handle dello script del nostro blocco.
 		wp_localize_script( 'venomaps-block', 'venomapsBlockVars', $venomaps_vars );
-		wp_enqueue_script( 'venomaps-block' );
 	}
 
 	/**
