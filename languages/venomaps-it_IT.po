@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP OpenMaps\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-26 17:13+0000\n"
-"PO-Revision-Date: 2020-09-26 17:17+0000\n"
+"PO-Revision-Date: 2026-01-20 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -12,245 +12,362 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.4.3; wp-5.5.1"
+"X-Loco-Version: 2.8.1; wp-6.9; php-8.2.0"
 
-#. Name of the plugin
-#: include/class-venomaps-options.php:64 include/class-venomaps-options.php:65
-#: include/class-venomaps-plugin.php:355
-msgid "VenoMaps"
-msgstr "VenoMaps"
-
-#: include/class-venomaps-options.php:75
-msgid "VenoMaps Settings"
-msgstr "Impostazioni VenoMaps"
-
-#: include/class-venomaps-options.php:91
-msgid "Options"
-msgstr "Opzioni"
-
-#: include/class-venomaps-options.php:92 include/class-venomaps-plugin.php:524
-msgid "Style"
-msgstr "Stile"
-
-#: include/class-venomaps-options.php:149
-msgid "Default Maps"
-msgstr "Mappe predefinite"
-
-#: include/class-venomaps-options.php:173
-msgid "Custom Maps"
-msgstr "Mappe personalizzate"
-
-#. "maptiler" is the website where to get custom maps.
-#: include/class-venomaps-options.php:177
-#, php-format
-msgid ""
-"Select a standard map or create your custom map at %1$sMapTiler%2$s and "
-"paste here the %3$sVector Style%4$s."
-msgstr ""
-"Seleziona una mappa standard, o crea la tua mappa personalizzata su "
-"%1$sMapTiler%2$s e incolla qui il %3$sVector Style%4$s."
-
-#: include/class-venomaps-options.php:196
-#: include/class-venomaps-options.php:204 include/class-venomaps-widget.php:69
-msgid "Title"
-msgstr "Titolo"
-
-#: include/class-venomaps-options.php:212
-msgid "New style"
-msgstr "Nuovo stile"
-
-#: include/class-venomaps-widget.php:14
-msgid "Displays one of your custom maps"
-msgstr "Mostra una delle tue mappe personalizzate"
-
-#: include/class-venomaps-widget.php:77 include/class-venomaps-plugin.php:145
-msgid "Select a map to display"
-msgstr "Seleziona una mappa da mostrare"
-
-#: include/class-venomaps-widget.php:88 include/class-venomaps-plugin.php:146
-#: include/class-venomaps-plugin.php:561
-msgid "Map Height"
-msgstr "Altezza Mappa"
-
-#: include/class-venomaps-plugin.php:147
-msgid "units"
-msgstr "unità"
-
-#: include/class-venomaps-plugin.php:231
-msgid "No map selected"
-msgstr "Nessuna mappa selezionata"
-
-#: include/class-venomaps-plugin.php:334
-msgid "Settings"
-msgstr "Impostazioni"
-
-#: include/class-venomaps-plugin.php:344
-msgctxt "post type general name"
-msgid "VenoMaps"
-msgstr "VenoMaps"
-
-#: include/class-venomaps-plugin.php:345
-msgctxt "post type singular name"
-msgid "Map"
-msgstr "Map"
-
-#: include/class-venomaps-plugin.php:346 include/class-venomaps-plugin.php:347
-msgid "Add new"
-msgstr "Aggiungi nuova"
-
-#: include/class-venomaps-plugin.php:348
-msgid "Edit map"
-msgstr "Modifica mappa"
-
-#: include/class-venomaps-plugin.php:349
-msgid "New map"
-msgstr "Nuova mappa"
-
-#: include/class-venomaps-plugin.php:350
-msgid "All maps"
-msgstr "Tutte le mappe"
-
-#: include/class-venomaps-plugin.php:351
-msgid "View map"
-msgstr "Visualizza mappa"
-
-#: include/class-venomaps-plugin.php:352
-msgid "Search maps"
-msgstr "Cerca mappe"
-
-#: include/class-venomaps-plugin.php:353
-msgid "No map found."
-msgstr "Nessuna mappa trovata."
-
-#: include/class-venomaps-plugin.php:354
-msgid "No Maps found in trash."
-msgstr "Nessuna mappa trovata nel cestino."
-
-#: include/class-venomaps-plugin.php:393
-msgid "Map Shortcode"
-msgstr "Shortcode Mappa"
-
-#: include/class-venomaps-plugin.php:402
-msgid "Map Options"
-msgstr "Opzioni Mappa"
-
-#: include/class-venomaps-plugin.php:411
-msgid "Markers"
-msgstr "Segnaposti"
-
-#: include/class-venomaps-plugin.php:420
-msgid "Geolocation"
-msgstr "Geolocalizzazione"
-
-#: include/class-venomaps-plugin.php:436
-msgid ""
-"Search an address or drag the marker to adjust the position and get the "
-"coordinates"
-msgstr ""
-"Cerca un indirizzo o trascina il segnaposto per regolare la posizione e "
-"ottenere le coordinate"
-
-#: include/class-venomaps-plugin.php:442
-msgid "Search"
-msgstr "Cerca"
-
-#: include/class-venomaps-plugin.php:447 include/class-venomaps-plugin.php:552
-#: include/class-venomaps-plugin.php:643
-msgid "Latitude"
-msgstr "Latitudine"
-
-#: include/class-venomaps-plugin.php:449 include/class-venomaps-plugin.php:554
-#: include/class-venomaps-plugin.php:645
-msgid "Longitude"
-msgstr "Longitudine"
-
-#: include/class-venomaps-plugin.php:485
-msgid "Copy the shortcode and paste it inside your Post or Page"
-msgstr "Copia lo shortcode e incollalo in un Articolo o Pagina"
-
-#: include/class-venomaps-plugin.php:486
-msgid "You will also find VenoMaps among Blocks and Widgets"
-msgstr "Troverai VenoMaps anche tra Blocchi e Widget"
+#: include/class-venomaps-edit.php:188
+msgid "A route has been selected and saved."
+msgstr "Un percorso che è stato selezionato e salvato."
 
 #. "Settings Page" is the link to plugins settings page.
-#: include/class-venomaps-plugin.php:544
+#: include/class-venomaps-edit.php:278
 #, php-format
 msgid "Add more Map Styles inside %1$sSettings Page%2$s."
 msgstr "Aggiungi nuovi stili dalla %1$spagina Impostazioni%2$s."
 
-#: include/class-venomaps-plugin.php:548 include/class-venomaps-plugin.php:639
+#: include/class-venomaps-plugin.php:824 include/class-venomaps-plugin.php:825
+msgid "Add new"
+msgstr "Aggiungi nuova"
+
+#: include/class-venomaps-edit.php:192
+msgid "Add Route"
+msgstr "Aggiungi Percorso"
+
+#: include/class-venomaps-plugin.php:828
+msgid "All maps"
+msgstr "Tutte le mappe"
+
+#: include/class-venomaps-edit.php:98
+msgid "Batch import"
+msgstr "Importazione Batch"
+
+#: include/class-venomaps-edit.php:281
+msgid "Center"
+msgstr "Centro"
+
+#: include/class-venomaps-plugin.php:570
+msgid "Clusters background"
+msgstr "I cluster di sfondo"
+
+#: include/class-venomaps-plugin.php:571
+msgid "Clusters color"
+msgstr "I cluster di colore"
+
+#: include/class-venomaps-edit.php:371
+msgid "Color"
+msgstr "Colore"
+
+#: include/class-venomaps-edit.php:463
+msgid "Comma"
+msgstr "Virgola"
+
+#: include/class-venomaps-edit.php:136
 msgid "Coordinates"
 msgstr "Coordinate"
 
-#: include/class-venomaps-plugin.php:556
-msgid "Get coordinates from the Geolocation box"
-msgstr "Ottieni coordinate dal riquadro Geolocalizzazione"
+#: include/class-venomaps-plugin.php:395
+msgid "Copy"
+msgstr "Copia"
 
-#: include/class-venomaps-plugin.php:574
-msgid "Zoom"
-msgstr "Zoom"
+#: include/class-venomaps-plugin.php:446
+msgid "Copy created"
+msgstr "Creazione di una copia"
 
-#: include/class-venomaps-plugin.php:581
-msgid "Enable mouse wheel zoom"
-msgstr "Abilita zoom allo scroll del mouse"
-
-#: include/class-venomaps-plugin.php:651
-msgid "Size"
-msgstr "Dimensioni"
-
-#: include/class-venomaps-plugin.php:655
-msgid "Small"
-msgstr "Piccolo"
-
-#: include/class-venomaps-plugin.php:656
-msgid "Medium"
-msgstr "Medio"
-
-#: include/class-venomaps-plugin.php:657
-msgid "Large"
-msgstr "Grande"
-
-#: include/class-venomaps-plugin.php:658
-msgid "Extra Large"
-msgstr "Molto Grande"
-
-#: include/class-venomaps-plugin.php:664
-msgid "Custom Marker"
-msgstr "Segnaposto Personalizzato"
-
-#: include/class-venomaps-plugin.php:671
-msgid "Upload Media"
-msgstr "Carica file"
-
-#: include/class-venomaps-plugin.php:677
-msgid "Info Box"
-msgstr "Pannello Informazioni"
-
-#: include/class-venomaps-plugin.php:681
-msgid "Visible panel"
-msgstr "Pannello visibile"
-
-#: include/class-venomaps-plugin.php:702
-msgid "New marker"
-msgstr "Nuovo segnaposto"
-
-#. Description of the plugin
+#: include/class-venomaps-edit.php:247
 msgid ""
-"Create maps with custom styles, multiple markers, info windows with rich "
-"text editors. Widget and Block available. Vector maps supported."
+"Copy the shortcode and paste it inside your Posts or Pages, or search "
+"VenoMaps among Blocks to set more options"
 msgstr ""
-"Crea mappe personalizzate, segnaposti multipli, pannelli informazioni con "
-"editor di testo avanzati. Widget e Blocco disponibili. Mappe vettoriali "
-"supportate."
+"Copia il codice e incollarlo all'interno del vostro Post o Pagine, o di "
+"ricerca VenoMaps tra Blocchi per impostare ulteriori opzioni"
+
+#: include/class-venomaps-options.php:270
+msgid "Custom Maps"
+msgstr "Mappe personalizzate"
+
+#: include/class-venomaps-options.php:160
+#| msgid "Default Maps"
+msgid "Default Map"
+msgstr "Mappa predefinita"
+
+#: include/class-venomaps-edit.php:425
+msgid "Default Open"
+msgstr "Apertura Predefinita"
+
+#: include/class-venomaps-edit.php:123
+msgid "Drag the marker to adjust the position and get the coordinates"
+msgstr "Trascinare il cursore per regolare la posizione e le coordinate"
+
+#: include/class-venomaps-plugin.php:826
+msgid "Edit map"
+msgstr "Modifica mappa"
+
+#. %s is the plugin name
+#: include/class-venomaps-plugin.php:955
+#, php-format
+msgid ""
+"Enjoying %s? Please consider leaving a 5-star review ⭐⭐⭐⭐⭐. It helps us grow "
+"and support the plugin!"
+msgstr ""
+
+#: include/class-venomaps-plugin.php:475
+msgid "Error, invalid file"
+msgstr "Errore di file non valido"
+
+#: include/class-venomaps-plugin.php:457
+msgid "Error: please reload the page"
+msgstr "Errore: si prega di ricaricare la pagina"
+
+#: include/class-venomaps-edit.php:107
+msgid "Geolocation"
+msgstr "Geolocalizzazione"
+
+#: include/class-venomaps-plugin.php:782
+msgid "Get Directions"
+msgstr "Ottieni Indicazioni Stradali"
+
+#. Author URI of the plugin
+msgid "https://veno.es"
+msgstr "https://veno.es"
 
 #. URI of the plugin
 msgid "https://veno.es/venomaps"
 msgstr "https://veno.es/venomaps"
 
+#: include/class-venomaps-plugin.php:968
+msgid "I Already Rated It"
+msgstr "Ho Già Valutato"
+
+#: include/class-venomaps-edit.php:454
+msgid "Import data"
+msgstr "Importare i dati"
+
+#: include/class-venomaps-edit.php:417
+msgid "Info Box"
+msgstr "Pannello Informazioni"
+
+#: include/class-venomaps-plugin.php:573
+msgid "Initial zoom"
+msgstr "Iniziale di zoom"
+
+#: include/class-venomaps-edit.php:136 include/class-venomaps-edit.php:281
+#: include/class-venomaps-edit.php:336
+msgid "Latitude"
+msgstr "Latitudine"
+
+#: include/class-venomaps-edit.php:136 include/class-venomaps-edit.php:281
+#: include/class-venomaps-edit.php:339
+msgid "Longitude"
+msgstr "Longitudine"
+
+#: include/class-venomaps-plugin.php:568
+msgid "Map Height"
+msgstr "Altezza Mappa"
+
+#: include/class-venomaps-edit.php:71
+msgid "Map Options"
+msgstr "Opzioni Mappa"
+
+#: include/class-venomaps-edit.php:243
+msgid "Map Shortcode"
+msgstr "Shortcode Mappa"
+
+#: include/class-venomaps-options.php:168
+msgid "Maptiler Maps"
+msgstr "Maptiler Mappe"
+
+#: include/class-venomaps-edit.php:80
+msgid "Markers"
+msgstr "Segnaposti"
+
+#: include/class-venomaps-plugin.php:473
+msgid "Markers successfully imported. Reload the page"
+msgstr "Marcatori importato correttamente. Ricaricare la pagina"
+
+#: include/class-venomaps-plugin.php:965
+msgid "Maybe Later"
+msgstr "Forse Più Tardi"
+
+#: include/class-venomaps-plugin.php:572
+msgid "Mouse wheel zoom"
+msgstr "Zoom con rotellina del Mouse"
+
+#: include/class-venomaps-plugin.php:827
+msgid "New map"
+msgstr "Nuova mappa"
+
+#: include/class-venomaps-edit.php:436
+msgid "New marker"
+msgstr "Nuovo segnaposto"
+
+#: include/class-venomaps-options.php:311
+msgid "New style"
+msgstr "Nuovo stile"
+
 #. Author of the plugin
 msgid "Nicola Franchini"
 msgstr "Nicola Franchini"
 
-#. Author URI of the plugin
-msgid "https://veno.es"
-msgstr "https://veno.es"
+#: include/class-venomaps-plugin.php:831
+msgid "No map found."
+msgstr "Nessuna mappa trovata."
+
+#: include/class-venomaps-plugin.php:660
+msgid "No map selected"
+msgstr "Nessuna mappa selezionata"
+
+#: include/class-venomaps-plugin.php:832
+msgid "No Maps found in trash."
+msgstr "Nessuna mappa trovata nel cestino."
+
+#: include/class-venomaps-options.php:100
+msgid "Options"
+msgstr "Opzioni"
+
+#: include/class-venomaps-options.php:273
+msgid "Paste here your custom raster tile url."
+msgstr "Incolla qui il tuo raster personalizzato piastrelle url."
+
+#: include/class-venomaps-options.php:204
+#, php-format
+msgid ""
+"Place here your <a target=\"_blank\" href=\"%s\">Maptiler</a> api key to "
+"enable these maps"
+msgstr ""
+
+#: include/class-venomaps-options.php:222
+#, php-format
+msgid ""
+"Place here your <a target=\"_blank\" href=\"%s\">Stadiamaps</a> api key to "
+"enable these maps"
+msgstr ""
+
+#: include/class-venomaps-options.php:268
+#, php-format
+msgid ""
+"Place here your <a target=\"_blank\" href=\"%s\">Thunderforest</a> api key "
+"to enable these maps"
+msgstr ""
+
+#: include/class-venomaps-plugin.php:822
+msgctxt "post type general name"
+msgid "VenoMaps"
+msgstr "VenoMaps"
+
+#: include/class-venomaps-plugin.php:823
+msgctxt "post type singular name"
+msgid "Map"
+msgstr "Map"
+
+#: include/class-venomaps-edit.php:184 include/class-venomaps-edit.php:206
+msgid "Preview"
+msgstr "Anteprima"
+
+#: include/class-venomaps-edit.php:170 include/class-venomaps-edit.php:197
+msgid "Route"
+msgstr "Percorso"
+
+#: include/class-venomaps-edit.php:89
+msgid "Routes"
+msgstr "Percorsi"
+
+#: include/class-venomaps-plugin.php:776
+msgid "Search"
+msgstr "Cerca"
+
+#: include/class-venomaps-edit.php:128
+msgid "Search address"
+msgstr "Indirizzo di ricerca"
+
+#: include/class-venomaps-plugin.php:830
+msgid "Search maps"
+msgstr "Cerca mappe"
+
+#: include/class-venomaps-plugin.php:574
+msgid "Search markers"
+msgstr "Ricerca di marcatori"
+
+#: include/class-venomaps-plugin.php:567
+msgid "Select a map to display"
+msgstr "Seleziona una mappa da mostrare"
+
+#: include/class-venomaps-edit.php:458
+msgid "Select the CSV delimiter"
+msgstr "Selezionare il file CSV delimitatore"
+
+#: include/class-venomaps-edit.php:467
+msgid "Semicolon"
+msgstr "Punto e virgola"
+
+#: include/class-venomaps-plugin.php:812
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: include/class-venomaps-edit.php:381
+msgid "Size"
+msgstr "Dimensioni"
+
+#: include/class-venomaps-options.php:206
+msgid "Stadia Maps"
+msgstr "Stadi Mappe"
+
+#: include/class-venomaps-options.php:101 include/class-venomaps-edit.php:252
+msgid "Style"
+msgstr "Stile"
+
+#: include/class-venomaps-plugin.php:962
+msgid "Sure, I’d love to!"
+msgstr "Certo, mi piacerebbe!"
+
+#. Description of the plugin
+msgid ""
+"The fast, privacy-friendly Google Maps alternative. Create custom Geo Maps "
+"and markers using OpenStreetMap and OpenLayers, requiring no API keys for "
+"default styles."
+msgstr ""
+"Veloce, rispettoso della privacy di Google Maps alternativa. Creare "
+"personalizzato Geo Mappe e indicatori di utilizzo di OpenStreetMap e "
+"OpenLayers, che non richiede chiavi API per gli stili predefiniti."
+
+#: include/class-venomaps-options.php:224
+msgid "Thunderforest Maps"
+msgstr "Thunderforest Mappe"
+
+#: include/class-venomaps-options.php:291
+#: include/class-venomaps-options.php:301 include/class-venomaps-edit.php:179
+#: include/class-venomaps-edit.php:200 include/class-venomaps-edit.php:332
+msgid "Title"
+msgstr "Titolo"
+
+#: include/class-venomaps-plugin.php:569
+msgid "units"
+msgstr "unità"
+
+#: include/class-venomaps-edit.php:450
+msgid "Upload CSV"
+msgstr "Upload CSV"
+
+#. Name of the plugin
+#: include/class-venomaps-options.php:72 include/class-venomaps-options.php:73
+#: include/class-venomaps-plugin.php:833
+msgid "VenoMaps"
+msgstr "VenoMaps"
+
+#: include/class-venomaps-options.php:83
+msgid "VenoMaps Settings"
+msgstr "Impostazioni VenoMaps"
+
+#: include/class-venomaps-plugin.php:829
+msgid "View map"
+msgstr "Visualizza mappa"
+
+#: include/class-venomaps-edit.php:471
+msgid ""
+"Warning: importing the CSV any previous marker of this map will be "
+"overwritten"
+msgstr ""
+"Avviso: l'importazione CSV qualsiasi indicatore precedente di questa mappa "
+"verrà sovrascritto"
+
+#: include/class-venomaps-edit.php:165
+msgid "You need at least two markers to create a route."
+msgstr "Avete bisogno di almeno due marcatori per creare un percorso."
