@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Compile Venomaps files",
   "scripts": {
-    "start": "rollup --config rollup.config.js --watch",
+    "dev": "rollup --config rollup.config.js --watch",
     "build": "rollup --config rollup.config.js && cleancss node_modules/ol/ol.css venomaps.css -o ../css/venomaps-bundle.css && cleancss node_modules/ol/ol.css venomaps-admin.css -o ../css/venomaps-admin-bundle.css"
   },
   "devDependencies": {

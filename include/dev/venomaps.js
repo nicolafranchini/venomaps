@@ -404,46 +404,35 @@ import { createEmpty, extend } from 'ol/extent';
                 if (clickedFeature) {
                     hasInteracted = true;
 
-                    const routeTitle = clickedFeature.get('route_title') || 'Dettagli percorso';
-                    // const routeGeometry = clickedFeature.getGeometry();
+                    const routeTitle = clickedFeature.get('route_title');
 
-                    // Calcola la coordinata al centro della linea del percorso
-                    // const centerCoordinate = routeGeometry.getCoordinateAt(0.5);
+                    if (routeTitle) {
 
-                    // Crea l'elemento HTML per l'infobox
-                    const infoBoxElement = document.createElement('div');
-                    infoBoxElement.className = 'wpol-infopanel'; // Riutilizza stili esistenti se possibile
+                        // Crea l'elemento HTML per l'infobox
+                        const infoBoxElement = document.createElement('div');
+                        infoBoxElement.className = 'wpol-infopanel'; // Riutilizza stili esistenti se possibile
 
-                    const infoLabelElement = document.createElement('div');
-                    infoLabelElement.className = 'wpol-infolabel';
+                        const infoLabelElement = document.createElement('div');
+                        infoLabelElement.className = 'wpol-infolabel';
 
-                    const arrowElement = document.createElement('div');
-                    arrowElement.className = 'wpol-arrow';
+                        const arrowElement = document.createElement('div');
+                        arrowElement.className = 'wpol-arrow';
 
-                    infoBoxElement.appendChild(infoLabelElement);
-                    infoBoxElement.appendChild(arrowElement);
+                        infoBoxElement.appendChild(infoLabelElement);
+                        infoBoxElement.appendChild(arrowElement);
 
-                    // infoBoxElement.className = 'wpol-infomarker wpol-infolabel'; // Riutilizza stili esistenti se possibile
-                    // infoBoxElement.style.cssText = `
-                    //     background-color: white;
-                    //     padding: 8px 12px;
-                    //     border-radius: 5px;
-                    //     box-shadow: 0 2px 7px 1px rgba(0,0,0,0.3);
-                    //     border: 1px solid #ccc;
-                    // `;
-                    infoLabelElement.innerHTML = `<strong>${routeTitle}</strong>`;
+                        infoLabelElement.innerHTML = `<strong>${routeTitle}</strong>`;
 
-                    routeInfoOverlay = new Overlay({
-                        position: event.coordinate, 
-                        // position: centerCoordinate,
-                        positioning: 'bottom-center',
-                        element: infoBoxElement,
-                        offset: [0, -15], // Sposta l'infobox leggermente sopra la linea
-                        stopEvent: false
-                    });
-
-                    map.addOverlay(routeInfoOverlay);
-
+                        routeInfoOverlay = new Overlay({
+                            position: event.coordinate, 
+                            // position: centerCoordinate,
+                            positioning: 'bottom-center',
+                            element: infoBoxElement,
+                            offset: [0, -15], // Sposta l'infobox leggermente sopra la linea
+                            stopEvent: false
+                        });
+                        map.addOverlay(routeInfoOverlay);
+                    }
                 }
 
                 // Se non è stato cliccato un percorso, gestisci i cluster
