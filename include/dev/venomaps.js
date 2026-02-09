@@ -386,75 +386,79 @@ import { createEmpty, extend } from 'ol/extent';
             }
 
             map.on('click', (event) => {
-                let hasInteracted = false;
-
                 // Rimuovi l'infobox del percorso precedente, se ne esiste uno
                 if (routeInfoOverlay) {
                     map.removeOverlay(routeInfoOverlay);
                     routeInfoOverlay = null;
                 }
 
-                // Cerca prima se è stato cliccato un percorso
-                const clickedFeature = map.forEachFeatureAtPixel(event.pixel, function(feature, layer) {
-                    if (layer === savedRoutesLayer) { // Controlla solo il layer dei percorsi salvati
-                        return feature;
-                    }
-                });
+                let hasInteracted = false; // Inizializzato a false
 
-                if (clickedFeature) {
-                    hasInteracted = true;
+                // 1. Cerca e gestisci prima i click sui cluster
+                clusterLayer.getFeatures(event.pixel).then((clickedFeatures) => {
+                    if (clickedFeatures.length > 0) {
+                        const clusterMembers = clickedFeatures[0].get('features');
+                        const view = map.getView();
 
-                    const routeTitle = clickedFeature.get('route_title');
-
-                    if (routeTitle) {
-
-                        // Crea l'elemento HTML per l'infobox
-                        const infoBoxElement = document.createElement('div');
-                        infoBoxElement.className = 'wpol-infopanel'; // Riutilizza stili esistenti se possibile
-
-                        const infoLabelElement = document.createElement('div');
-                        infoLabelElement.className = 'wpol-infolabel';
-
-                        const arrowElement = document.createElement('div');
-                        arrowElement.className = 'wpol-arrow';
-
-                        infoBoxElement.appendChild(infoLabelElement);
-                        infoBoxElement.appendChild(arrowElement);
-
-                        infoLabelElement.innerHTML = `<strong>${routeTitle}</strong>`;
-
-                        routeInfoOverlay = new Overlay({
-                            position: event.coordinate, 
-                            // position: centerCoordinate,
-                            positioning: 'bottom-center',
-                            element: infoBoxElement,
-                            offset: [0, -15], // Sposta l'infobox leggermente sopra la linea
-                            stopEvent: false
-                        });
-                        map.addOverlay(routeInfoOverlay);
-                    }
-                }
-
-                // Se non è stato cliccato un percorso, gestisci i cluster
-                if (!hasInteracted) {
-                    clusterLayer.getFeatures(event.pixel).then((clickedFeatures) => {
-                        if (clickedFeatures.length > 0) {
-                            const clusterMembers = clickedFeatures[0].get('features');
-                            const view = map.getView();
-                            if (clusterMembers.length > 1) {
-                                const extent = createEmpty();
-                                clusterMembers.forEach((f) => extend(extent, f.getGeometry().getExtent()));
-                                view.fit(extent, { duration: 500, padding: [50, 50, 50, 50] });
-                            } else if (clusterMembers.length === 1) {
-                                const paneltarget = clusterMembers[0].get('panel');
-                                if (paneltarget) {
-                                    paneltarget.classList.remove('infobox-closed');
-                                    view.animate({ center: clusterMembers[0].getGeometry().getCoordinates(), duration: 500 });
-                                }
+                        if (clusterMembers.length > 1) {
+                            // Se è un cluster con più elementi, esegui lo zoom
+                            const extent = createEmpty();
+                            clusterMembers.forEach((f) => extend(extent, f.getGeometry().getExtent()));
+                            view.fit(extent, { duration: 500, padding: [50, 50, 50, 50] });
+                            hasInteracted = true; // Abbiamo gestito un click su cluster
+                        } else if (clusterMembers.length === 1) {
+                            // Se è un cluster con un solo elemento, apri il pannello
+                            const paneltarget = clusterMembers[0].get('panel');
+                            if (paneltarget) {
+                                paneltarget.classList.remove('infobox-closed');
+                                view.animate({ center: clusterMembers[0].getGeometry().getCoordinates(), duration: 500 });
+                                hasInteracted = true; // Abbiamo gestito un click su un singolo elemento nel cluster
                             }
                         }
-                    });
-                }
+                    }
+
+                    // 2. Solo se non abbiamo interagito con un cluster, controlla i click sulle route
+                    if (!hasInteracted) {
+                        const clickedFeature = map.forEachFeatureAtPixel(event.pixel, function(feature, layer) {
+                            if (layer === savedRoutesLayer) { // Controlla solo il layer dei percorsi salvati
+                                return feature;
+                            }
+                        });
+
+                        if (clickedFeature) {
+                            const routeTitle = clickedFeature.get('route_title');
+
+                            // Crea l'infobox solo se routeTitle esiste e non è vuoto
+                            if (routeTitle) {
+                                hasInteracted = true; // Abbiamo gestito un click su route con titolo
+
+                                // Crea l'elemento HTML per l'infobox
+                                const infoBoxElement = document.createElement('div');
+                                infoBoxElement.className = 'wpol-infopanel';
+
+                                const infoLabelElement = document.createElement('div');
+                                infoLabelElement.className = 'wpol-infolabel';
+
+                                const arrowElement = document.createElement('div');
+                                arrowElement.className = 'wpol-arrow';
+
+                                infoBoxElement.appendChild(infoLabelElement);
+                                infoBoxElement.appendChild(arrowElement);
+
+                                infoLabelElement.innerHTML = `<strong>${routeTitle}</strong>`;
+
+                                routeInfoOverlay = new Overlay({
+                                    position: event.coordinate,
+                                    positioning: 'bottom-center',
+                                    element: infoBoxElement,
+                                    offset: [0, -15],
+                                    stopEvent: false
+                                });
+                                map.addOverlay(routeInfoOverlay);
+                            }
+                        }
+                    }
+                }); // Fine .then() della Promise del cluster
             });
             
             map.on('pointermove', function (e) {
