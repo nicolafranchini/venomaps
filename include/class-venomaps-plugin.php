@@ -919,7 +919,22 @@ class Venomaps_Plugin {
 	 * @return void
 	 */
 	public function display_review_notice() {
-		// Only show notice to users who can manage options.
+		// Ottieni le informazioni sulla schermata corrente.
+		$screen = get_current_screen();
+
+		// Definisci le pagine in cui visualizzare la notifica.
+		$allowed_screens = array(
+			'settings_page_venomaps', // Pagina delle opzioni del plugin.
+			'edit-venomaps',          // Pagina di elenco dei CPT "venomaps".
+			'venomaps',               // Schermata di modifica e aggiunta del CPT "venomaps".
+		);
+
+		// Controlla se la schermata corrente è tra quelle consentite.
+		if ( ! in_array( $screen->id, $allowed_screens, true ) ) {
+			return;
+		}
+
+		// Mostra la notifica solo agli utenti che possono gestire le opzioni.
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -927,22 +942,22 @@ class Venomaps_Plugin {
 		$dismissed_option = $this->slug . '_review_notice_dismissed';
 		$activation_option = $this->slug . '_activation_date';
 
-		// Check if the notice has been dismissed.
+		// Controlla se la notifica è stata disattivata.
 		if ( get_option( $dismissed_option ) ) {
 			return;
 		}
 
 		$activation_date = get_option( $activation_option );
 
-		// Show notice only after 14 days of usage.
+		// Mostra la notifica solo dopo 14 giorni di utilizzo.
 		if ( ! $activation_date || ( time() - $activation_date < 14 * DAY_IN_SECONDS ) ) {
 			return;
 		}
 
-		// Enqueue the script for the notice.
+		// Accoda lo script per la notifica.
 		$this->enqueue_review_notice_script();
 
-		// Dynamic CSS IDs and classes.
+		// ID e classi CSS dinamici.
 		$notice_id     = $this->slug . '-review-notice';
 		$dismiss_class = $this->slug . '-dismiss-notice';
 		$review_url    = 'https://wordpress.org/support/plugin/' . $this->slug . '/reviews/?filter=5';
