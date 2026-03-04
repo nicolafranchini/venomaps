@@ -1,0 +1,15 @@
+# /.gitignore
+
+# Dipendenze (MAI nel repository)
+node_modules/
+
+# File di sistema (macOS / Windows)
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Sourcemaps (opzionale, ma consigliato tenerle fuori dal Git per pulizia)
+*.map

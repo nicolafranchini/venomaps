@@ -1,3 +1,4 @@
+import './venomaps-admin.css';
 import { Feature, Map, View, Overlay } from 'ol';
 import { Point } from 'ol/geom';
 import { Style, Circle, Fill, Stroke, Text } from 'ol/style';
@@ -616,41 +617,48 @@ const VenomapsAdmin = function(){
 	}
 
 	function loadIconImage(upmarker, url = false) {
+
+	    if (!url || url === 'undefined' || url === '' || url === null) {
+	        url = false;
+	    }
+
 		const field = upmarker.querySelector( '.vmap-modal-get-icon' );
 		const upimage = upmarker.querySelector( '.vmap-icon-image' );
 		const defaultimage = upmarker.querySelector( '.vmap-icon-default' );
 		const removemarkers = upmarker.querySelectorAll( '.venomaps_marker_remove_btn' );
 		const color_component = upmarker.querySelector(".vmap-color-component");
-		if (url) {
-			const img = new Image();
-			img.src = url;
-			img.onload = function () {
-				upimage.innerHTML = "";
-				upimage.append(img);
-				upimage.classList.remove("vmap-hidden");
-				defaultimage.classList.add("vmap-hidden");
-				defaultimage.innerHTML = "";
-				removemarkers.forEach(function(removemarker){
-					removemarker.classList.remove("vmap-invisible");
-					color_component.classList.add("vmap-hidden");
-				});
-			}
-			field.value = url;
-		} else {
-			field.value = "";
-			defaultimage.innerHTML = defaultIcon;
-			upimage.classList.add("vmap-hidden");
-			defaultimage.classList.remove("vmap-hidden");
-			removemarkers.forEach(function(removemarker){
-				removemarker.classList.add("vmap-invisible");
-				color_component.classList.remove("vmap-hidden");
-			});
-		}
+
+	    if (url) {
+	        // Mostra immagine custom
+	        const img = new Image();
+	        img.src = url;
+	        img.onload = function () {
+	            upimage.innerHTML = `<img src="${url}" style="width:100%; height:auto;">`;
+	            upimage.classList.remove("vmap-hidden");
+	            defaultimage.classList.add("vmap-hidden");
+	            removemarkers.forEach(btn => btn.classList.remove("vmap-invisible"));
+	            if (color_component) color_component.classList.add("vmap-hidden");
+	        }
+	        field.value = url;
+	    } else {
+	        // Ritorna all'SVG di default
+	        field.value = "";
+	        defaultimage.innerHTML = defaultIcon;
+	        upimage.classList.add("vmap-hidden");
+	        upimage.innerHTML = "";
+	        defaultimage.classList.remove("vmap-hidden");
+	        removemarkers.forEach(btn => btn.classList.add("vmap-invisible"));
+	        if (color_component) color_component.classList.remove("vmap-hidden");
+	    }
 	}
 
 	function iconUploader(modal_component){
 		if (!modal_component) return false;
-		const upmarker = modal_component.querySelector(".vmap-icon-uploader");
+		const upmarker = modal_component.classList.contains('vmap-icon-uploader') 
+        ? modal_component 
+        : modal_component.querySelector(".vmap-icon-uploader");
+
+    	if (!upmarker) return false; // Esci se non trovi nulla
 		const upbuttons = upmarker.querySelectorAll( '.venomaps_marker_upload_btn' );
 		const removemarkers = upmarker.querySelectorAll( '.venomaps_marker_remove_btn' );
 		const color_component = modal_component.querySelector(".vmap-color-component");
@@ -663,8 +671,8 @@ const VenomapsAdmin = function(){
 				color_component.classList.remove("vmap-hidden");
 				loadIconImage(upmarker, false);
 				rowdata.icon = "";
-				get_target = modal_component.dataset.rowTarget;
-				updateRowData(get_target);
+				get_target = modal_component.dataset.rowTarget || false;
+				if (get_target) updateRowData(get_target);
 			});
 		});
 		upbuttons.forEach(function(upbutton){
@@ -676,8 +684,8 @@ const VenomapsAdmin = function(){
 					if (media_attachment.url) {
 						loadIconImage(upmarker, media_attachment.url);
 						rowdata.icon = media_attachment.url;
-						get_target = modal_component.dataset.rowTarget;
-						updateRowData(get_target);
+						get_target = modal_component.dataset.rowTarget || false;
+						if (get_target) updateRowData(get_target);
 					}
 				});
 				om_metaImageFrame.open();
@@ -703,13 +711,15 @@ const VenomapsAdmin = function(){
 		dialog.classList.add("active");
 		const modal_component = dialog.querySelector(".vmap-modal-content");
 
-		// const rowindex = row.dataset.rowIndex;
-		// modal_component.dataset.index = rowindex;
 		modal_component.dataset.rowTarget = row.id;
 		const set_data = row.querySelector(".vmap-modal-set-data");
-		rowdata = set_data.value ? JSON.parse(set_data.value) : JSON.parse(venomapsAdminVars.default_settings);
+
+		const globalDefaults = JSON.parse(venomapsAdminVars.default_settings);
+		const savedData = set_data.value ? JSON.parse(set_data.value) : {};
+
+		rowdata = { ...globalDefaults, ...savedData };
 		
-		const rowindex = rowdata.key;
+		const rowindex = rowdata.key || (parseInt(row.dataset.markerKey) + 1);
 		modal_component.dataset.index = rowindex;
 
 		const get_size = modal_component.querySelector(".vmap-modal-get-size");
@@ -720,6 +730,7 @@ const VenomapsAdmin = function(){
 		const get_infobox_open = modal_component.querySelector(".vmap-modal-get-infobox-open");
 		const get_header = modal_component.querySelector(".vmap-modal-title");
 		const upmarker = modal_component.querySelector(".vmap-icon-uploader");
+
 		get_size.value = rowdata.size;
 		get_icon.value = rowdata.icon;
 		get_color.value = rowdata.color;
@@ -727,11 +738,15 @@ const VenomapsAdmin = function(){
 		get_infobox.value = rowdata.infobox;
 		get_infobox_open.checked = rowdata.infobox_open == 1;
 		get_header.innerHTML = `<span class="vmap-badge">#${rowindex}</span> ${rowdata.title}`;
+
+		const iconToLoad = (rowdata.icon && rowdata.icon !== 'undefined') ? rowdata.icon : false;
+
 		loadIconImage(upmarker, rowdata.icon);
 		updateIconStyle(modal_component);
 	}
 	
 	function updateRowData(row_target){
+		if (!row_target) return false;
 		const row = document.getElementById(row_target);
 		if (!row) return false;
 		const set_data = row.querySelector(".vmap-modal-set-data");
@@ -764,31 +779,31 @@ const VenomapsAdmin = function(){
 			rowdata.color = get_color.value;
 			set_color.value = get_color.value;
 			updateIconStyle(modal_component);
-			get_target = modal_component.dataset.rowTarget;
-			updateRowData(get_target);
+			get_target = modal_component.dataset.rowTarget || false;
+			if (get_target) updateRowData(get_target);
 		});
 		set_color.addEventListener("change", function(){
 			rowdata.color = set_color.value;
 			get_color.value = set_color.value;
 			updateIconStyle(modal_component);
-			get_target = modal_component.dataset.rowTarget;
-			updateRowData(get_target);
+			get_target = modal_component.dataset.rowTarget || false;
+			if (get_target) updateRowData(get_target);
 		});
 		get_size.addEventListener("change", function(){
 			rowdata.size = get_size.value;
 			updateIconStyle(modal_component);
-			get_target = modal_component.dataset.rowTarget;
-			updateRowData(get_target);
+			get_target = modal_component.dataset.rowTarget || false;
+			if (get_target) updateRowData(get_target);
 		});
 		get_infobox.addEventListener("change", function(){
 			rowdata.infobox = get_infobox.value;
-			get_target = modal_component.dataset.rowTarget;
-			updateRowData(get_target);
+			get_target = modal_component.dataset.rowTarget || false;
+			if (get_target) updateRowData(get_target);
 		});
 		get_infobox_open.addEventListener("change", function(){
 			rowdata.infobox_open = get_infobox_open.checked;
-			get_target = modal_component.dataset.rowTarget;
-			updateRowData(get_target);
+			get_target = modal_component.dataset.rowTarget || false;
+			if (get_target) updateRowData(get_target);
 		});
 		iconUploader(modal_component);
 	}
@@ -848,6 +863,58 @@ const VenomapsAdmin = function(){
 				repeatablegroup.insertAdjacentHTML('beforeend', newItemHtml);
 			});
 		});
+
+        // --- NUOVA LOGICA: INIZIALIZZAZIONE MARKER GLOBALI ---
+        const settingsWrapper = document.querySelector("#vmap-global-settings-wrapper");
+        if (settingsWrapper) {
+            // Prepariamo rowdata con i valori attuali dei settings
+            rowdata = {
+                color: settingsWrapper.querySelector('.vmap-modal-get-color').value,
+                size: settingsWrapper.querySelector('.vmap-modal-get-size').value,
+                icon: settingsWrapper.querySelector('.vmap-modal-get-icon').value
+            };
+
+            // Inizializziamo l'uploader (riutilizza la tua funzione iconUploader)
+            // Passiamo settingsWrapper come se fosse il modal_component
+            iconUploader(settingsWrapper);
+
+            // Se c'è un'icona salvata, carichiamola subito nell'anteprima
+	        // Carica l'anteprima iniziale
+	        loadIconImage(settingsWrapper, rowdata.icon);
+
+	        // Listener per aggiornare l'anteprima (Size e Color)
+	        const sizeInput = settingsWrapper.querySelector('.vmap-modal-get-size');
+	        const colorInput = settingsWrapper.querySelector('.vmap-modal-get-color');
+
+	        if (sizeInput) {
+	            sizeInput.addEventListener('input', () => {
+	                rowdata.size = sizeInput.value;
+	                updateIconStyle(settingsWrapper);
+	            });
+	        }
+	        if (colorInput) {
+	            colorInput.addEventListener('input', () => {
+	                rowdata.color = colorInput.value;
+	                // Aggiorna anche il testo accanto se presente
+	                const colorText = settingsWrapper.querySelector('.vmap-modal-set-color');
+	                if (colorText) colorText.value = colorInput.value;
+	                updateIconStyle(settingsWrapper);
+	            });
+	        }
+
+            // Sovrascriviamo leggermente il comportamento di updateRowData 
+            // perché nei settings non abbiamo un textarea JSON da aggiornare ad ogni click,
+            // ma degli input standard che si aggiornano da soli.
+            // Tuttavia, dobbiamo assicurarci che updateIconStyle funzioni:
+            settingsWrapper.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => {
+                    rowdata.color = settingsWrapper.querySelector('.vmap-modal-get-color').value;
+                    rowdata.size = settingsWrapper.querySelector('.vmap-modal-get-size').value;
+                    updateIconStyle(settingsWrapper);
+                });
+            });
+        }
+
 	}
 
 	function getStyleData(currentstyle) {

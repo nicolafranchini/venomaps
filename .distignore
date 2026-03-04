@@ -1,0 +1,15 @@
+# /.distignore
+src/
+node_modules/
+package.json
+package-lock.json
+rollup.config.js
+
+.git/
+.gitignore
+.distignore
+
+*.map
+
+.DS_Store
+Thumbs.db

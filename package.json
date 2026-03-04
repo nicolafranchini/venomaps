@@ -1,0 +1,32 @@
+{
+  "name": "venomaps",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development rollup -c -w",
+    "build": "NODE_ENV=production rollup -c",
+    "package": "wp dist-archive .",
+    "dist": "npm run build && npm run package"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "cssnano": "^7.1.2",
+    "postcss": "^8.5.1",
+    "postcss-import": "^16.1.1",
+    "rollup": "^4.30.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "terser": "^5.37.0"
+  },
+  "dependencies": {
+    "ol": "^10.3.1"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.3",
+    "terser": "^5.37.0",
+    "glob": "^10.4.5",
+    "inflight": "npm:lru-cache@^7.14.1",
+    "rimraf": "^5.0.5"
+  }
+}

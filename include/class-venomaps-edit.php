@@ -39,21 +39,37 @@ class Venomaps_Edit {
 	 * @param string $hook page hook.
 	 */
 	public function load_post_edit_scripts( $hook ) {
-
-		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin-bundle.css', __FILE__ ), array(), VENOMAPS_VERSION );
-
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ) ) ) {
 			$screen = get_current_screen();
 			if ( is_object( $screen ) && 'venomaps' == $screen->post_type ) {
+
+				$min = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
+
 				wp_enqueue_media();
 				wp_enqueue_editor();
-				wp_register_script( 'venomaps-admin', plugins_url( 'js/venomaps-admin-bundle.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
+
+				wp_enqueue_style( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'css/venomaps-admin-bundle' . $min . '.css', array(), VENOMAPS_VERSION );
+				wp_register_script( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'js/venomaps-admin-bundle' . $min . '.js', array(), VENOMAPS_VERSION, true );
+
+				// --- RECUPERO SETTINGS GLOBALI ---
+				$global_settings = get_option( 'venomaps_settings', array() );
+				$plugin_defaults = $this->plugin->get_default_settings(); // I tuoi default hardcoded.
+
+				// Prepariamo i default per i nuovi marker basandoci sulle impostazioni generali.
+				$merged_defaults = array(
+					'color'        => ! empty( $global_settings['default_color'] ) ? $global_settings['default_color'] : $plugin_defaults['color'],
+					'size'         => ! empty( $global_settings['default_size'] ) ? $global_settings['default_size'] : $plugin_defaults['size'],
+					'icon'         => ! empty( $global_settings['default_icon'] ) ? $global_settings['default_icon'] : '',
+					'infobox'      => '',
+					'infobox_open' => false,
+					'title'        => '',
+				);
 
 				$venomaps_vars = array(
 					'styles'           => wp_json_encode( $this->plugin->available_styles() ),
 					'ajax_url'         => admin_url( 'admin-ajax.php' ),
 					'nonce'            => wp_create_nonce( 'vmap-ajax-nonce' ),
-					'default_settings' => wp_json_encode( $this->plugin->get_default_settings() ),
+					'default_settings' => wp_json_encode( $merged_defaults ), // <--- Ora contiene i tuoi Style settings
 				);
 
 				wp_localize_script( 'venomaps-admin', 'venomapsAdminVars', $venomaps_vars );
@@ -89,13 +105,18 @@ class Venomaps_Edit {
 			__( 'Routes', 'venomaps' ),
 			array( $this, 'render_venomaps_routes_metabox' ),
 			'venomaps',
-			'normal', // o 'side' se preferisci
+			'normal', // o 'side' se preferisci.
 			'default'
 		);
 
 		add_meta_box(
 			'venomaps_csv_box',
-			__( 'Batch import', 'venomaps' ),
+			sprintf(
+				'%s <a href="%s" target="_blank" style="text-decoration:none; vertical-align:middle; margin-left:0.4em; margin-right:auto" title="%s"><span class="dashicons dashicons-info" style="font-size:18px;"></span></a>',
+				esc_html__( 'Batch import', 'venomaps' ),
+				esc_url( 'https://veno.es/venomaps/documentation/#batch-import' ),
+				esc_attr__( 'View documentation', 'venomaps' )
+			),
 			array( $this, 'render_venomaps_csv_metabox' ),
 			'venomaps',
 			'normal',
@@ -176,7 +197,7 @@ class Venomaps_Edit {
 								<div class="vmap-route-stops-select">
 									<?php foreach ( $markers as $marker_key => $marker_data ) : ?>
 									<label>
-										<input class="vmap-change-route" type="checkbox" value="<?php echo esc_attr( $marker_key ); ?>" name="venomaps_routes[<?php echo esc_attr( $index ); ?>][stops][]" <?php checked( ! empty($route_data['stops']) && in_array( $marker_key, $route_data['stops'] ) ); ?> placeholder="<?php esc_html_e('Title', 'venomaps'); ?>"> <?php echo esc_html( ! empty( $marker_data['title'] ) ? $marker_data['title'] : 'Marker #' . ( $marker_key + 1 ) ); ?>
+										<input class="vmap-change-route" type="checkbox" value="<?php echo esc_attr( $marker_key ); ?>" name="venomaps_routes[<?php echo esc_attr( $index ); ?>][stops][]" <?php checked( ! empty( $route_data['stops'] ) && in_array( $marker_key, $route_data['stops'] ) ); ?> placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>"> <?php echo esc_html( ! empty( $marker_data['title'] ) ? $marker_data['title'] : 'Marker #' . ( $marker_key + 1 ) ); ?>
 									</label>
 									<?php endforeach; ?>
 								</div>
@@ -197,7 +218,7 @@ class Venomaps_Edit {
 						<strong><?php esc_html_e( 'Route', 'venomaps' ); ?> #__NUM__</strong>
 						<div class="vmap-flex vmap-flex-collapse vmap-align-center">
 
-							<input type="text" class="vmap-route-title" value="" placeholder="<?php esc_html_e('Title', 'venomaps'); ?>">
+							<input type="text" class="vmap-route-title" value="" placeholder="<?php esc_html_e( 'Title', 'venomaps' ); ?>">
 
 							<!-- Questo contenitore ora è vuoto. Lo popolerà interamente la funzione JS `updateAllRouteSelects` -->
 							<div class="vmap-route-stops-select">
@@ -275,7 +296,7 @@ class Venomaps_Edit {
 				</div>
 			</div>
 			<?php // translators: "Settings Page" is the link to plugins settings page. ?>
-			<p><?php printf( __( 'Add more Map Styles inside %1$sSettings Page%2$s.', 'venomaps' ), '<a target="_blank" href="' . esc_url( get_admin_url( null, 'options-general.php?page=venomaps' ) ) . '">', '</a>' ); // XSS ok. ?></p>
+			<p><?php printf( esc_html__( 'Add more Map Styles inside %1$sSettings Page%2$s.', 'venomaps' ), '<a target="_blank" href="' . esc_url( get_admin_url( null, 'options-general.php?page=venomaps' ) ) . '">', '</a>' ); // XSS ok. ?></p>
 			<hr>
 
 			<div><strong><?php esc_html_e( 'Center', 'venomaps' ); ?></strong> ( <?php esc_html_e( 'Latitude', 'venomaps' ); ?> / <?php esc_html_e( 'Longitude', 'venomaps' ); ?> )</div>
@@ -301,19 +322,35 @@ class Venomaps_Edit {
 	public function render_venomaps_marker_metabox( $post ) {
 		$marker_settings = get_post_meta( $post->ID, 'venomaps_marker', true ); // return array.
 		$output_settings = array();
-		$default_settings = $this->plugin->get_default_settings();
+		// $default_settings = $this->plugin->get_default_settings();
+
+		// --- FIX: Recupera i settings globali e uniscili ai default del plugin ---
+		$global_settings = get_option( 'venomaps_settings', array() );
+		$plugin_defaults = $this->plugin->get_default_settings();
+
+		$merged_global_defaults = array(
+			'title'        => $plugin_defaults['title'],
+			'lat'          => $plugin_defaults['lat'],
+			'lon'          => $plugin_defaults['lon'],
+			'size'         => ! empty( $global_settings['default_size'] ) ? $global_settings['default_size'] : $plugin_defaults['size'],
+			'icon'         => ! empty( $global_settings['default_icon'] ) ? $global_settings['default_icon'] : $plugin_defaults['icon'],
+			'color'        => ! empty( $global_settings['default_color'] ) ? $global_settings['default_color'] : $plugin_defaults['color'],
+			'infobox'      => $plugin_defaults['infobox'],
+			'infobox_open' => $plugin_defaults['infobox_open'],
+		);
 
 		if ( $marker_settings ) {
-			foreach ( $marker_settings as $key => $setting ) {
+			foreach ( $marker_settings as $index => $setting ) {
 				$full_settings = array();
-				foreach ( $default_settings as $key => $default_setting ) {
-					$full_settings[ $key ] = isset( $setting[ $key ] ) ? $setting[ $key ] : $default_setting;
+				foreach ( $merged_global_defaults as $key => $default_val ) {
+					$full_settings[ $key ] = isset( $setting[ $key ] ) ? $setting[ $key ] : $default_val;
 				}
 				$output_settings[] = $full_settings;
 			}
 		}
-		if ( ! isset( $output_settings[0] ) || empty( $output_settings[0] ) ) {
-			$output_settings = array( $default_settings );
+
+		if ( empty( $output_settings ) ) {
+			$output_settings = array( $merged_global_defaults );
 		}
 		?>
 
@@ -348,6 +385,11 @@ class Venomaps_Edit {
 		}
 		?>
 </div>
+		<?php
+		// Recupera le impostazioni globali.
+		$venomaps_options = get_option( 'venomaps_settings' );
+		$global_default_color = ! empty( $global_settings['default_color'] ) ? $global_settings['default_color'] : '#000000';
+		?>
 <!-- vmap-modal -->
 <div id="vmap-modal" class="vmap-modal">
 	<div class="vmap-modal-helper vmap-modal-dismiss"></div>
@@ -366,16 +408,6 @@ class Venomaps_Edit {
 				<div class="vmap-marker-box-left">
 					<div class="wpol-form-group vmap-icon-uploader">
 
-						<div class="vmap-color-component">
-							<div class="wpol-form-group">
-								<strong><?php esc_html_e( 'Color', 'venomaps' ); ?></strong>
-							</div>
-							<div class="vmap-flex vmap-flex-collapse">
-								<input type="color" value="" class="vmap-modal-get-color vmap-input vmap-form-control-color" data-default-color="<?php echo esc_attr( $default_settings['color'] ); ?>" />
-								<input type="text" value="" class="vmap-modal-set-color vmap-inputr" />
-							</div>
-						</div>
-
 						<div class="vmap-flex-grow-1" style="padding-left: 0.5em;">
 							<div class="wpol-form-group">
 								<strong><?php esc_html_e( 'Size', 'venomaps' ); ?></strong>
@@ -383,29 +415,32 @@ class Venomaps_Edit {
 							<input type="range" name="" class="vmap-modal-get-size vmap-icon-set-size vmap-form-range" min="30" max="100">
 						</div>
 
-		<?php
-		$default_icon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
-		?>
+						<div class="vmap-color-component">
+							<div class="wpol-form-group">
+								<strong><?php esc_html_e( 'Color', 'venomaps' ); ?></strong>
+							</div>
+							<div class="vmap-flex vmap-flex-collapse">
+								<input type="color" value="" class="vmap-modal-get-color vmap-input vmap-form-control-color" data-default-color="<?php echo esc_attr( $global_default_color ); ?>" />
+								<input type="text" value="" class="vmap-modal-set-color vmap-input" placeholder="<?php echo esc_attr( $global_default_color ); ?>" />
+							</div>
+						</div>
+
 						<div class="wpol-form-group vmap-flex vmap-align-center">
-							<div class="">
-								<div class="vmap-icon-default venomaps_marker_upload_btn" style="width:<?php echo esc_attr( $default_settings['size'] ); ?>px; color: <?php echo esc_attr( $default_settings['color'] ); ?>">
-									<?php echo wp_kses_post( $default_icon ); ?>
+							<div class="vmap-icon-preview">
+								<!-- DIV SVG -->
+								<div class="vmap-icon-default venomaps_marker_upload_btn">
+									<!-- Verrà riempito dal JS con venomapsAdminVars.global_svg -->
 								</div>
 
-								<div class="vmap-icon-image venomaps_marker_upload_btn" style="width:<?php echo esc_attr( $default_settings['size'] ); ?>px;">
+								<div class="vmap-icon-image venomaps_marker_upload_btn vmap-hidden">
+									<!-- Verrà riempito dal JS con il tag <img> -->
 								</div>
 							</div>
-
-							<!-- UPDATE / DELETE -->
-							<div>
+							<div style="margin-left: 15px;">
 								<div class="wpol-btn-link venomaps_marker_upload_btn"><span class="dashicons dashicons-update"></span></div>
-								<div class="wpol-btn-link venomaps_marker_remove_btn"><span class="dashicons dashicons-trash"></span></div>
-								<div class="vmap-hidden">
-									<div class="vmap-input-group">
-										<input type="text" class="vmap-modal-get-icon" value="">
-										<button type="button" class="wpol-btn-link venomaps_marker_remove_btn"><span class="dashicons dashicons-no-alt"></span></button>
-									</div>
-								</div>
+								<div class="wpol-btn-link venomaps_marker_remove_btn vmap-invisible"><span class="dashicons dashicons-trash"></span></div>
+								<!-- Input nascosto per l'URL icona -->
+								<input type="hidden" class="vmap-modal-get-icon" value="">
 							</div>
 						</div>
 					</div>
@@ -445,6 +480,16 @@ class Venomaps_Edit {
 	 */
 	public function render_venomaps_csv_metabox( $post ) {
 		?>
+
+<p><?php esc_html_e( 'It is possible to batch import markers using a .csv file.', 'venomaps' ); ?><br>
+		<?php esc_html_e( 'The csv file should start with this line', 'venomaps' ); ?>:</p>
+
+<code>title,lat,lon,size,icon,color,infobox,infobox_open</code>
+
+<p><?php esc_html_e( 'Also semicolon separator allowed', 'venomaps' ); ?>:</p>
+
+<p><code>title;lat;lon;size;icon;color;infobox;infobox_open</code></p>
+
 <div class="vmap-uploader">
 <div class="vmap-flex vmap-flex-collapse vmap-align-center">
 	<button class="button vmap-set-uploader"><?php esc_html_e( 'Upload CSV', 'venomaps' ); ?></button>
@@ -484,10 +529,9 @@ class Venomaps_Edit {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
 		}
-		if ( ! isset( $_POST['venomaps_nonce'] ) || ! wp_verify_nonce( $_POST['venomaps_nonce'], 'venomaps_metaboxes' ) ) {
+		if ( ! isset( $_POST['venomaps_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['venomaps_nonce'] ) ), 'venomaps_metaboxes' ) ) {
 			return $post_id;
 		}
-
 		$default_coords = $this->plugin->get_default_coords();
 		$default_settings = $this->plugin->get_default_settings();
 
@@ -528,34 +572,29 @@ class Venomaps_Edit {
 		update_post_meta( $post_id, 'venomaps_marker', $newmarkervars );
 
 		// Save routes data.
-		// Sostituisci l'intera logica di salvataggio delle routes
 		if ( isset( $_POST['venomaps_routes'] ) ) {
 			$routes_data = (array) $_POST['venomaps_routes'];
-			$sanitized_routes = array(); // Array vuoto
+			$sanitized_routes = array();
 
-			foreach ( $routes_data as $route ) { // Non ci serve più l'indice qui
+			foreach ( $routes_data as $route ) {
 				if ( isset( $route['stops'] ) && is_array( $route['stops'] ) && count( $route['stops'] ) >= 2 && ! empty( $route['geometry'] ) ) {
 
-					// Aggiungi semplicemente l'elemento valido all'array
-					$sanitized_routes[] = [
+					$sanitized_routes[] = array(
 						'stops'    => array_map( 'absint', $route['stops'] ),
 						'geometry' => sanitize_textarea_field( $route['geometry'] ),
 						'title' => sanitize_textarea_field( $route['title'] ),
-					];
+					);
 				}
 			}
-			
+
 			if ( ! empty( $sanitized_routes ) ) {
-				// Salva l'array numerico pulito (avrà indici 0, 1, 2...)
+				// Salva l'array numerico pulito (avrà indici 0, 1, 2...).
 				update_post_meta( $post_id, 'venomaps_routes', $sanitized_routes );
 			} else {
 				delete_post_meta( $post_id, 'venomaps_routes' );
 			}
-			
 		} else {
 			delete_post_meta( $post_id, 'venomaps_routes' );
 		}
-
 	}
-
 }

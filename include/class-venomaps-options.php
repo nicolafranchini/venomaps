@@ -60,8 +60,24 @@ class Venomaps_Options {
 		if ( 'settings_page_venomaps' !== $hook ) {
 			return;
 		}
-		wp_enqueue_style( 'venomaps-admin', plugins_url( 'css/venomaps-admin-bundle.css', __FILE__ ), array(), VENOMAPS_VERSION );
-		wp_enqueue_script( 'venomaps-admin', plugins_url( 'js/venomaps-admin-bundle.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
+
+		$min = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
+
+		wp_enqueue_media();
+
+		wp_enqueue_style( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'css/venomaps-admin-bundle' . $min . '.css', array(), VENOMAPS_VERSION );
+
+		wp_register_script( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'js/venomaps-admin-bundle' . $min . '.js', array(), VENOMAPS_VERSION, true );
+
+		$global_settings = $this->options;
+
+		$venomaps_vars = array(
+			'ajax_url'         => admin_url( 'admin-ajax.php' ),
+			'nonce'            => wp_create_nonce( 'vmap-ajax-nonce' ),
+		);
+
+		wp_localize_script( 'venomaps-admin', 'venomapsAdminVars', $venomaps_vars );
+		wp_enqueue_script( 'venomaps-admin' );
 	}
 
 	/**
@@ -89,7 +105,7 @@ class Venomaps_Options {
 				submit_button();
 				?>
 			</form>
-		</div> <!-- /wrap -->
+		</div>
 		<?php
 	}
 
@@ -97,9 +113,87 @@ class Venomaps_Options {
 	 * Register admin page options.
 	 */
 	public function register_page_options() {
-		add_settings_section( 'venomaps_section', __( 'Options', 'venomaps' ), array( $this, 'display_section' ), __FILE__ ); // id, title, display cb, page.
-		add_settings_field( 'venomaps_style_field', __( 'Style', 'venomaps' ), array( $this, 'style_settings_field' ), __FILE__, 'venomaps_section' );
+
 		register_setting( __FILE__, 'venomaps_settings', array( $this, 'validate_options' ) ); // option group, option name, sanitize cb.
+
+		add_settings_section( 'venomaps_marker_style_section', __( 'Markers', 'venomaps' ), array( $this, 'display_section' ), __FILE__ );
+
+		add_settings_field(
+			'venomaps_marker_defaults',
+			__( 'Default Style', 'venomaps' ),
+			array( $this, 'marker_defaults_callback' ),
+			__FILE__,
+			'venomaps_marker_style_section'
+		);
+
+		add_settings_section( 'venomaps_section', __( 'Maps', 'venomaps' ), array( $this, 'display_section' ), __FILE__ ); // id, title, display cb, page.
+		add_settings_field( 'venomaps_style_field', __( 'Style', 'venomaps' ), array( $this, 'style_settings_field' ), __FILE__, 'venomaps_section' );
+	}
+
+	/**
+	 * Marker default style
+	 */
+	public function marker_defaults_callback() {
+		$color = isset( $this->options['default_color'] ) ? $this->options['default_color'] : '#000000';
+		$size  = isset( $this->options['default_size'] ) ? $this->options['default_size'] : '30';
+
+		// 1. Recuperiamo l'URL dell'icona custom (se esiste)
+		$custom_icon_url = isset( $this->options['default_icon'] ) ? $this->options['default_icon'] : '';
+		// 3. Determiniamo le classi CSS iniziali per nascondere o mostrare i div corretti
+		$svg_visible_class = ! empty( $custom_icon_url ) ? ' vmap-hidden' : '';
+		$img_visible_class = empty( $custom_icon_url ) ? ' vmap-hidden' : '';
+		$remove_btn_class  = empty( $custom_icon_url ) ? ' vmap-invisible' : '';
+		?>
+
+		<div id="vmap-global-settings-wrapper" class="vmap-icon-uploader" style="max-width: 400px; background: #fff; padding: 15px; border: 1px solid #ccd0d4;">
+
+			<div style="margin-top: 15px;">
+				<div class="wpol-form-group">
+					<strong><?php esc_html_e( 'Size', 'venomaps' ); ?></strong>
+				</div>
+				<input type="range" name="venomaps_settings[default_size]" class="vmap-modal-get-size vmap-icon-set-size vmap-form-range" min="30" max="100" value="<?php echo esc_attr( $size ); ?>">
+			</div>
+
+			<div class="vmap-color-component <?php echo esc_attr( $img_visible_class ); // Nascondi se c'è icona custom. ?>">
+				<div class="wpol-form-group">
+					<strong><?php esc_html_e( 'Default Color', 'venomaps' ); ?></strong>
+				</div>
+				<div class="vmap-flex vmap-flex-collapse">
+					<input type="color" name="venomaps_settings[default_color]" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-get-color vmap-input vmap-form-control-color" />
+					<input type="text" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-set-color vmap-inputr" readonly />
+				</div>
+			</div>
+
+			<div class="wpol-form-group vmap-flex vmap-align-center" style="margin-top: 15px;">
+				<div class="vmap-icon-preview">
+					
+					<!-- DIV SVG: Contiene SEMPRE l'SVG, ma lo nascondiamo se c'è un'icona custom -->
+					<div class="vmap-icon-default venomaps_marker_upload_btn <?php echo esc_attr( $svg_visible_class ); ?>" 
+						 style="width:<?php echo esc_attr( $size ); ?>px; color: <?php echo esc_attr( $color ); ?>;">
+						<?php // default loaded via js. ?>
+					</div>
+
+					<!-- DIV IMMAGINE: Contiene il tag IMG solo se l'URL è salvato -->
+					<div class="vmap-icon-image venomaps_marker_upload_btn <?php echo esc_attr( $img_visible_class ); ?>" 
+						 style="width:<?php echo esc_attr( $size ); ?>px;">
+						<?php if ( ! empty( $custom_icon_url ) ) : ?>
+							<img src="<?php echo esc_url( $custom_icon_url ); ?>" style="height: <?php echo esc_attr( $size ); ?>px; width: auto;">
+						<?php endif; ?>
+					</div>
+				</div>
+
+				<div style="margin-left: 15px;">
+				<div class="button venomaps_marker_upload_btn"><?php esc_html_e( 'Change Icon', 'venomaps' ); ?></div>
+				<div class="wpol-btn-link venomaps_marker_remove_btn <?php echo esc_attr( $remove_btn_class ); ?>" style="color:#a00; cursor:pointer;">
+					<span class="dashicons dashicons-trash"></span>
+				</div>
+			</div>
+
+			<!-- Input nascosto per salvare l'URL -->
+			<input type="hidden" name="venomaps_settings[default_icon]" class="vmap-modal-get-icon" value="<?php echo esc_attr( $custom_icon_url ); ?>">
+		</div>
+	</div>
+		<?php
 	}
 
 	/**
@@ -160,7 +254,7 @@ class Venomaps_Options {
 		<h2><?php esc_html_e( 'Default Map', 'venomaps' ); ?></h2>
 		<div class="venomaps-default-maps">
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/default.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/default.jpg', __DIR__ ) ); ?>">
 				<p>Default</p>
 			</div>
 		</div>
@@ -168,105 +262,133 @@ class Venomaps_Options {
 		<h2><?php esc_html_e( 'Maptiler Maps', 'venomaps' ); ?></h2>
 		<div class="venomaps-default-maps">
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/backdrop.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/backdrop.jpg', __DIR__ ) ); ?>">
 				<p>Backdrop</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/basic.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/basic.jpg', __DIR__ ) ); ?>">
 				<p>Basic</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/ocean.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/ocean.jpg', __DIR__ ) ); ?>">
 				<p>Ocean</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/satellite.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/satellite.jpg', __DIR__ ) ); ?>">
 				<p>Satellite</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/streets.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/streets.jpg', __DIR__ ) ); ?>">
 				<p>Streets</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/toner.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/toner.jpg', __DIR__ ) ); ?>">
 				<p>Toner</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/topo.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/topo.jpg', __DIR__ ) ); ?>">
 				<p>Topo</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/winter.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/maptiler/winter.jpg', __DIR__ ) ); ?>">
 				<p>Winter</p>
 			</div>
 		</div>
 		<input type="text" class="regular-text" name="venomaps_settings[map_key][maptiler]" value="<?php echo esc_attr( $maptiler_key ); ?>">
-		<p><?php printf( __( 'Place here your <a target="_blank" href="%s">Maptiler</a> api key to enable these maps', 'venomaps' ), esc_url( 'https://cloud.maptiler.com/account/keys/' ) ); ?></p>
+		<p>
+		<?php
+		echo wp_kses_post(
+			sprintf(
+				/* translators: %s: Maptiler API keys URL. */
+				__( 'Place here your <a target="_blank" href="%s">Maptiler</a> api key to enable these maps', 'venomaps' ),
+				esc_url( 'https://cloud.maptiler.com/account/keys/' )
+			)
+		);
+		?>
+		</p>
 
 		<h2><?php esc_html_e( 'Stadia Maps', 'venomaps' ); ?></h2>
 		<div class="venomaps-default-maps">
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/stadiamaps/terrain.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/stadiamaps/terrain.jpg', __DIR__ ) ); ?>">
 				<p>Terrain</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/stadiamaps/toner.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/stadiamaps/toner.jpg', __DIR__ ) ); ?>">
 				<p>Toner</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/stadiamaps/watercolor.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/stadiamaps/watercolor.jpg', __DIR__ ) ); ?>">
 				<p>Watercolor</p>
 			</div>
 		</div>
 		<input type="text" class="regular-text" name="venomaps_settings[map_key][stadiamaps]" value="<?php echo esc_attr( $stadiamaps_key ); ?>">
-		<p><?php printf( __( 'Place here your <a target="_blank" href="%s">Stadiamaps</a> api key to enable these maps', 'venomaps' ), esc_url( 'https://client.stadiamaps.com/accounts/login/?next=/dashboard/' ) ); ?></p>
-
+		<p>
+		<?php
+		echo wp_kses_post(
+			sprintf(
+				/* translators: %s: Stadiamaps API keys URL. */
+				__( 'Place here your <a target="_blank" href="%s">Stadiamaps</a> api key to enable these maps', 'venomaps' ),
+				esc_url( 'https://client.stadiamaps.com/accounts/login/?next=/dashboard/' )
+			)
+		);
+		?>
+		</p>
 		<h2><?php esc_html_e( 'Thunderforest Maps', 'venomaps' ); ?></h2>
 		<div class="venomaps-default-maps">
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/atlas.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/atlas.jpg', __DIR__ ) ); ?>">
 				<p>Atlas</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/landscape.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/landscape.jpg', __DIR__ ) ); ?>">
 				<p>Landscape</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/mobile-atlas.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/mobile-atlas.jpg', __DIR__ ) ); ?>">
 				<p>Mobile Atlas</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/neighbourhood.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/neighbourhood.jpg', __DIR__ ) ); ?>">
 				<p>Neighbourhood</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/opencyclemap.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/opencyclemap.jpg', __DIR__ ) ); ?>">
 				<p>Open Cycle</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/outdoors.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/outdoors.jpg', __DIR__ ) ); ?>">
 				<p>Outdoors</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/pioneer.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/pioneer.jpg', __DIR__ ) ); ?>">
 				<p>Pioneer</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/spinal.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/spinal.jpg', __DIR__ ) ); ?>">
 				<p>Spinal</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/transport.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/transport.jpg', __DIR__ ) ); ?>">
 				<p>Transport</p>
 			</div>
 			<div class="venomaps-image-placeholder">
-				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/transport-dark.jpg', __FILE__ ) ); ?>">
+				<img src="<?php echo esc_url( plugins_url( '/images/maps/thunderforest/transport-dark.jpg', __DIR__ ) ); ?>">
 				<p>Transport Dark</p>
 			</div>
 		</div>
 		<input type="text" class="regular-text" name="venomaps_settings[map_key][thunderforest]" value="<?php echo esc_attr( $thunderforest_key ); ?>" placeholder="">
-		<p><?php printf( __( 'Place here your <a target="_blank" href="%s">Thunderforest</a> api key to enable these maps', 'venomaps' ), esc_url( 'https://manage.thunderforest.com/' ) ); ?></p>
-
+		<p>
+		<?php
+		echo wp_kses_post(
+			sprintf(
+				/* translators: %s: Thunderforest API keys URL. */
+				__( 'Place here your <a target="_blank" href="%s">Thunderforest</a> api key to enable these maps', 'venomaps' ),
+				esc_url( 'https://manage.thunderforest.com/' )
+			)
+		);
+		?>
+		</p>
 		<h2><?php esc_html_e( 'Custom Maps', 'venomaps' ); ?></h2>
 		<p>
 		<?php
@@ -313,8 +435,7 @@ class Venomaps_Options {
 
 		<?php
 	}
-
-} // end class
+}
 
 // Call options.
 Venomaps_Options::get_instance();

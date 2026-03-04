@@ -217,7 +217,6 @@ class Venomaps_Plugin {
 		),
 	);
 
-
 	/**
 	 * Creates or returns an instance of this class.
 	 *
@@ -301,7 +300,7 @@ class Venomaps_Plugin {
 			wp_send_json_error( 'Permission denied.' );
 		}
 
-		$coords_string = isset( $_POST['coords'] ) ? wp_unslash( $_POST['coords'] ) : '';
+		$coords_string = isset( $_POST['coords'] ) ? sanitize_text_field( wp_unslash( $_POST['coords'] ) ) : '';
 
 		if ( ! preg_match( '/^[0-9.,;\-]+$/', $coords_string ) ) {
 			wp_send_json_error( 'Invalid characters in coordinates string.' );
@@ -531,13 +530,13 @@ class Venomaps_Plugin {
 
 		// 1. Registra il tipo di blocco usando i metadati del file block.json.
 		// Assicurati che il percorso punti alla DIRECTORY che contiene block.json.
-		register_block_type( __DIR__ . '/block' );
+		register_block_type( dirname( __DIR__ ) . '/block' );
 
 		// 2. Registra lo script dell'editor, specificando le dipendenze corrette.
 		// Questo è il passaggio chiave che risolve l'errore 'window.wp is undefined'.
 		wp_register_script(
-			'venomaps-block', // Handle - DEVE corrispondere a "editorScript" in block.json
-			plugins_url( 'block/block.js', __FILE__ ),
+			'venomaps-block', // Handle - DEVE corrispondere a "editorScript" in block.json.
+			plugins_url( 'block/block.js', __DIR__ ),
 			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components' ),
 			VENOMAPS_VERSION,
 			true
@@ -564,14 +563,17 @@ class Venomaps_Plugin {
 
 		$venomaps_vars = array(
 			'templates'          => wp_json_encode( $templist ),
-			'_select_map'        => __( 'Select a map to display', 'venomaps' ),
-			'_map_height'        => __( 'Map Height', 'venomaps' ),
-			'_units'             => __( 'units', 'venomaps' ),
-			'_clusters_background' => __( 'Clusters background', 'venomaps' ),
-			'_clusters_color'    => __( 'Clusters color', 'venomaps' ),
-			'_zoom_scroll'       => __( 'Mouse wheel zoom', 'venomaps' ),
-			'_initial_zoom'      => __( 'Initial zoom', 'venomaps' ),
-			'_search'            => __( 'Search markers', 'venomaps' ),
+			'i18n' => array(
+				'select_map'        => __( 'Select a map to display', 'venomaps' ),
+				'map_height'        => __( 'Map Height', 'venomaps' ),
+				'units'             => __( 'units', 'venomaps' ),
+				'clusters_background' => __( 'Clusters background', 'venomaps' ),
+				'clusters_color'    => __( 'Clusters color', 'venomaps' ),
+				'zoom_scroll'       => __( 'Mouse wheel zoom', 'venomaps' ),
+				'auto_fit_map'       => __( 'Auto-fit Map', 'venomaps' ),
+				'initial_zoom'      => __( 'Initial zoom', 'venomaps' ),
+				'search'            => __( 'Search markers', 'venomaps' ),
+			),
 		);
 
 		// Attacca i dati all'handle dello script del nostro blocco.
@@ -593,8 +595,10 @@ class Venomaps_Plugin {
 	 * @return void
 	 */
 	public function register_scripts() {
-		wp_enqueue_style( 'venomaps', plugins_url( 'css/venomaps-bundle.css', __FILE__ ), array(), VENOMAPS_VERSION );
-		wp_register_script( 'venomaps', plugins_url( 'js/venomaps-bundle.js', __FILE__ ), array(), VENOMAPS_VERSION, true );
+		$min = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
+
+		wp_register_script( 'venomaps', plugin_dir_url( __DIR__ ) . 'js/venomaps-bundle' . $min . '.js', array(), VENOMAPS_VERSION, true );
+		wp_enqueue_style( 'venomaps', plugin_dir_url( __DIR__ ) . 'css/venomaps-bundle' . $min . '.css', array(), VENOMAPS_VERSION );
 	}
 
 	/**
@@ -649,6 +653,7 @@ class Venomaps_Plugin {
 				'zoom' => 10,
 				'scroll' => 0,
 				'search' => 0,
+				'zoom_markers' => 0,
 				// 'tags' => '',
 			),
 			$atts
@@ -667,11 +672,9 @@ class Venomaps_Plugin {
 		$cluster_bg = esc_attr( $args['cluster_bg'] );
 
 		$zoom = esc_attr( $args['zoom'] );
-		$zoom_scroll = (int) esc_attr( $args['scroll'] );
-		$search = (bool) esc_attr( $args['search'] );
-
-		// $taglist = esc_attr( $args['tags'] );
-		// $tags = strlen( $taglist ) ? array_map( 'trim', explode( ',', $taglist ) ) : false;
+		$zoom_scroll = rest_sanitize_boolean( $args['scroll'] );
+		$search = rest_sanitize_boolean( $args['search'] );
+		$zoom_markers = rest_sanitize_boolean( $args['zoom_markers'] );
 
 		$html_map_id = $map_id . '_' . self::$mapscounter;
 
@@ -696,7 +699,7 @@ class Venomaps_Plugin {
 		// ** NUOVA LOGICA: Inizializza le coordinate di destinazione **
 		$destination_coords = false;
 
-		// Ottieni i marker per trovare la destinazione
+		// Ottieni i marker per trovare la destinazione.
 		$marker_settings = get_post_meta( $map_id, 'venomaps_marker', true );
 
 		$map_data = array(
@@ -706,19 +709,25 @@ class Venomaps_Plugin {
 			'style_url' => urlencode( $styleurl ),
 			'zoom' => $zoom,
 			'zoom_scroll' => $zoom_scroll,
+			'zoom_markers' => $zoom_markers,
 			'stylekey' => $style_key,
 			'cluster_color' => $cluster_color,
 			'cluster_bg' => $cluster_bg,
-			// ** NUOVO: Aggiungi le coordinate di destinazione ai dati della mappa **
 			'destination' => $destination_coords,
 			'routes' => $routes,
 		);
 
 		$infobox_index = 0;
+		$map_navbar = '';
 		$markers_output = '';
+		$marker_list = '';
 
 		// Output markers and infoboxes.
 		if ( $marker_settings ) {
+
+			$venomaps_options = get_option( 'venomaps_settings' );
+			$global_default_size  = isset( $venomaps_options['default_size'] ) ? $venomaps_options['default_size'] : '30';
+			$global_default_color = isset( $venomaps_options['default_color'] ) ? $venomaps_options['default_color'] : '#000000';
 
 			$marker_list = '<datalist id="vmap-suggestions-' . $html_map_id . '">';
 
@@ -729,14 +738,19 @@ class Venomaps_Plugin {
 				$key = $marker_index;
 				$marker_data = array();
 
-				$marker_size = isset( $marker['size'] ) && strlen( $marker['size'] ) ? $marker['size'] : $this->default_settings['size'];
-				$marker_color = isset( $marker['color'] ) && strlen( $marker['color'] ) ? $marker['color'] : '#000000';
+				$marker_icon = isset( $marker['icon'] ) && strlen( $marker['icon'] ) ? $marker['icon'] : false;
 
-				$svgicon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path fill="#ffffff" d="M15,0C8.1,0,2.5,5.5,2.5,12.3S8,23.9,15,30c7-6.1,12.5-10.9,12.5-17.7S21.9,0,15,0z"/><path fill="' . $marker_color . '" d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
+				$marker_size = isset( $marker['size'] ) && strlen( $marker['size'] ) ? $marker['size'] : $global_default_size;
 
-				$svgicon_encoded = 'data:image/svg+xml;base64,' . base64_encode( $svgicon );
+				if ( ! $marker_icon ) {
+					$marker_color = isset( $marker['color'] ) && strlen( $marker['color'] ) ? $marker['color'] : $global_default_color;
 
-				$marker_icon = isset( $marker['icon'] ) && strlen( $marker['icon'] ) ? $marker['icon'] : $svgicon_encoded;
+					$svgicon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path fill="#ffffff" d="M15,0C8.1,0,2.5,5.5,2.5,12.3S8,23.9,15,30c7-6.1,12.5-10.9,12.5-17.7S21.9,0,15,0z"/><path fill="' . $marker_color . '" d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
+
+					$svgicon_encoded = 'data:image/svg+xml;base64,' . base64_encode( $svgicon );
+
+					$marker_icon = $svgicon_encoded;
+				}
 
 				$infobox = isset( $marker['infobox'] ) && strlen( $marker['infobox'] ) ? nl2br( $marker['infobox'] ) : '';
 
@@ -764,12 +778,8 @@ class Venomaps_Plugin {
 
 				$marker_index++;
 			}
-
 			$marker_list .= '</datalist>';
-
 		}
-
-		$map_navbar = '';
 
 		if ( $search && $infobox_index > 1 ) {
 			$map_navbar .= '<div class="vmap-input-group">';
@@ -801,6 +811,7 @@ class Venomaps_Plugin {
 
 		return $output;
 	}
+
 	/**
 	 * Add links to settings page
 	 *
@@ -999,7 +1010,7 @@ class Venomaps_Plugin {
 
 		wp_enqueue_script(
 			$handle,
-			$plugin_url . 'include/js/admin-review-notice.js', // Adjust path if necessary.
+			$plugin_url . 'js/admin-review-notice.js', // Adjust path if necessary.
 			array(),
 			VENOMAPS_VERSION,
 			true
