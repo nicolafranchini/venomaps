@@ -40,15 +40,46 @@ class Venomaps_Plugin {
 	 *
 	 * @var $default_settings
 	 */
-	private $default_settings = array(
-		'lat'            => '',
-		'lon'            => '',
-		'size'           => '40',
-		'icon'           => '',
-		'color'          => '#000000',
-		'infobox_open'   => 0,
-		'infobox'        => '',
-		'title'          => '',
+	private $default_settings = null;
+
+	/**
+	 * Field schema.
+	 *
+	 * @var $default_settings
+	 */
+	private $field_schema = array(
+		'lat'          => array(
+			'default' => '',
+			'sanitize' => 'esc_attr',
+		),
+		'lon'          => array(
+			'default' => '',
+			'sanitize' => 'esc_attr',
+		),
+		'size'         => array(
+			'default' => '40',
+			'sanitize' => 'absint',
+		),
+		'icon' => array(
+			'default' => '',
+			'sanitize' => 'esc_url_raw',
+		),
+		'color'        => array(
+			'default' => '#000000',
+			'sanitize' => 'sanitize_hex_color',
+		),
+		'infobox'      => array(
+			'default' => '',
+			'sanitize' => 'wp_kses_post',
+		),
+		'infobox_open' => array(
+			'default' => 0,
+			'sanitize' => 'intval',
+		),
+		'title' => array(
+			'default' => '',
+			'sanitize' => 'sanitize_text_field',
+		),
 	);
 
 	/**
@@ -243,11 +274,24 @@ class Venomaps_Plugin {
 	}
 
 	/**
+	 * Getter per lo schema (utile per il parser e sanitizzatore)
+	 */
+	public function get_field_schema() {
+		return $this->field_schema;
+	}
+
+	/**
 	 * Getter for default_settings.
 	 *
 	 * @return array
 	 */
 	public function get_default_settings() {
+		if ( null === $this->default_settings ) {
+			$this->default_settings = array();
+			foreach ( $this->field_schema as $key => $config ) {
+				$this->default_settings[ $key ] = $config['default'];
+			}
+		}
 		return $this->default_settings;
 	}
 
@@ -279,15 +323,51 @@ class Venomaps_Plugin {
 		add_filter( 'post_row_actions', array( $this, 'duplicate_post_link' ), 25, 2 );
 		add_action( 'admin_action_vmaps_duplicate_post_as_draft', array( $this, 'duplicate_post_as_draft' ) );
 		add_action( 'admin_notices', array( $this, 'duplication_admin_notice' ) );
+
 		// Review notice.
-		add_action( 'admin_init', array( $this, 'check_installation_date' ) );
-		add_action( 'admin_notices', array( $this, 'display_review_notice' ) );
-		add_action( 'wp_ajax_' . $this->slug . '_dismiss_review_notice', array( $this, 'dismiss_review_notice' ) );
+		add_filter( 'admin_footer_text', array( $this, 'custom_admin_footer_text' ) );
 
 		// Check routes.
 		add_action( 'wp_ajax_vmap_fetch_osrm_routes', array( $this, 'fetch_osrm_routes_ajax' ) );
 
 		add_shortcode( 'venomap', array( $this, 'venomaps_do_shortcode' ) );
+	}
+
+	/**
+	 * Add footer notice
+	 *
+	 * @param str $text Footer text.
+	 *
+	 * @return str notice text
+	 */
+	public function custom_admin_footer_text( $text ) {
+		// Ottieni l'ID della schermata corrente.
+		$screen = get_current_screen();
+
+		// Definisci le pagine in cui visualizzare la notifica.
+		$allowed_screens = array(
+			'settings_page_venomaps', // Pagina delle opzioni del plugin.
+			'edit-venomaps',          // Pagina di elenco dei CPT "venomaps".
+			'venomaps',               // Schermata di modifica e aggiunta del CPT "venomaps".
+		);
+
+		// Controlla se la schermata corrente è tra quelle consentite.
+		if ( ! in_array( $screen->id, $allowed_screens, true ) ) {
+			return;
+		}
+
+		// Mostra la notifica solo agli utenti che possono gestire le opzioni.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$url = 'https://wordpress.org/support/plugin/venomaps/reviews/?rate=5#new-post'; // Inserisci lo slug corretto del plugin.
+		$text = sprintf(
+			// Translators: plugin rating page.
+			__( 'If you like <strong>VenoMaps</strong> please leave us a <a href="%s" target="_blank">★★★★★</a> rating. A huge thanks in advance!', 'venobox' ),
+			$url
+		);
+		return $text;
 	}
 
 	/**
@@ -451,27 +531,40 @@ class Venomaps_Plugin {
 	 * Update post meta from CSV
 	 */
 	public function set_csv() {
-		$nonce = filter_input( INPUT_POST, 'vmap_nonce', FILTER_SANITIZE_SPECIAL_CHARS );
+		$nonce = isset( $_POST['vmap_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['vmap_nonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'vmap-ajax-nonce' ) ) {
-			$response = __( 'Error: please reload the page', 'venomaps' );
-			echo wp_json_encode( $response );
-			wp_die();
-			exit();
+			wp_send_json_error( __( 'Error: please reload the page', 'venomaps' ) );
 		}
-		$url = filter_input( INPUT_POST, 'url', FILTER_SANITIZE_SPECIAL_CHARS );
-		$post_id = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_SPECIAL_CHARS );
-
-		$delimiters = array( ',', ';' );
+		$url     = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
+		$post_id = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;
 
 		$delimiter = isset( $_POST['delimiter'] ) && ';' == $_POST['delimiter'] ? ';' : ',';
 
-		$post_meta = $this->parse_csv( $url, $delimiter );
+		$raw_data = $this->parse_csv( $url, $delimiter );
+		$schema   = $this->get_field_schema();
 
-		if ( $post_meta ) {
-			update_post_meta( $post_id, 'venomaps_marker', $post_meta );
-			$response = __( 'Markers successfully imported. Reload the page', 'venomaps' );
+		if ( $raw_data ) {
+			$sanitized_markers = array_map(
+				function ( $marker ) use ( $schema ) {
+					$clean = array();
+					foreach ( $schema as $key => $config ) {
+						$func = $config['sanitize'];
+						$clean[ $key ] = function_exists( $func ) ? $func( $marker[ $key ] ) : sanitize_text_field( $marker[ $key ] );
+					}
+					return $clean;
+				},
+				$raw_data
+			);
+
+			update_post_meta( $post_id, 'venomaps_marker', $sanitized_markers );
+			$response = array(
+				'message' => __( 'Markers successfully imported', 'venomaps' ),
+				'markers' => $sanitized_markers,
+			);
 		} else {
-			$response = __( 'Error, invalid file', 'venomaps' );
+			$response = array(
+				'message' => __( 'Error, invalid file', 'venomaps' ),
+			);
 		}
 
 		echo wp_json_encode( $response );
@@ -489,35 +582,41 @@ class Venomaps_Plugin {
 	 */
 	public function parse_csv( $file, $delimiter ) {
 		$handle = fopen( $file, 'r' );
-		$counter = 0;
-		$keys = array();
+		if ( ! $handle ) {
+			return false;
+		}
 		$parsed = array();
 
+		// Leggiamo l'intestazione.
+		$header = fgetcsv( $handle, null, $delimiter );
+		if ( ! $header ) {
+			fclose( $handle );
+			return false;
+		}
+
+		// 1. Verifica la presenza dei campi obbligatori
+		if ( ! in_array( 'lat', $header ) || ! in_array( 'lon', $header ) ) {
+			fclose( $handle );
+			return false;
+		}
+
+		// 2. Prepariamo una mappa: colonna_csv => indice
+		// Questo ci serve per sapere quale colonna del CSV corrisponde a quale chiave
+		$header_map = array_flip( $header );
+		$parsed = array();
+		$schema = $this->get_field_schema();
+
 		while ( ( $row = fgetcsv( $handle, null, $delimiter ) ) !== false ) {
-			if ( 0 === $counter ) {
-				$keys_values = array_values( $row );
-				$settings_values = array_keys( $this->default_settings );
+			$item = array();
+			// Estrai solo le chiavi definite nel tuo schema.
+			foreach ( $schema as $key => $config ) {
+				// Se esiste nel CSV lo prende, altrimenti usa il default dello schema.
+				$index = isset( $header_map[ $key ] ) ? $header_map[ $key ] : null;
+				$val = ( null !== $index && isset( $row[ $index ] ) ) ? $row[ $index ] : '';
 
-				$keys = $keys_values;
-				$settings = $settings_values;
-
-				sort( $keys_values );
-				sort( $settings_values );
-
-				// Wrong file format.
-				if ( $settings_values != $keys_values ) {
-					return false;
-				}
-
-				$counter++;
-				continue;
+				$item[ $key ] = ( '' !== $val ) ? $val : $config['default'];
 			}
-			$fragments = array_values( $row );
-			$current = array();
-			foreach ( $fragments as $fragment_number => $value ) {
-				$current[ $keys[ $fragment_number ] ] = $value;
-			}
-			$parsed[] = $current;
+			$parsed[] = $item;
 		}
 		fclose( $handle );
 		return $parsed;
@@ -909,139 +1008,6 @@ class Venomaps_Plugin {
 		if ( false === get_option( $option_name ) ) {
 			add_option( $option_name, time() );
 		}
-	}
-
-	/**
-	 * Check and set the installation date if it doesn't exist.
-	 * This ensures that the notice timer starts for existing users who update the plugin.
-	 *
-	 * @return void
-	 */
-	public function check_installation_date() {
-		$option_name = $this->slug . '_activation_date';
-		if ( false === get_option( $option_name ) ) {
-			add_option( $option_name, time() );
-		}
-	}
-
-	/**
-	 * Display the review notice in the admin dashboard.
-	 *
-	 * @return void
-	 */
-	public function display_review_notice() {
-		// Ottieni le informazioni sulla schermata corrente.
-		$screen = get_current_screen();
-
-		// Definisci le pagine in cui visualizzare la notifica.
-		$allowed_screens = array(
-			'settings_page_venomaps', // Pagina delle opzioni del plugin.
-			'edit-venomaps',          // Pagina di elenco dei CPT "venomaps".
-			'venomaps',               // Schermata di modifica e aggiunta del CPT "venomaps".
-		);
-
-		// Controlla se la schermata corrente è tra quelle consentite.
-		if ( ! in_array( $screen->id, $allowed_screens, true ) ) {
-			return;
-		}
-
-		// Mostra la notifica solo agli utenti che possono gestire le opzioni.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		$dismissed_option = $this->slug . '_review_notice_dismissed';
-		$activation_option = $this->slug . '_activation_date';
-
-		// Controlla se la notifica è stata disattivata.
-		if ( get_option( $dismissed_option ) ) {
-			return;
-		}
-
-		$activation_date = get_option( $activation_option );
-
-		// Mostra la notifica solo dopo 14 giorni di utilizzo.
-		if ( ! $activation_date || ( time() - $activation_date < 14 * DAY_IN_SECONDS ) ) {
-			return;
-		}
-
-		// Accoda lo script per la notifica.
-		$this->enqueue_review_notice_script();
-
-		// ID e classi CSS dinamici.
-		$notice_id     = $this->slug . '-review-notice';
-		$dismiss_class = $this->slug . '-dismiss-notice';
-		$review_url    = 'https://wordpress.org/support/plugin/' . $this->slug . '/reviews/?filter=5';
-		?>
-		<div id="<?php echo esc_attr( $notice_id ); ?>" class="notice notice-info is-dismissible">
-			<p>
-				<?php
-				printf(
-					/* translators: %s is the plugin name */
-					esc_html__( 'Enjoying %s? Please consider leaving a 5-star review ⭐⭐⭐⭐⭐. It helps us grow and support the plugin!', 'venomaps' ),
-					'<strong>' . esc_html( $this->plugin_name ) . '</strong>'
-				);
-				?>
-			</p>
-			<p>
-				<a href="<?php echo esc_url( $review_url ); ?>" class="button button-primary" target="_blank">
-					<?php esc_html_e( 'Sure, I’d love to!', 'venomaps' ); ?>
-				</a>
-				<a href="#" class="button button-secondary <?php echo esc_attr( $dismiss_class ); ?>">
-					<?php esc_html_e( 'Maybe Later', 'venomaps' ); ?>
-				</a>
-				<a href="#" class="button button-secondary <?php echo esc_attr( $dismiss_class ); ?>">
-					<?php esc_html_e( 'I Already Rated It', 'venomaps' ); ?>
-				</a>
-			</p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Enqueue the JavaScript for the review notice dismissal.
-	 *
-	 * @return void
-	 */
-	private function enqueue_review_notice_script() {
-		// Dynamic script handle.
-		$handle     = $this->slug . '-review-notice';
-		$plugin_url = plugin_dir_url( __DIR__ );
-
-		wp_enqueue_script(
-			$handle,
-			$plugin_url . 'js/admin-review-notice.js', // Adjust path if necessary.
-			array(),
-			VENOMAPS_VERSION,
-			true
-		);
-
-		// Create a unique, JS-friendly object name from the slug.
-		$object_name = 'venomapsReviewNoticeData';
-
-		wp_localize_script(
-			$handle,
-			$object_name, // Use the unique object name here.
-			array(
-				'ajax_url'    => admin_url( 'admin-ajax.php' ),
-				'nonce'       => wp_create_nonce( $this->slug . '_dismiss_review_notice_nonce' ),
-				'action'      => $this->slug . '_dismiss_review_notice',
-				'notice_id'   => $this->slug . '-review-notice',
-				'dismiss_class' => $this->slug . '-dismiss-notice',
-			)
-		);
-	}
-
-	/**
-	 * Handles the AJAX request to dismiss the review notice.
-	 *
-	 * @return void
-	 */
-	public function dismiss_review_notice() {
-		// Dynamic nonce check and option update.
-		check_ajax_referer( $this->slug . '_dismiss_review_notice_nonce', 'nonce' );
-		update_option( $this->slug . '_review_notice_dismissed', true );
-		wp_send_json_success();
 	}
 } // end class
 

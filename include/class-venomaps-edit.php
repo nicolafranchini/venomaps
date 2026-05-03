@@ -183,7 +183,7 @@ class Venomaps_Edit {
 		?>
 		<div id="vmap-routes-container">
 			<?php if ( ! $markers || count( $markers ) < 2 ) : ?>
-				<p><?php esc_html_e( 'You need at least two markers to create a route.', 'venomaps' ); ?></p>
+				<p><?php esc_html_e( 'Add at least two markers and update the post to create routes.', 'venomaps' ); ?></p>
 			<?php else : ?>
 				<div class="vmap-routes-list">
 					<?php foreach ( $routes as $index => $route_data ) : ?>
@@ -480,20 +480,20 @@ class Venomaps_Edit {
 	 */
 	public function render_venomaps_csv_metabox( $post ) {
 		?>
-
-<p><?php esc_html_e( 'It is possible to batch import markers using a .csv file.', 'venomaps' ); ?><br>
-		<?php esc_html_e( 'The csv file should start with this line', 'venomaps' ); ?>:</p>
+<p><?php esc_html_e( 'It is possible to batch import markers using a .csv file, the csv file should start with this line', 'venomaps' ); ?>:<br>
 
 <code>title,lat,lon,size,icon,color,infobox,infobox_open</code>
 
-<p><?php esc_html_e( 'Also semicolon separator allowed', 'venomaps' ); ?>:</p>
+<p><?php esc_html_e( 'Also semicolon separator allowed', 'venomaps' ); ?>:<br>
 
-<p><code>title;lat;lon;size;icon;color;infobox;infobox_open</code></p>
+<code>title;lat;lon;size;icon;color;infobox;infobox_open</code></p>
+
+<p>Required fields: <code>lat,lon</code></p>
 
 <div class="vmap-uploader">
 <div class="vmap-flex vmap-flex-collapse vmap-align-center">
-	<button class="button vmap-set-uploader"><?php esc_html_e( 'Upload CSV', 'venomaps' ); ?></button>
-	<input type="text" class="button vmap-get-uploader" readonly data-post-id="<?php echo esc_attr( $post->ID ); ?>">
+	<button class="button vmap-set-uploader"><?php esc_html_e( 'Import CSV', 'venomaps' ); ?></button>
+	<input type="hidden" class="button vmap-get-uploader" readonly data-post-id="<?php echo esc_attr( $post->ID ); ?>">
 	<span class="spinner"></span>
 	<div class="vmap-import-csv vmap-hidden">
 		<div type="button" class="button button-primary button-large"><?php esc_html_e( 'Import data', 'venomaps' ); ?></div>
@@ -513,7 +513,7 @@ class Venomaps_Edit {
 </label>
 </div>
 </div>
-<p><?php esc_html_e( 'Warning: importing the CSV any previous marker of this map will be overwritten', 'venomaps' ); ?></p>
+<p><strong><?php esc_html_e( 'Warning: selecting a new .CSV file, any previous marker of this map will be overwritten', 'venomaps' ); ?></strong></p>
 		<?php
 	}
 
@@ -525,74 +525,76 @@ class Venomaps_Edit {
 	 * @return null
 	 */
 	public function save_metaboxes( $post_id, $post ) {
-		// Check if our nonce is set.
+		// Controllo sicurezza.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
 		}
 		if ( ! isset( $_POST['venomaps_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['venomaps_nonce'] ) ), 'venomaps_metaboxes' ) ) {
 			return $post_id;
 		}
+
+		// Salvataggio campi base.
 		$default_coords = $this->plugin->get_default_coords();
-		$default_settings = $this->plugin->get_default_settings();
+		// Recupero e unslash/sanitize.
+		$lat_input   = isset( $_POST['venomaps_lat'] ) ? sanitize_text_field( wp_unslash( $_POST['venomaps_lat'] ) ) : '';
+		$lon_input   = isset( $_POST['venomaps_lon'] ) ? sanitize_text_field( wp_unslash( $_POST['venomaps_lon'] ) ) : '';
+		$style_input = isset( $_POST['venomaps_style'] ) ? sanitize_text_field( wp_unslash( $_POST['venomaps_style'] ) ) : '';
 
-		$lat = filter_input( INPUT_POST, 'venomaps_lat', FILTER_SANITIZE_SPECIAL_CHARS );
-		$lat = $lat ? esc_attr( $lat ) : $default_coords['lat'];
+		// Sostituzione short ternaries (?:) con ternari completi per maggiore chiarezza e standard VIP.
+		$lat = ( '' !== $lat_input ) ? $lat_input : $default_coords['lat'];
+		$lon = ( '' !== $lon_input ) ? $lon_input : $default_coords['lon'];
+
 		update_post_meta( $post_id, 'venomaps_lat', $lat );
-
-		$lon = filter_input( INPUT_POST, 'venomaps_lon', FILTER_SANITIZE_SPECIAL_CHARS );
-		$lon = $lon ? esc_attr( $lon ) : $default_coords['lon'];
 		update_post_meta( $post_id, 'venomaps_lon', $lon );
+		update_post_meta( $post_id, 'venomaps_style', $style_input );
 
-		$style = filter_input( INPUT_POST, 'venomaps_style', FILTER_SANITIZE_SPECIAL_CHARS );
-		update_post_meta( $post_id, 'venomaps_style', $style );
+		// Recuperiamo schema e default dal plugin.
+		$schema   = $this->plugin->get_field_schema();
+		$postdata = isset( $_POST['venomaps_data'] ) ? (array) wp_unslash( $_POST['venomaps_data'] ) : array();
 
 		$newmarkervars = array();
-		$postdata      = isset( $_POST['venomaps_data'] ) ? $_POST['venomaps_data'] : array(); // phpcs:ignore
 
 		foreach ( $postdata as $key => $json_value ) {
-			$value = json_decode( stripslashes( $json_value ), true );
+			$value = json_decode( $json_value, true );
+			if ( ! is_array( $value ) ) {
+				continue;
+			}
+			$marker = array();
+			foreach ( $schema as $field => $config ) {
+				$raw_val = isset( $value[ $field ] ) ? $value[ $field ] : $config['default'];
+				$func    = $config['sanitize'];
 
-			$markervars = array();
+				// Sanitizzazione dinamica.
+				$marker[ $field ] = function_exists( $func ) ? $func( $raw_val ) : sanitize_text_field( $raw_val );
+			}
 
-			if ( isset( $value['lat'] ) && isset( $value['lon'] ) ) {
-				$markervars['title']        = isset( $value['title'] ) ? sanitize_text_field( $value['title'] ) : $default_settings['title'];
-				$markervars['lat']          = isset( $value['lat'] ) ? esc_attr( $value['lat'] ) : $default_settings['lat'];
-				$markervars['lon']          = isset( $value['lon'] ) ? esc_attr( $value['lon'] ) : $default_settings['lon'];
-				$markervars['size']         = isset( $value['size'] ) ? esc_attr( $value['size'] ) : $default_settings['size'];
-				$markervars['icon']         = isset( $value['icon'] ) ? esc_url_raw( $value['icon'] ) : $default_settings['icon'];
-				$markervars['color']        = isset( $value['color'] ) ? esc_attr( $value['color'] ) : $default_settings['color'];
-				$markervars['infobox']      = wp_kses_post( trim( $value['infobox'] ) );
-				$markervars['infobox_open'] = 1 == $value['infobox_open'] ? 1 : $default_settings['infobox_open'];
-
-				if ( strlen( $markervars['lat'] ) && strlen( $markervars['lon'] ) ) {
-					$newmarkervars[ $key ] = $markervars;
-				}
+			// Validazione minima: lat e lon obbligatori.
+			if ( ! empty( $marker['lat'] ) && ! empty( $marker['lon'] ) ) {
+				// $newmarkervars[ $key ] = $marker;
+				$newmarkervars[] = $marker; // Usiamo [] per resettare gli indici (0, 1, 2...).
 			}
 		}
+
+		// 3. SALVATAGGIO REALE:
+		// Sovrascriviamo SEMPRE. Se $newmarkervars è vuoto, pulirà il database.
+		// Questo permette l'eliminazione effettiva.
 		update_post_meta( $post_id, 'venomaps_marker', $newmarkervars );
 
 		// Save routes data.
 		if ( isset( $_POST['venomaps_routes'] ) ) {
-			$routes_data = (array) $_POST['venomaps_routes'];
+			$routes_data = (array) wp_unslash( $_POST['venomaps_routes'] );
 			$sanitized_routes = array();
 
 			foreach ( $routes_data as $route ) {
-				if ( isset( $route['stops'] ) && is_array( $route['stops'] ) && count( $route['stops'] ) >= 2 && ! empty( $route['geometry'] ) ) {
-
+				if ( ! empty( $route['stops'] ) && is_array( $route['stops'] ) && count( $route['stops'] ) >= 2 && ! empty( $route['geometry'] ) ) {
 					$sanitized_routes[] = array(
 						'stops'    => array_map( 'absint', $route['stops'] ),
 						'geometry' => sanitize_textarea_field( $route['geometry'] ),
-						'title' => sanitize_textarea_field( $route['title'] ),
+						'title'    => sanitize_text_field( $route['title'] ?? '' ),
 					);
 				}
 			}
-
-			if ( ! empty( $sanitized_routes ) ) {
-				// Salva l'array numerico pulito (avrà indici 0, 1, 2...).
-				update_post_meta( $post_id, 'venomaps_routes', $sanitized_routes );
-			} else {
-				delete_post_meta( $post_id, 'venomaps_routes' );
-			}
+			update_post_meta( $post_id, 'venomaps_routes', $sanitized_routes );
 		} else {
 			delete_post_meta( $post_id, 'venomaps_routes' );
 		}

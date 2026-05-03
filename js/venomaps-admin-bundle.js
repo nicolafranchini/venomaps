@@ -48323,79 +48323,80 @@
   	let previewMarkersLayer;
   	let previewRouteLayer;
   	let routeClickListenerKey;
+  	let markerTemplate;
 
   	let sourcesettings = {};
   	let rowdata = {};
   	const defaultIcon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
 
   	function init() {
-  	    initModal();
-  	    initRows();
-  	    loadGeolocator();
-  	    loadPreviewMap();
-  	    initSettingsPage();
-  	    initRoutesUI();
-  	    drawSavedRoutesOnLoad();
-  	    syncPreviewMarkers();
-  	    initFormValidation();
-  	    document.onkeydown = omDisableEnterKey;
+  		initModal();
+  		initRows();
+  		loadGeolocator();
+  		loadPreviewMap();
+  		initSettingsPage();
+  		initRoutesUI();
+  		drawSavedRoutesOnLoad();
+  		syncPreviewMarkers();
+  		initFormValidation();
+  		document.onkeydown = onDisableEnterKey;
   	}
 
-      // =======================================================
-      // NUOVA SEZIONE: VALIDAZIONE DEL FORM PRIMA DEL SALVATAGGIO
-      // =======================================================
+  	// =======================================================
+  	// NUOVA SEZIONE: VALIDAZIONE DEL FORM PRIMA DEL SALVATAGGIO
+  	// =======================================================
   	function validateRoutesBeforeSave() {
-  	    const allRouteRows = document.querySelectorAll('#vmap-routes-container .vmap-route-row');
-  	    let allRoutesAreValid = true;
+  		const allRouteRows = document.querySelectorAll('#vmap-routes-container .vmap-route-row');
+  		let allRoutesAreValid = true;
 
-  	    allRouteRows.forEach(row => {
-  	        const stopsContainer = row.querySelector('.vmap-route-stops-select');
-  	        const geometryInput = row.querySelector('.vmap-route-geometry');
-  	        const status = row.querySelector('.vmap-route-status');
+  		allRouteRows.forEach(row => {
+  			const stopsContainer = row.querySelector('.vmap-route-stops-select');
+  			const geometryInput = row.querySelector('.vmap-route-geometry');
+  			const status = row.querySelector('.vmap-route-status');
 
-  	        const stopsCount = stopsContainer ? stopsContainer.querySelectorAll('input[type="checkbox"]:checked').length : 0;
-  	        const hasGeometry = geometryInput && geometryInput.value.trim() !== '';
+  			const stopsCount = stopsContainer ? stopsContainer.querySelectorAll('input[type="checkbox"]:checked').length : 0;
+  			const hasGeometry = geometryInput && geometryInput.value.trim() !== '';
 
-  	        // Reset stile errore
-  	        row.classList.remove('invalid-route');
-  	        if (status) {
-  	            status.classList.remove('error-message');
-  	            // Non cancellare il testo se è un messaggio di successo
-  	            if (status.textContent.startsWith('ERROR:')) {
-  	                status.textContent = '';
-  	            }
-  	        }
+  			// Reset stile errore
+  			row.classList.remove('invalid-route');
+  			if (status) {
+  				status.classList.remove('error-message');
+  				// Non cancellare il testo se è un messaggio di successo
+  				if (status.textContent.startsWith('ERROR:')) {
+  					status.textContent = '';
+  				}
+  			}
 
-  	        // CONDIZIONE DI ERRORE: l'utente ha selezionato delle tappe ma non ha generato la geometria
-  	        if (stopsCount > 0 && !hasGeometry) {
-  	            allRoutesAreValid = false;
-  	            row.classList.add('invalid-route');
-  	            if (status) {
-  	                status.textContent = 'ERROR: Please click "Preview" to generate the route before saving.';
-  	                status.classList.add('error-message');
-  	            }
-  	        }
-  	    });
-  	    return allRoutesAreValid;
+  			// CONDIZIONE DI ERRORE: l'utente ha selezionato delle tappe ma non ha generato la geometria
+  			if (stopsCount > 0 && !hasGeometry) {
+  				allRoutesAreValid = false;
+  				row.classList.add('invalid-route');
+  				if (status) {
+  					status.textContent = 'ERROR: Please click "Preview" to generate the route before saving.';
+  					status.classList.add('error-message');
+  				}
+  			}
+  		});
+  		return allRoutesAreValid;
   	}
 
-      function initFormValidation() {
-          const postForm = document.getElementById('post');
-          if (postForm) {
-              postForm.addEventListener('submit', function(event) {
-                  const routesAreValid = validateRoutesBeforeSave();
-                  if (!routesAreValid) {
-                      event.preventDefault(); // Blocca il salvataggio
-                      alert('There are incomplete routes. Please generate a preview for each route that has stops selected before saving the post.');
-                      const firstError = document.querySelector('.invalid-route');
-                      if (firstError) {
-                          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }
-                  }
-              });
-          }
-      }
-      
+  	function initFormValidation() {
+  		const postForm = document.getElementById('post');
+  		if (postForm) {
+  			postForm.addEventListener('submit', function(event) {
+  				const routesAreValid = validateRoutesBeforeSave();
+  				if (!routesAreValid) {
+  					event.preventDefault(); // Blocca il salvataggio
+  					alert('There are incomplete routes. Please generate a preview for each route that has stops selected before saving the post.');
+  					const firstError = document.querySelector('.invalid-route');
+  					if (firstError) {
+  						firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  					}
+  				}
+  			});
+  		}
+  	}
+  	
   	function loadPreviewMap(){
   		const styleSelector = document.querySelector('select[name="venomaps_style"]');
   		if (!styleSelector) return;
@@ -48430,230 +48431,250 @@
   		maplat.addEventListener('change', updateCenter);
   		maplon.addEventListener('change', updateCenter);
 
-  	    const routeSource = new VectorSource();
-  	    previewRouteLayer = new VectorLayer({ source: routeSource, zIndex: 10 });
-  	    
-  	    const markersSource = new VectorSource();
-  	    previewMarkersLayer = new VectorLayer({ source: markersSource, zIndex: 11 });
-  	    
-  	    preview_map.addLayer(previewRouteLayer);
-  	    preview_map.addLayer(previewMarkersLayer);
+  		const routeSource = new VectorSource();
+  		previewRouteLayer = new VectorLayer({ source: routeSource, zIndex: 10 });
+  		
+  		const markersSource = new VectorSource();
+  		previewMarkersLayer = new VectorLayer({ source: markersSource, zIndex: 11 });
+  		
+  		preview_map.addLayer(previewRouteLayer);
+  		preview_map.addLayer(previewMarkersLayer);
   	}
 
   	function syncPreviewMarkers() {
 
-  	    if (!previewMarkersLayer) {
-  	        return;
-  	    }
-  	    const source = previewMarkersLayer.getSource();
-  	    source.clear();
-  	    const allMarkerRows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
+  		if (!previewMarkersLayer) {
+  			return;
+  		}
+  		const source = previewMarkersLayer.getSource();
+  		source.clear();
+  		const allMarkerRows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
 
-  	    if (allMarkerRows.length === 0) {
-  	        return;
-  	    }
-  	    allMarkerRows.forEach((row, index) => {
-  	        const markerKey = row.dataset.markerKey;
-  	        const dataTextarea = row.querySelector('.vmap-modal-set-data');
-  	        const rawData = dataTextarea ? dataTextarea.value : null;
+  		if (allMarkerRows.length === 0) {
+  			return;
+  		}
+  		allMarkerRows.forEach((row, index) => {
+  			const markerKey = row.dataset.markerKey;
+  			const dataTextarea = row.querySelector('.vmap-modal-set-data');
+  			const rawData = dataTextarea ? dataTextarea.value : null;
 
-  	        if (!rawData || rawData.trim() === '') {
-  	            return; // Salta questa iterazione
-  	        }
+  			if (!rawData || rawData.trim() === '') {
+  				return; // Salta questa iterazione
+  			}
 
-  	        let data;
-  	        try {
-  	            data = JSON.parse(rawData);
-  	        } catch (e) {
-  	            console.error(`Riga #${index}: ERRORE nel parsing del JSON.`, e);
-  	            return; // Salta questa iterazione
-  	        }
+  			let data;
+  			try {
+  				data = JSON.parse(rawData);
+  			} catch (e) {
+  				console.error(`Riga #${index}: ERRORE nel parsing del JSON.`, e);
+  				return; // Salta questa iterazione
+  			}
 
-  	        if (data && data.lon && data.lat && data.lon.toString().trim() !== '' && data.lat.toString().trim() !== '') {
-  	            
-  	            const coordinates = fromLonLat([parseFloat(data.lon), parseFloat(data.lat)]);
-  	            const feature = new Feature({ geometry: new Point(coordinates) });
-  	            
-  	            const style = new Style({
-  	                image: new CircleStyle({
-  	                    radius: 10,
-  	                    fill: new Fill({ color: 'rgba(255, 100, 50, 0.8)' }),
-  	                    stroke: new Stroke({ color: '#fff', width: 2 })
-  	                }),
-  	                text: new Text({
-  	                    text: (parseInt(markerKey, 10) + 1).toString(),
-  	                    fill: new Fill({ color: '#fff' }),
-  	                    font: 'bold 12px sans-serif'
-  	                })
-  	            });
-  	            feature.setStyle(style);
-  	            
-  	            source.addFeature(feature);
-  	        } else {
-  	            console.warn(`Riga #${index}: Coordinate mancanti o non valide nei dati parsati.`);
-  	        }
-  	    });
+  			if (data && data.lon && data.lat && data.lon.toString().trim() !== '' && data.lat.toString().trim() !== '') {
+  				
+  				const coordinates = fromLonLat([parseFloat(data.lon), parseFloat(data.lat)]);
+  				const feature = new Feature({ geometry: new Point(coordinates) });
+  				
+  				const style = new Style({
+  					image: new CircleStyle({
+  						radius: 10,
+  						fill: new Fill({ color: 'rgba(255, 100, 50, 0.8)' }),
+  						stroke: new Stroke({ color: '#fff', width: 2 })
+  					}),
+  					text: new Text({
+  						text: (parseInt(markerKey, 10) + 1).toString(),
+  						fill: new Fill({ color: '#fff' }),
+  						font: 'bold 12px sans-serif'
+  					})
+  				});
+  				feature.setStyle(style);
+  				
+  				source.addFeature(feature);
+  			} else {
+  				console.warn(`Riga #${index}: Coordinate mancanti o non valide nei dati parsati.`);
+  			}
+  		});
 
   	}
 
   	function drawSavedRoutesOnLoad() {
-  	    setTimeout(() => {
+  		setTimeout(() => {
 
-  	        if (!previewRouteLayer) {
-  	            return;
-  	        }
-  	        
-  	        const allRouteRows = document.querySelectorAll('#vmap-routes-container .vmap-route-row');
-  	        
-  	        const routeSource = previewRouteLayer.getSource();
-  	        routeSource.clear();
+  			if (!previewRouteLayer) {
+  				return;
+  			}
+  			
+  			const allRouteRows = document.querySelectorAll('#vmap-routes-container .vmap-route-row');
+  			
+  			const routeSource = previewRouteLayer.getSource();
+  			routeSource.clear();
 
-  	        const format = new GeoJSON({
-  	            dataProjection: 'EPSG:4326',
-  	            featureProjection: 'EPSG:3857'
-  	        });
-  	        const routeColors = ['#0073aa', '#d9534f', '#5cb85c', '#f0ad4e'];
-  	        let featuresExist = false;
+  			const format = new GeoJSON({
+  				dataProjection: 'EPSG:4326',
+  				featureProjection: 'EPSG:3857'
+  			});
+  			const routeColors = ['#0073aa', '#d9534f', '#5cb85c', '#f0ad4e'];
+  			let featuresExist = false;
 
-  	        allRouteRows.forEach((row, index) => {
-  	            console.log(`--- Analizzando la riga di percorso #${index} ---`);
-  	            const geometryInput = row.querySelector('.vmap-route-geometry');
-  	            
-  	            if (geometryInput && geometryInput.value && geometryInput.value.trim() !== '') {
-  	                console.log(`Riga #${index}: Trovata geometria salvata.`);
-  	                try {
-  	                    const feature = format.readFeature(geometryInput.value);
-  	                    if (feature.getGeometry().getCoordinates().length > 0) {
-  	                        const style = new Style({
-  	                            stroke: new Stroke({
-  	                                color: routeColors[index % routeColors.length],
-  	                                width: 5,
-  	                                lineCap: 'round', lineJoin: 'round'
-  	                            })
-  	                        });
-  	                        feature.setStyle(style);
-  	                        routeSource.addFeature(feature);
-  	                        featuresExist = true;
-  	                        console.log(`Riga #${index}: Feature del percorso aggiunta con successo.`);
-  	                    }
-  	                } catch (e) {
-  	                    console.error(`Riga #${index}: ERRORE nel parsare la geometria salvata.`, e);
-  	                }
-  	            } else {
-  	                console.warn(`Riga #${index}: Nessuna geometria salvata trovata.`);
-  	            }
-  	        });
-  	        
-  	        const finalFeatureCount = routeSource.getFeatures().length;
+  			allRouteRows.forEach((row, index) => {
+  				console.log(`--- Analizzando la riga di percorso #${index} ---`);
+  				const geometryInput = row.querySelector('.vmap-route-geometry');
+  				
+  				if (geometryInput && geometryInput.value && geometryInput.value.trim() !== '') {
+  					console.log(`Riga #${index}: Trovata geometria salvata.`);
+  					try {
+  						const feature = format.readFeature(geometryInput.value);
+  						if (feature.getGeometry().getCoordinates().length > 0) {
+  							const style = new Style({
+  								stroke: new Stroke({
+  									color: routeColors[index % routeColors.length],
+  									width: 5,
+  									lineCap: 'round', lineJoin: 'round'
+  								})
+  							});
+  							feature.setStyle(style);
+  							routeSource.addFeature(feature);
+  							featuresExist = true;
+  							console.log(`Riga #${index}: Feature del percorso aggiunta con successo.`);
+  						}
+  					} catch (e) {
+  						console.error(`Riga #${index}: ERRORE nel parsare la geometria salvata.`, e);
+  					}
+  				} else {
+  					console.warn(`Riga #${index}: Nessuna geometria salvata trovata.`);
+  				}
+  			});
+  			
+  			const finalFeatureCount = routeSource.getFeatures().length;
 
-  	        if (featuresExist && finalFeatureCount > 0) {
-  	            const extent = routeSource.getExtent();
-  	            preview_map.getView().fit(extent, { padding: [40, 40, 40, 40], duration: 500, maxZoom: 16 });
-  	        } else {
-  	            console.warn("Nessuna feature valida da mostrare, lo zoom non viene eseguito.");
-  	        }
-  	        console.groupEnd();
-  	    }, 500);
+  			if (featuresExist && finalFeatureCount > 0) {
+  				const extent = routeSource.getExtent();
+  				preview_map.getView().fit(extent, { padding: [40, 40, 40, 40], duration: 500, maxZoom: 16 });
+  			} else {
+  				console.warn("Nessuna feature valida da mostrare, lo zoom non viene eseguito.");
+  			}
+  			console.groupEnd();
+  		}, 500);
+  	}
+
+  	function reIndexMarkers() {
+  		const rows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
+  		rows.forEach((row, index) => {
+  			row.dataset.markerKey = index;
+  			row.id = `vmap-row-${index}`;
+  			
+  			// Aggiorna il numero visibile #1, #2...
+  			const badge = row.querySelector(".vmap-badge-text");
+  			if (badge) badge.innerText = index + 1;
+
+  			// Aggiorna il NAME dell'input nascosto per il PHP
+  			const dataInput = row.querySelector(".vmap-modal-set-data");
+  			if (dataInput) dataInput.name = `venomaps_data[${index}]`;
+  		});
+  		
+  		// Aggiorna selettori rotte e mappa
+  		updateAllRouteSelects();
+  		syncPreviewMarkers();
   	}
 
   	function initRows(){
   		const marker_rows = document.querySelectorAll(".vmap-marker-row");
   		if (!marker_rows.length) return false;
+  		markerTemplate = marker_rows[0].cloneNode(true);
   		marker_rows.forEach(row => initRow(row));
-  		initRepeatable(marker_rows[0]);
+  		initRepeatable(markerTemplate);
   	}
 
   	function initRow(row) {
-  	    const set_title = row.querySelector(".vmap-modal-set-title");
-  	    const set_lat = row.querySelector(".vmap-modal-set-lat");
-  	    const set_lon = row.querySelector(".vmap-modal-set-lon");
-  	    const removeRows = row.querySelectorAll(".vmap-del-row");
+  		const set_title = row.querySelector(".vmap-modal-set-title");
+  		const set_lat = row.querySelector(".vmap-modal-set-lat");
+  		const set_lon = row.querySelector(".vmap-modal-set-lon");
+  		const removeRows = row.querySelectorAll(".vmap-del-row");
 
-  	    row.querySelectorAll(".vmap-edit-marker").forEach(trigger => {
-  	        trigger.addEventListener("click", () => fillModal(row));
-  	    });
+  		row.querySelectorAll(".vmap-edit-marker").forEach(trigger => {
+  			trigger.addEventListener("click", () => fillModal(row));
+  		});
 
-  	    removeRows.forEach(removeRow => {
-  	        removeRow.addEventListener("click", () => {
-  	            row.remove();
-  	            updateAllRouteSelects();
-  	            syncPreviewMarkers();
-  	        });
-  	    });
+  		removeRows.forEach(removeRow => {
+  			removeRow.addEventListener("click", () => {
+  				row.remove();
+  				reIndexMarkers();
+  			});
+  		});
 
-  	    // FUNZIONE UNICA PER GESTIRE OGNI CAMBIAMENTO
-  	    function handleInputChange() {
-  	        const set_data = row.querySelector(".vmap-modal-set-data");
-  	        let currentData;
-  	        try {
-  	            currentData = set_data.value ? JSON.parse(set_data.value) : {};
-  	        } catch (e) {
-  	            currentData = {}; // Inizia da un oggetto vuoto se il JSON non è valido
-  	        }
+  		// FUNZIONE UNICA PER GESTIRE OGNI CAMBIAMENTO
+  		function handleInputChange() {
+  			const set_data = row.querySelector(".vmap-modal-set-data");
+  			let currentData;
+  			try {
+  				currentData = set_data.value ? JSON.parse(set_data.value) : {};
+  			} catch (e) {
+  				currentData = {}; // Inizia da un oggetto vuoto se il JSON non è valido
+  			}
 
-  	        // Aggiorna l'oggetto dati con i valori correnti degli input
-  	        currentData.title = set_title.value;
-  	        currentData.lat = set_lat.value;
-  	        currentData.lon = set_lon.value;
-  	        
-  	        // Risalva la stringa JSON nel textarea
-  	        set_data.value = JSON.stringify(currentData);
+  			// Aggiorna l'oggetto dati con i valori correnti degli input
+  			currentData.title = set_title.value;
+  			currentData.lat = set_lat.value;
+  			currentData.lon = set_lon.value;
+  			
+  			// Risalva la stringa JSON nel textarea
+  			set_data.value = JSON.stringify(currentData);
 
-  	        // Aggiorna l'interfaccia
-  	        updateAllRouteSelects(); // Necessario per aggiornare il titolo nei select
-  	        syncPreviewMarkers();   // Ridisegna TUTTI i marker sulla mappa
-  	    }
+  			// Aggiorna l'interfaccia
+  			updateAllRouteSelects(); // Necessario per aggiornare il titolo nei select
+  			syncPreviewMarkers();   // Ridisegna TUTTI i marker sulla mappa
+  		}
 
-  	    // Applica lo stesso handler a tutti gli input
-  	    if(set_title) set_title.addEventListener('input', handleInputChange);
-  	    if(set_lat) set_lat.addEventListener("input", handleInputChange);
-  	    if(set_lon) set_lon.addEventListener("input", handleInputChange);
+  		// Applica lo stesso handler a tutti gli input
+  		if(set_title) set_title.addEventListener('input', handleInputChange);
+  		if(set_lat) set_lat.addEventListener("input", handleInputChange);
+  		if(set_lon) set_lon.addEventListener("input", handleInputChange);
   	}
 
   	function updateAllRouteSelects() {
-  	    const allMarkerRows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
-  	    const allRouteStopsContainers = document.querySelectorAll('#vmap-routes-container .vmap-route-stops-select');
+  		const allMarkerRows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
+  		const allRouteStopsContainers = document.querySelectorAll('#vmap-routes-container .vmap-route-stops-select');
 
-  	    if (allRouteStopsContainers.length === 0) return;
+  		if (allRouteStopsContainers.length === 0) return;
 
-  	    // 1. Raccogli i dati di tutti i marker disponibili
-  	    const markerOptions = [];
-  	    allMarkerRows.forEach(row => {
-  	        const key = row.dataset.markerKey;
-  	        const titleInput = row.querySelector('.vmap-modal-set-title');
-  	        const title = titleInput && titleInput.value ? titleInput.value : `Marker #${parseInt(key, 10) + 1}`;
-  	        markerOptions.push({ value: key, text: title });
-  	    });
+  		// 1. Raccogli i dati di tutti i marker disponibili
+  		const markerOptions = [];
+  		allMarkerRows.forEach(row => {
+  			const key = row.dataset.markerKey;
+  			const titleInput = row.querySelector('.vmap-modal-set-title');
+  			const title = titleInput && titleInput.value ? titleInput.value : `Marker #${parseInt(key, 10) + 1}`;
+  			markerOptions.push({ value: key, text: title });
+  		});
 
-  	    // 2. Itera su ogni contenitore di checkbox (per ogni rotta) e aggiornalo
-  	    allRouteStopsContainers.forEach(container => {
-  	        // Salva i valori attualmente selezionati
-  	        const checkedValues = Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-  	        
-  	        // Svuota il contenitore
-  	        container.innerHTML = '';
+  		// 2. Itera su ogni contenitore di checkbox (per ogni rotta) e aggiornalo
+  		allRouteStopsContainers.forEach(container => {
+  			// Salva i valori attualmente selezionati
+  			const checkedValues = Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+  			
+  			// Svuota il contenitore
+  			container.innerHTML = '';
 
-  	        // Ricostruisci la lista di checkbox
-  	        const parentRow = container.closest('.vmap-route-row');
-  	        const routeIndex = parentRow ? parentRow.dataset.index : '0';
+  			// Ricostruisci la lista di checkbox
+  			const parentRow = container.closest('.vmap-route-row');
+  			const routeIndex = parentRow ? parentRow.dataset.index : '0';
 
-  	        markerOptions.forEach(opt => {
-  	            const label = document.createElement('label');
-  	            const checkbox = document.createElement('input');
-  	            
-  	            checkbox.type = 'checkbox';
-  	            checkbox.value = opt.value;
-  	            checkbox.name = `venomaps_routes[${routeIndex}][stops][]`;
+  			markerOptions.forEach(opt => {
+  				const label = document.createElement('label');
+  				const checkbox = document.createElement('input');
+  				
+  				checkbox.type = 'checkbox';
+  				checkbox.value = opt.value;
+  				checkbox.name = `venomaps_routes[${routeIndex}][stops][]`;
 
-  	            if (checkedValues.includes(opt.value)) {
-  	                checkbox.checked = true;
-  	            }
+  				if (checkedValues.includes(opt.value)) {
+  					checkbox.checked = true;
+  				}
 
-  	            label.appendChild(checkbox);
-  	            label.appendChild(document.createTextNode(` ${opt.text}`));
-  	            container.appendChild(label);
-  	        });
-  	    });
+  				label.appendChild(checkbox);
+  				label.appendChild(document.createTextNode(` ${opt.text}`));
+  				container.appendChild(label);
+  			});
+  		});
   	}
 
   	function initRoutesUI() {
@@ -48661,264 +48682,345 @@
   		if (!container) return;
 
   		container.addEventListener('click', async function(e) {
-  		    const previewBtn = e.target.closest('.vmap-preview-route');
-  		    const deleteBtn = e.target.closest('.vmap-del-route');
-  		    const addBtn = e.target.closest('#vmap-add-route');
+  			const previewBtn = e.target.closest('.vmap-preview-route');
+  			const deleteBtn = e.target.closest('.vmap-del-route');
+  			const addBtn = e.target.closest('#vmap-add-route');
 
-  		    if (previewBtn) {
-  		        e.preventDefault();
-  		        previewBtn.disabled = true;
-  		        previewBtn.textContent = 'Loading...';
-  		        const routeRow = previewBtn.closest('.vmap-route-row');
-  		        const stopsContainer = routeRow.querySelector('.vmap-route-stops-select');
-  		        
-  		        const selectedCheckboxes = stopsContainer.querySelectorAll('input[type="checkbox"]:checked');
-  		        const selectedMarkerIndexes = Array.from(selectedCheckboxes).map(cb => cb.value);
+  			if (previewBtn) {
+  				e.preventDefault();
+  				previewBtn.disabled = true;
+  				previewBtn.textContent = 'Loading...';
+  				const routeRow = previewBtn.closest('.vmap-route-row');
+  				const stopsContainer = routeRow.querySelector('.vmap-route-stops-select');
+  				
+  				const selectedCheckboxes = stopsContainer.querySelectorAll('input[type="checkbox"]:checked');
+  				const selectedMarkerIndexes = Array.from(selectedCheckboxes).map(cb => cb.value);
 
-  		        if (selectedMarkerIndexes.length < 2) {
-  		            alert('Please select at least two stops.');
-  		            previewBtn.disabled = false;
-  		            previewBtn.textContent = 'Preview';
-  		            return;
-  		        }
+  				if (selectedMarkerIndexes.length < 2) {
+  					alert('Please select at least two stops.');
+  					previewBtn.disabled = false;
+  					previewBtn.textContent = 'Preview';
+  					return;
+  				}
 
-  		        const allMarkerRows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
-  		        const markerDataMap = {};
-  		        allMarkerRows.forEach(row => {
-  		            const key = row.dataset.markerKey;
-  		            try {
-  		                const data = JSON.parse(row.querySelector('.vmap-modal-set-data').value);
-  		                if (data && data.lon && data.lat) {
-  		                    markerDataMap[key] = { lon: data.lon, lat: data.lat };
-  		                }
-  		            } catch (e) {}
-  		        });
+  				const allMarkerRows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
+  				const markerDataMap = {};
+  				allMarkerRows.forEach(row => {
+  					const key = row.dataset.markerKey;
+  					try {
+  						const data = JSON.parse(row.querySelector('.vmap-modal-set-data').value);
+  						if (data && data.lon && data.lat) {
+  							markerDataMap[key] = { lon: data.lon, lat: data.lat };
+  						}
+  					} catch (e) {}
+  				});
 
-  		        const orderedCoords = selectedMarkerIndexes
-  		            .map(index => {
-  		                const marker = markerDataMap[index];
-  		                if (marker) return `${marker.lon},${marker.lat}`;
-  		                return null;
-  		            })
-  		            .filter(coord => coord !== null);
+  				const orderedCoords = selectedMarkerIndexes
+  					.map(index => {
+  						const marker = markerDataMap[index];
+  						if (marker) return `${marker.lon},${marker.lat}`;
+  						return null;
+  					})
+  					.filter(coord => coord !== null);
 
-  		        const coordsString = orderedCoords.join(';');
-  		        if (orderedCoords.length < 2) {
-  		            alert('The selected stops do not have valid coordinates. Please check each selected marker.');
-  		            previewBtn.disabled = false;
-  		            previewBtn.textContent = 'Preview';
-  		            return;
-  		        }
+  				const coordsString = orderedCoords.join(';');
+  				if (orderedCoords.length < 2) {
+  					alert('The selected stops do not have valid coordinates. Please check each selected marker.');
+  					previewBtn.disabled = false;
+  					previewBtn.textContent = 'Preview';
+  					return;
+  				}
 
-  		        const bodyParams = new URLSearchParams();
-  		        bodyParams.append("action", "vmap_fetch_osrm_routes");
-  		        bodyParams.append("nonce", venomapsAdminVars.nonce);
-  		        bodyParams.append("coords", coordsString);
+  				const bodyParams = new URLSearchParams();
+  				bodyParams.append("action", "vmap_fetch_osrm_routes");
+  				bodyParams.append("nonce", venomapsAdminVars.nonce);
+  				bodyParams.append("coords", coordsString);
 
-  		        try {
-  		            const response = await fetch(venomapsAdminVars.ajax_url, {
-  		                method: 'POST',
-  		                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  		                body: bodyParams
-  		            });
-  		            const result = await response.json();
-  		            if (result.success) {
-  		                drawRoutePreviews(result.data, routeRow);
-  		            } else {
-  		                alert('Error fetching route: ' + result.data);
-  		            }
-  		        } catch (error) {
-  		            console.error('AJAX Error:', error);
-  		            alert('An error occurred while fetching the route.');
-  		        } finally {
-  		            previewBtn.disabled = false;
-  		            previewBtn.textContent = 'Preview';
-  		        }
-  		    }
+  				try {
+  					const response = await fetch(venomapsAdminVars.ajax_url, {
+  						method: 'POST',
+  						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  						body: bodyParams
+  					});
+  					const result = await response.json();
+  					if (result.success) {
+  						drawRoutePreviews(result.data, routeRow);
+  					} else {
+  						alert('Error fetching route: ' + result.data);
+  					}
+  				} catch (error) {
+  					console.error('AJAX Error:', error);
+  					alert('An error occurred while fetching the route.');
+  				} finally {
+  					previewBtn.disabled = false;
+  					previewBtn.textContent = 'Preview';
+  				}
+  			}
 
-  		    if (deleteBtn) {
-  		        deleteBtn.closest('.vmap-route-row').remove();
-  		        // updateAllRouteSelects();
-  		        // syncPreviewMarkers();
-  		        drawSavedRoutesOnLoad(); 
-  		    }
+  			if (deleteBtn) {
+  				deleteBtn.closest('.vmap-route-row').remove();
+  				// updateAllRouteSelects();
+  				// syncPreviewMarkers();
+  				drawSavedRoutesOnLoad(); 
+  			}
 
-  		    if (addBtn) {
-  		        const list = container.querySelector('.vmap-routes-list');
-  		        const template = container.querySelector('#vmap-route-template');
+  			if (addBtn) {
+  				const list = container.querySelector('.vmap-routes-list');
+  				const template = container.querySelector('#vmap-route-template');
 
-  		        let nextIndex = 0;
-  		        const allRows = list.querySelectorAll('.vmap-route-row');
-  		        if (allRows.length > 0) {
-  		            const lastRow = allRows[allRows.length - 1];
-  		            nextIndex = parseInt(lastRow.dataset.index, 10) + 1;
-  		        }
-  		        const newNum = nextIndex + 1;
+  				let nextIndex = 0;
+  				const allRows = list.querySelectorAll('.vmap-route-row');
+  				if (allRows.length > 0) {
+  					const lastRow = allRows[allRows.length - 1];
+  					nextIndex = parseInt(lastRow.dataset.index, 10) + 1;
+  				}
+  				const newNum = nextIndex + 1;
 
-  		        const newRow = template.querySelector('.vmap-route-row').cloneNode(true);
-  		        newRow.id = `vmap-route-row-${nextIndex}`;
-  		        newRow.dataset.index = nextIndex;
+  				const newRow = template.querySelector('.vmap-route-row').cloneNode(true);
+  				newRow.id = `vmap-route-row-${nextIndex}`;
+  				newRow.dataset.index = nextIndex;
 
-  		        const strongEl = newRow.querySelector('strong');
-  		        strongEl.textContent = strongEl.textContent.replace('#__NUM__', `#${newNum}`);
+  				const strongEl = newRow.querySelector('strong');
+  				strongEl.textContent = strongEl.textContent.replace('#__NUM__', `#${newNum}`);
 
-  		        // Aggiorna i nomi degli input
-  		        const geometryInput = newRow.querySelector('.vmap-route-geometry');
-  		        if (geometryInput) geometryInput.name = `venomaps_routes[${nextIndex}][geometry]`;
-  		        
-  		        // Aggiorna il contenitore delle checkbox, svuotandolo e ripopolandolo
-  		        const stopsContainer = newRow.querySelector('.vmap-route-stops-select');
-  		        if (stopsContainer) {
-  		             stopsContainer.innerHTML = 'No markers available yet.'; // Messaggio temporaneo
-  		        }
+  				// Aggiorna i nomi degli input
+  				const geometryInput = newRow.querySelector('.vmap-route-geometry');
+  				if (geometryInput) geometryInput.name = `venomaps_routes[${nextIndex}][geometry]`;
+  				
+  				// Aggiorna il contenitore delle checkbox, svuotandolo e ripopolandolo
+  				const stopsContainer = newRow.querySelector('.vmap-route-stops-select');
+  				if (stopsContainer) {
+  					 stopsContainer.innerHTML = 'No markers available yet.'; // Messaggio temporaneo
+  				}
 
-  		        list.appendChild(newRow);
-  		        
-  		        // Aggiorna tutti i contenitori per aggiungere le opzioni alla nuova riga
-  		        updateAllRouteSelects();
-  		    }
+  				list.appendChild(newRow);
+  				
+  				// Aggiorna tutti i contenitori per aggiungere le opzioni alla nuova riga
+  				updateAllRouteSelects();
+  			}
   		});
   	}
 
   	function drawRoutePreviews(routes, targetRow) {
-  	    if (!previewRouteLayer) return;
-  	    const routeSource = previewRouteLayer.getSource();
-  	    routeSource.clear();
+  		if (!previewRouteLayer) return;
+  		const routeSource = previewRouteLayer.getSource();
+  		routeSource.clear();
 
-  	    if (routeClickListenerKey) {
-  	        unByKey(routeClickListenerKey);
-  	        routeClickListenerKey = null;
-  	    }
-  	    
-  	    const format = new GeoJSON({ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
-  	    const primaryStyle = new Style({ stroke: new Stroke({ color: '#0073aa', width: 6, lineCap: 'round', lineJoin: 'round' }) });
-  	    const alternativeStyle = new Style({ stroke: new Stroke({ color: '#888', width: 4, lineCap: 'round', lineJoin: 'round' }) });
-  	    
-  	    // 1. Disegna tutte le rotte e assegna loro lo stile alternativo di default
-  	    routes.forEach((route) => {
-  	        const feature = format.readFeature(route.geometry);
-  	        feature.set('full_route_data', route);
-  	        feature.set('is_preview', true);
-  	        feature.set('targetRowId', targetRow.id);
-  	        feature.setStyle(alternativeStyle); // Iniziano tutte come alternative
-  	        routeSource.addFeature(feature);
-  	    });
+  		if (routeClickListenerKey) {
+  			unByKey(routeClickListenerKey);
+  			routeClickListenerKey = null;
+  		}
+  		
+  		const format = new GeoJSON({ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
+  		const primaryStyle = new Style({ stroke: new Stroke({ color: '#0073aa', width: 6, lineCap: 'round', lineJoin: 'round' }) });
+  		const alternativeStyle = new Style({ stroke: new Stroke({ color: '#888', width: 4, lineCap: 'round', lineJoin: 'round' }) });
+  		
+  		// 1. Disegna tutte le rotte e assegna loro lo stile alternativo di default
+  		routes.forEach((route) => {
+  			const feature = format.readFeature(route.geometry);
+  			feature.set('full_route_data', route);
+  			feature.set('is_preview', true);
+  			feature.set('targetRowId', targetRow.id);
+  			feature.setStyle(alternativeStyle); // Iniziano tutte come alternative
+  			routeSource.addFeature(feature);
+  		});
 
-  	    // 2. Determina quale feature deve essere quella "attiva" (primaria)
-  	    const savedGeometryValue = targetRow.querySelector('.vmap-route-geometry').value;
-  	    let activeFeature = routeSource.getFeatures()[0] || null; // Default alla prima se non troviamo altro
+  		// 2. Determina quale feature deve essere quella "attiva" (primaria)
+  		const savedGeometryValue = targetRow.querySelector('.vmap-route-geometry').value;
+  		let activeFeature = routeSource.getFeatures()[0] || null; // Default alla prima se non troviamo altro
 
-  	    if (savedGeometryValue) {
-  	        try {
-  	            // Confronta la geometria salvata con quelle nuove
-  	            const savedGeomString = JSON.stringify(JSON.parse(savedGeometryValue));
-  	            for (const feature of routeSource.getFeatures()) {
-  	                const featureGeomString = JSON.stringify(format.writeGeometryObject(feature.getGeometry()));
-  	                if (featureGeomString === savedGeomString) {
-  	                    activeFeature = feature; // Trovata! Questa è la nostra feature attiva
-  	                    break;
-  	                }
-  	            }
-  	        } catch(e) { /* Ignora errori */ }
-  	    }
-  	    
-  	    // 3. Applica lo stile primario alla feature attiva e salva i suoi dati
-  	    if (activeFeature) {
-  	        activeFeature.setStyle(primaryStyle);
-  	        const activeGeometry = format.writeGeometryObject(activeFeature.getGeometry());
-  	        targetRow.querySelector('.vmap-route-geometry').value = JSON.stringify(activeGeometry);
-  	        targetRow.querySelector('.vmap-route-status').textContent = 'Route selected. Click an alternative to change.';
-  	    }
+  		if (savedGeometryValue) {
+  			try {
+  				// Confronta la geometria salvata con quelle nuove
+  				const savedGeomString = JSON.stringify(JSON.parse(savedGeometryValue));
+  				for (const feature of routeSource.getFeatures()) {
+  					const featureGeomString = JSON.stringify(format.writeGeometryObject(feature.getGeometry()));
+  					if (featureGeomString === savedGeomString) {
+  						activeFeature = feature; // Trovata! Questa è la nostra feature attiva
+  						break;
+  					}
+  				}
+  			} catch(e) { /* Ignora errori */ }
+  		}
+  		
+  		// 3. Applica lo stile primario alla feature attiva e salva i suoi dati
+  		if (activeFeature) {
+  			activeFeature.setStyle(primaryStyle);
+  			const activeGeometry = format.writeGeometryObject(activeFeature.getGeometry());
+  			targetRow.querySelector('.vmap-route-geometry').value = JSON.stringify(activeGeometry);
+  			targetRow.querySelector('.vmap-route-status').textContent = 'Route selected. Click an alternative to change.';
+  		}
 
-  	    // 4. Zoom e listener
-  	    const fullExtent = previewMarkersLayer.getSource().getExtent();
+  		// 4. Zoom e listener
+  		const fullExtent = previewMarkersLayer.getSource().getExtent();
   		extend$1(fullExtent, routeSource.getExtent());
-  	    preview_map.getView().fit(fullExtent, { padding: [40, 40, 40, 40], duration: 500, maxZoom: 16 });
-  	    
-  	    routeClickListenerKey = preview_map.on('singleclick', function(e) {
-  	        const clickedFeature = preview_map.forEachFeatureAtPixel(e.pixel, function(f) {
-  	            if (f.get('is_preview')) return f;
-  	        });
+  		preview_map.getView().fit(fullExtent, { padding: [40, 40, 40, 40], duration: 500, maxZoom: 16 });
+  		
+  		routeClickListenerKey = preview_map.on('singleclick', function(e) {
+  			const clickedFeature = preview_map.forEachFeatureAtPixel(e.pixel, function(f) {
+  				if (f.get('is_preview')) return f;
+  			});
 
-  	        if (clickedFeature) {
-  	            const geometryJson = JSON.stringify(format.writeGeometryObject(clickedFeature.getGeometry()));
-  	            document.getElementById(clickedFeature.get('targetRowId')).querySelector('.vmap-route-geometry').value = geometryJson;
-  	            
-  	            routeSource.getFeatures().forEach(f => {
-  	                f.setStyle(f === clickedFeature ? primaryStyle : alternativeStyle);
-  	            });
-  	        }
-  	    });
+  			if (clickedFeature) {
+  				const geometryJson = JSON.stringify(format.writeGeometryObject(clickedFeature.getGeometry()));
+  				document.getElementById(clickedFeature.get('targetRowId')).querySelector('.vmap-route-geometry').value = geometryJson;
+  				
+  				routeSource.getFeatures().forEach(f => {
+  					f.setStyle(f === clickedFeature ? primaryStyle : alternativeStyle);
+  				});
+  			}
+  		});
   	}
 
-      // Qui inserisci tutte le altre funzioni che hai dato prima, da `upFile` a `omDisableEnterKey`.
-      // Sono corrette e non serve modificarle. Per brevità non le ripeto.
-  	function upFile(component){
-  		const upbutton = component.querySelector( '.vmap-set-uploader' );
-  		const field = component.querySelector( '.vmap-get-uploader' );
-  		const processCsvBtn = component.querySelector(".vmap-import-csv");
-  		const post_id = field.dataset.postId;
-  		var om_metaImageFrame;
-  		if (field && upbutton) {
-  			upbutton.addEventListener("click", function(e){
-  				e.preventDefault();
-  				om_metaImageFrame = wp.media.frames.om_metaImageFrame = wp.media();
-  				om_metaImageFrame.on("select", function(){
-  					var media_attachment = om_metaImageFrame.state().get('selection').first().toJSON();
-  					field.value = media_attachment.url;
-  					processCsvBtn.classList.remove("vmap-hidden");
-  				});
-  				om_metaImageFrame.open();
-  			});
-  		}
-  		if (processCsvBtn && post_id) {
-  			processCsvBtn.addEventListener("click", function(e){
-  				e.preventDefault();
-  				const data = {};
-  				data.url = field.value;
-  				data.id = post_id;
-  				sendCsvData(data, component);
-  			});
-  		}	
+  	function upFile(component) {
+  	    const upbutton = component.querySelector('.vmap-set-uploader');
+  	    const field = component.querySelector('.vmap-get-uploader');
+  	    const post_id = field ? field.dataset.postId : null;
+  	    let om_metaImageFrame;
+
+  	    // Helper per inviare i dati senza ripetere codice
+  	    const triggerImport = () => {
+  	        const url = field.value.trim();
+  	        if (url && post_id) {
+  	            const data = {
+  	                url: url,
+  	                id: post_id
+  	            };
+  	            sendCsvData(data, component);
+  	        }
+  	    };
+
+  	    if (field && upbutton) {
+  	        // Apertura Media Manager
+  	        upbutton.addEventListener("click", function(e) {
+  	            e.preventDefault();
+  	            
+  	            // Riutilizza il frame se esiste
+  	            if (om_metaImageFrame) {
+  	                om_metaImageFrame.open();
+  	                return;
+  	            }
+
+  	            om_metaImageFrame = wp.media({
+  	                title: 'Select CSV File',
+  	                button: { text: 'Use this file' },
+  	                multiple: false,
+  				    library: {
+  				        type: 'text/csv' // Forza la visualizzazione dei soli file CSV
+  				    }
+  	            });
+
+  	            om_metaImageFrame.on("select", function() {
+  	                const attachment = om_metaImageFrame.state().get('selection').first().toJSON();
+  	                field.value = attachment.url;
+  	                
+  	                // Trigger automatico dopo la selezione
+  	                triggerImport();
+  	            });
+
+  	            om_metaImageFrame.open();
+  	        });
+
+  	        // Trigger se l'utente incolla un URL manualmente
+  	        field.addEventListener("change", triggerImport);
+  	    }
+
+  		component.querySelectorAll('input[name="csv_delimiter"]').forEach(el => {
+  		    el.addEventListener('change', triggerImport);
+  		});
   	}
 
   	const allUploaders = document.querySelectorAll(".vmap-uploader");
-  	allUploaders.forEach(function(component){ upFile(component); });
+  	allUploaders.forEach( function(component) {
+  		upFile(component); 
+  	});
 
   	function sendCsvData(data, component) {
-  		const spinner = component.querySelector(".spinner");
-  		const processCsvBtn = component.querySelector(".vmap-import-csv");
-  		const responseMsg = component.querySelector(".vmap-response-message");
-  		const delimiter = component.querySelector('input[name="csv_delimiter"]:checked');
-  		responseMsg.classList.remove("active");
-  		spinner.classList.add("is-active");
-  		processCsvBtn.classList.add("vmap-hidden");
-  		const xhttp = new XMLHttpRequest();
-  		xhttp.onreadystatechange = function() {
-  			if (xhttp.readyState == 4) {
-  				if (xhttp.status == 200) {
-  					const response_obj = JSON.parse(xhttp.response);
-  					responseMsg.innerText = response_obj;
-  					responseMsg.classList.add("active");
-  				}
-  				spinner.classList.remove("is-active");
-  			}
-  		};
-  		const formData = new FormData();
-  		formData.append("action", "vmap_set_csv");
-  		formData.append("vmap_nonce", venomapsAdminVars.nonce);
-  		formData.append("url", data.url);
-  		formData.append("post_id", data.id);
-  		formData.append("delimiter", delimiter.value);
-  		xhttp.open("POST", venomapsAdminVars.ajax_url, true);
-  		xhttp.send(formData);
+  	    const spinner = component.querySelector(".spinner");
+  	    const responseMsg = component.querySelector(".vmap-response-message");
+  	    const delimiterInput = component.querySelector('input[name="csv_delimiter"]:checked');
+  	    const delimiter = delimiterInput ? delimiterInput.value : ',';
+
+  	    // UI Feedback
+  	    if (responseMsg) responseMsg.classList.remove("active");
+  	    if (spinner) spinner.classList.add("is-active");
+
+  	    const formData = new FormData();
+  	    formData.append("action", "vmap_set_csv");
+  	    formData.append("vmap_nonce", venomapsAdminVars.nonce);
+  	    formData.append("url", data.url);
+  	    formData.append("post_id", data.id);
+  	    formData.append("delimiter", delimiter);
+
+  	    fetch(venomapsAdminVars.ajax_url, {
+  	        method: 'POST',
+  	        body: formData
+  	    })
+  	    .then(response => response.json())
+  	    .then(res => {
+  console.log(res);
+
+  	        if (spinner) spinner.classList.remove("is-active");
+  	        
+  	        if (responseMsg) {
+  	            responseMsg.innerText = res.message || res.data;
+  	            responseMsg.classList.add("active");
+  	        }
+
+  	        if (res.markers) {
+  	            // Se la risposta di WP è wp_send_json_success, i dati sono in res.data
+  	            rebuildMarkersUI(res.markers);
+  	        }
+  	    })
+  	    .catch(error => {
+  	        console.error('Error:', error);
+  	        if (spinner) spinner.classList.remove("is-active");
+  	    });
+  	}
+
+  	function rebuildMarkersUI(markers) {
+  		const row_container = document.querySelector(".vmap-wrap-rows");
+  		if (!row_container || !markerTemplate) return;
+
+  		row_container.innerHTML = "";
+
+  		markers.forEach((marker, index) => {
+  			const newKey = index;
+  			const clone = markerTemplate.cloneNode(true);
+  			clone.dataset.markerKey = newKey;
+  			clone.id = `vmap-row-${newKey}`;
+  			clone.querySelector(".vmap-badge-text").innerText = newKey + 1;
+
+  			const inputdata = clone.querySelector(".vmap-modal-set-data");
+  			inputdata.name = `venomaps_data[${newKey}]`;
+
+  			// Set marker data
+  			marker.key = newKey + 1;
+  			inputdata.value = JSON.stringify(marker);
+
+  			// Update visible inputs
+  			const titleInput = clone.querySelector(".vmap-modal-set-title");
+  			if (titleInput) titleInput.value = marker.title || "";
+
+  			const latInput = clone.querySelector(".vmap-modal-set-lat");
+  			if (latInput) latInput.value = marker.lat || "";
+
+  			const lonInput = clone.querySelector(".vmap-modal-set-lon");
+  			if (lonInput) lonInput.value = marker.lon || "";
+
+  			row_container.append(clone);
+  			initRow(clone);
+  		});
+
+  		updateAllRouteSelects();
+  		syncPreviewMarkers();
   	}
 
   	function loadIconImage(upmarker, url = false) {
 
-  	    if (!url || url === 'undefined' || url === '' || url === null) {
-  	        url = false;
-  	    }
+  		if (!url || url === 'undefined' || url === '' || url === null) {
+  			url = false;
+  		}
 
   		const field = upmarker.querySelector( '.vmap-modal-get-icon' );
   		const upimage = upmarker.querySelector( '.vmap-icon-image' );
@@ -48926,37 +49028,37 @@
   		const removemarkers = upmarker.querySelectorAll( '.venomaps_marker_remove_btn' );
   		const color_component = upmarker.querySelector(".vmap-color-component");
 
-  	    if (url) {
-  	        // Mostra immagine custom
-  	        const img = new Image();
-  	        img.src = url;
-  	        img.onload = function () {
-  	            upimage.innerHTML = `<img src="${url}" style="width:100%; height:auto;">`;
-  	            upimage.classList.remove("vmap-hidden");
-  	            defaultimage.classList.add("vmap-hidden");
-  	            removemarkers.forEach(btn => btn.classList.remove("vmap-invisible"));
-  	            if (color_component) color_component.classList.add("vmap-hidden");
-  	        };
-  	        field.value = url;
-  	    } else {
-  	        // Ritorna all'SVG di default
-  	        field.value = "";
-  	        defaultimage.innerHTML = defaultIcon;
-  	        upimage.classList.add("vmap-hidden");
-  	        upimage.innerHTML = "";
-  	        defaultimage.classList.remove("vmap-hidden");
-  	        removemarkers.forEach(btn => btn.classList.add("vmap-invisible"));
-  	        if (color_component) color_component.classList.remove("vmap-hidden");
-  	    }
+  		if (url) {
+  			// Mostra immagine custom
+  			const img = new Image();
+  			img.src = url;
+  			img.onload = function () {
+  				upimage.innerHTML = `<img src="${url}" style="width:100%; height:auto;">`;
+  				upimage.classList.remove("vmap-hidden");
+  				defaultimage.classList.add("vmap-hidden");
+  				removemarkers.forEach(btn => btn.classList.remove("vmap-invisible"));
+  				if (color_component) color_component.classList.add("vmap-hidden");
+  			};
+  			field.value = url;
+  		} else {
+  			// Ritorna all'SVG di default
+  			field.value = "";
+  			defaultimage.innerHTML = defaultIcon;
+  			upimage.classList.add("vmap-hidden");
+  			upimage.innerHTML = "";
+  			defaultimage.classList.remove("vmap-hidden");
+  			removemarkers.forEach(btn => btn.classList.add("vmap-invisible"));
+  			if (color_component) color_component.classList.remove("vmap-hidden");
+  		}
   	}
 
   	function iconUploader(modal_component){
   		if (!modal_component) return false;
   		const upmarker = modal_component.classList.contains('vmap-icon-uploader') 
-          ? modal_component 
-          : modal_component.querySelector(".vmap-icon-uploader");
+  		? modal_component 
+  		: modal_component.querySelector(".vmap-icon-uploader");
 
-      	if (!upmarker) return false; // Esci se non trovi nulla
+  		if (!upmarker) return false; // Esci se non trovi nulla
   		const upbuttons = upmarker.querySelectorAll( '.venomaps_marker_upload_btn' );
   		const removemarkers = upmarker.querySelectorAll( '.venomaps_marker_remove_btn' );
   		const color_component = modal_component.querySelector(".vmap-color-component");
@@ -49107,44 +49209,55 @@
   	}
 
   	function initRepeatable(clonemaster) {
-  	    const row_container = document.querySelector(".vmap-wrap-rows");
-  	    const newmarker_btn = document.querySelector(".wpol-new-marker");
+  		const row_container = document.querySelector(".vmap-wrap-rows");
+  		const newmarker_btn = document.querySelector(".wpol-new-marker");
 
-  	    if (!clonemaster || !row_container || !newmarker_btn) return false;
+  		if (!clonemaster || !row_container || !newmarker_btn) return false;
 
-  	    newmarker_btn.addEventListener("click", function() {
-  	        const allRows = row_container.querySelectorAll('.vmap-marker-row');
-  	        let maxKey = -1;
-  	        allRows.forEach(r => {
-  	            const key = parseInt(r.dataset.markerKey, 10);
-  	            if (key > maxKey) maxKey = key;
-  	        });
-  	        const newKey = maxKey + 1;
-  	        const clone = clonemaster.cloneNode(true);
-  	        clone.dataset.markerKey = newKey;
-  	        clone.id = `vmap-row-${newKey}`;
-  	        clone.querySelector(".vmap-badge-text").innerText = newKey + 1;
+  		newmarker_btn.addEventListener("click", function() {
+  			// const allRows = row_container.querySelectorAll('.vmap-marker-row');
+  			// let maxKey = -1;
+  			// allRows.forEach(r => {
+  			//     const key = parseInt(r.dataset.markerKey, 10);
+  			//     if (key > maxKey) maxKey = key;
+  			// });
+  			// const newKey = maxKey + 1;
+  			// const clone = clonemaster.cloneNode(true);
+  			// clone.dataset.markerKey = newKey;
+  			// clone.id = `vmap-row-${newKey}`;
+  			// clone.querySelector(".vmap-badge-text").innerText = newKey + 1;
 
-  	        const inputdata = clone.querySelector(".vmap-modal-set-data");
-  	        inputdata.name = `venomaps_data[${newKey}]`;
-  	        
-  	        // CORREZIONE: Inizializza con un JSON valido ma vuoto
-  	        let newMarkerData = JSON.parse(venomapsAdminVars.default_settings);
-  	        newMarkerData.lat = '';
-  	        newMarkerData.lon = '';
-  	        newMarkerData.title = '';
-  	        newMarkerData.key = newKey + 1;
-  	        inputdata.value = JSON.stringify(newMarkerData);
-  	        
-  	        clone.querySelectorAll("input[type='text']").forEach(input => {
-  	            input.value = "";
-  	        });
+  			// const inputdata = clone.querySelector(".vmap-modal-set-data");
+  			// inputdata.name = `venomaps_data[${newKey}]`;
+  			
+  			// // CORREZIONE: Inizializza con un JSON valido ma vuoto
+  			// let newMarkerData = JSON.parse(venomapsAdminVars.default_settings);
+  			// newMarkerData.lat = '';
+  			// newMarkerData.lon = '';
+  			// newMarkerData.title = '';
+  			// newMarkerData.key = newKey + 1;
+  			// inputdata.value = JSON.stringify(newMarkerData);
+  			
+  			// clone.querySelectorAll("input[type='text']").forEach(input => {
+  			//     input.value = "";
+  			// });
 
-  	        row_container.append(clone);
-  	        initRow(clone);
-  	        updateAllRouteSelects();
-  	        syncPreviewMarkers();
-  	    });
+  			// row_container.append(clone);
+  			// initRow(clone);
+  			// updateAllRouteSelects();
+  			// syncPreviewMarkers();
+
+  	const clone = clonemaster.cloneNode(true);
+  	
+  	// Pulisce i campi del clone
+  	clone.querySelector(".vmap-modal-set-data").value = venomapsAdminVars.default_settings;
+  	clone.querySelectorAll("input[type='text']").forEach(input => input.value = "");
+
+  	row_container.append(clone);
+  	initRow(clone); // Inizializza i listener sulla nuova riga
+  	reIndexMarkers(); // Sistema gli indici per includere la nuova riga
+
+  		});
   	}
 
 
@@ -49162,56 +49275,56 @@
   			});
   		});
 
-          // --- NUOVA LOGICA: INIZIALIZZAZIONE MARKER GLOBALI ---
-          const settingsWrapper = document.querySelector("#vmap-global-settings-wrapper");
-          if (settingsWrapper) {
-              // Prepariamo rowdata con i valori attuali dei settings
-              rowdata = {
-                  color: settingsWrapper.querySelector('.vmap-modal-get-color').value,
-                  size: settingsWrapper.querySelector('.vmap-modal-get-size').value,
-                  icon: settingsWrapper.querySelector('.vmap-modal-get-icon').value
-              };
+  		// --- NUOVA LOGICA: INIZIALIZZAZIONE MARKER GLOBALI ---
+  		const settingsWrapper = document.querySelector("#vmap-global-settings-wrapper");
+  		if (settingsWrapper) {
+  			// Prepariamo rowdata con i valori attuali dei settings
+  			rowdata = {
+  				color: settingsWrapper.querySelector('.vmap-modal-get-color').value,
+  				size: settingsWrapper.querySelector('.vmap-modal-get-size').value,
+  				icon: settingsWrapper.querySelector('.vmap-modal-get-icon').value
+  			};
 
-              // Inizializziamo l'uploader (riutilizza la tua funzione iconUploader)
-              // Passiamo settingsWrapper come se fosse il modal_component
-              iconUploader(settingsWrapper);
+  			// Inizializziamo l'uploader (riutilizza la tua funzione iconUploader)
+  			// Passiamo settingsWrapper come se fosse il modal_component
+  			iconUploader(settingsWrapper);
 
-              // Se c'è un'icona salvata, carichiamola subito nell'anteprima
-  	        // Carica l'anteprima iniziale
-  	        loadIconImage(settingsWrapper, rowdata.icon);
+  			// Se c'è un'icona salvata, carichiamola subito nell'anteprima
+  			// Carica l'anteprima iniziale
+  			loadIconImage(settingsWrapper, rowdata.icon);
 
-  	        // Listener per aggiornare l'anteprima (Size e Color)
-  	        const sizeInput = settingsWrapper.querySelector('.vmap-modal-get-size');
-  	        const colorInput = settingsWrapper.querySelector('.vmap-modal-get-color');
+  			// Listener per aggiornare l'anteprima (Size e Color)
+  			const sizeInput = settingsWrapper.querySelector('.vmap-modal-get-size');
+  			const colorInput = settingsWrapper.querySelector('.vmap-modal-get-color');
 
-  	        if (sizeInput) {
-  	            sizeInput.addEventListener('input', () => {
-  	                rowdata.size = sizeInput.value;
-  	                updateIconStyle(settingsWrapper);
-  	            });
-  	        }
-  	        if (colorInput) {
-  	            colorInput.addEventListener('input', () => {
-  	                rowdata.color = colorInput.value;
-  	                // Aggiorna anche il testo accanto se presente
-  	                const colorText = settingsWrapper.querySelector('.vmap-modal-set-color');
-  	                if (colorText) colorText.value = colorInput.value;
-  	                updateIconStyle(settingsWrapper);
-  	            });
-  	        }
+  			if (sizeInput) {
+  				sizeInput.addEventListener('input', () => {
+  					rowdata.size = sizeInput.value;
+  					updateIconStyle(settingsWrapper);
+  				});
+  			}
+  			if (colorInput) {
+  				colorInput.addEventListener('input', () => {
+  					rowdata.color = colorInput.value;
+  					// Aggiorna anche il testo accanto se presente
+  					const colorText = settingsWrapper.querySelector('.vmap-modal-set-color');
+  					if (colorText) colorText.value = colorInput.value;
+  					updateIconStyle(settingsWrapper);
+  				});
+  			}
 
-              // Sovrascriviamo leggermente il comportamento di updateRowData 
-              // perché nei settings non abbiamo un textarea JSON da aggiornare ad ogni click,
-              // ma degli input standard che si aggiornano da soli.
-              // Tuttavia, dobbiamo assicurarci che updateIconStyle funzioni:
-              settingsWrapper.querySelectorAll('input').forEach(input => {
-                  input.addEventListener('input', () => {
-                      rowdata.color = settingsWrapper.querySelector('.vmap-modal-get-color').value;
-                      rowdata.size = settingsWrapper.querySelector('.vmap-modal-get-size').value;
-                      updateIconStyle(settingsWrapper);
-                  });
-              });
-          }
+  			// Sovrascriviamo leggermente il comportamento di updateRowData 
+  			// perché nei settings non abbiamo un textarea JSON da aggiornare ad ogni click,
+  			// ma degli input standard che si aggiornano da soli.
+  			// Tuttavia, dobbiamo assicurarci che updateIconStyle funzioni:
+  			settingsWrapper.querySelectorAll('input').forEach(input => {
+  				input.addEventListener('input', () => {
+  					rowdata.color = settingsWrapper.querySelector('.vmap-modal-get-color').value;
+  					rowdata.size = settingsWrapper.querySelector('.vmap-modal-get-size').value;
+  					updateIconStyle(settingsWrapper);
+  				});
+  			});
+  		}
 
   	}
 
@@ -49312,7 +49425,7 @@
   		});
   	}
 
-  	function omDisableEnterKey(evt) {
+  	function onDisableEnterKey(evt) {
   		var elem = evt.target;
   		if (evt.keyCode === 13 && (elem.type =='text' || elem.type =='url' || elem.type =='number')) {
   			evt.preventDefault();

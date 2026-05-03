@@ -725,7 +725,7 @@ textarea.vmap-form-control {
 	cursor: pointer;
 }
 
-@media only screen and (min-width: 851px) {
+/*@media only screen and (min-width: 851px) {
 	.post-type-venomaps #side-sortables{
 		height: 100%;
 	  position: absolute;
@@ -735,6 +735,7 @@ textarea.vmap-form-control {
 	  top: 0;
 	}
 }
+*/
 
 .vmap-marker-row, 
 .vmap-route-row{
