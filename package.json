@@ -13,7 +13,7 @@
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "cssnano": "^7.1.2",
-    "postcss": "^8.5.1",
+    "postcss": "^8.5.14",
     "postcss-import": "^16.1.1",
     "rollup": "^4.30.1",
     "rollup-plugin-postcss": "^4.0.2",
