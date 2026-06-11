@@ -49,7 +49,7 @@ Based on OpenLayers and OpenStreetMap (OSM) data, VenoMaps ensures quick setup a
 
 If you find VenoMaps useful, you might also like my other tools for WordPress:
 
-* 💎 **[QRcdr](https://qrcdr.pro/):** From static QR codes to a full White-Label SaaS. Launch your own platform, sell subscriptions, and keep 100% of the revenue.
+* 💎 **[QRcdr](https://qrcdr.pro/):** From static codes to a full **Dynamic QR SaaS**. Sell plans, track scans and monetize.
 * 🖼️ **[VenoBox](https://veno.es/venobox/):** A fast, responsive, and flexible lightbox for images, videos, and galleries. Zero jQuery dependency.
 
 **Discover all my solutions at [veno.es](https://veno.es/shop/).**
