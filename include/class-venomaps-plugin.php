@@ -351,22 +351,14 @@ class Venomaps_Plugin {
 			'venomaps',               // Schermata di modifica e aggiunta del CPT "venomaps".
 		);
 
-		// Controlla se la schermata corrente è tra quelle consentite.
-		if ( ! in_array( $screen->id, $allowed_screens, true ) ) {
-			return;
+		if ( in_array( $screen->id, $allowed_screens, true ) ) {
+			$url = 'https://wordpress.org/support/plugin/venomaps/reviews/?rate=5#new-post'; // Inserisci lo slug corretto del plugin.
+			$text = sprintf(
+				// Translators: plugin rating page.
+				__( 'If you like <strong>VenoMaps</strong> please leave us a <a href="%s" target="_blank">★★★★★</a> rating. A huge thanks in advance!', 'venobox' ),
+				$url
+			);
 		}
-
-		// Mostra la notifica solo agli utenti che possono gestire le opzioni.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		$url = 'https://wordpress.org/support/plugin/venomaps/reviews/?rate=5#new-post'; // Inserisci lo slug corretto del plugin.
-		$text = sprintf(
-			// Translators: plugin rating page.
-			__( 'If you like <strong>VenoMaps</strong> please leave us a <a href="%s" target="_blank">★★★★★</a> rating. A huge thanks in advance!', 'venobox' ),
-			$url
-		);
 		return $text;
 	}
 
