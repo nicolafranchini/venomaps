@@ -16,7 +16,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Donate link: https://www.paypal.com/donate/?hosted_button_id=BXVJVBJ2BZUQL
 
-Create beautiful, searchable maps with custom markers and routes. The simple, private alternative to Google Maps.
+Create custom searchable maps with custom markers and routes. The simple, private alternative to Google Maps.
 
 == Description ==
 
