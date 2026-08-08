@@ -35,13 +35,14 @@
             zoom: { type: 'string', default: '12' },
             zoom_scroll: { type: 'boolean', default: false }, // Booleano è più corretto qui
             zoom_markers: { type: 'boolean', default: false },
-            search: { type: 'boolean', default: false } // Booleano è più corretto qui
+            search: { type: 'boolean', default: false }, // Booleano è più corretto qui
+            disable_clusters: { type: 'boolean', default: false }
         },
 
         edit: function( props ) {
             const blockProps = useBlockProps(); // Applica le props al wrapper
             const { attributes, setAttributes } = props;
-            const { map_id, height, height_um, cluster_color, cluster_bg, zoom, zoom_scroll, zoom_markers, search } = attributes;
+            const { map_id, height, height_um, cluster_color, cluster_bg, zoom, zoom_scroll, zoom_markers, search, disable_clusters } = attributes;
 
             return [
                 el(
@@ -104,6 +105,11 @@
                             checked: search,
                             onChange: (value) => setAttributes({search: value}),
                         }),
+                        el( ToggleControl, {
+                            label: venomapsBlockVars.i18n.disable_clusters || 'Disable clusters',
+                            checked: disable_clusters,
+                            onChange: (value) => setAttributes({disable_clusters: value}),
+                        }),
                         el( 'p', {}, venomapsBlockVars.i18n.clusters_background || 'Clusters background' ),
                         el( ColorPalette, {
                             value: cluster_bg,
@@ -123,10 +129,34 @@
             const scroll_val = attributes.zoom_scroll ? 1 : 0;
             const search_val = attributes.search ? 1 : 0;
             const zoom_markers_val = attributes.zoom_markers ? 1 : 0;
+            const disable_clusters_val = attributes.disable_clusters ? 1 : 0;
             
-            return '[venomap id="' + attributes.map_id + '" height="' + attributes.height + attributes.height_um + '" cluster_bg="' + attributes.cluster_bg + '" cluster_color="' + attributes.cluster_color + '" zoom="' + attributes.zoom + '" zoom_markers="' + zoom_markers_val + '" scroll="' + scroll_val + '" search="' + search_val + '"]';
+            return '[venomap id="' + attributes.map_id + '" height="' + attributes.height + attributes.height_um + '" cluster_bg="' + attributes.cluster_bg + '" cluster_color="' + attributes.cluster_color + '" zoom="' + attributes.zoom + '" zoom_markers="' + zoom_markers_val + '" scroll="' + scroll_val + '" search="' + search_val + '" disable_clusters="' + disable_clusters_val + '"]';
         },
         deprecated: [
+            {
+                // Questa è la definizione della VECCHIA versione del blocco (senza disable_clusters).
+                attributes: {
+                    map_id: { type: 'string', default: '' },
+                    height: { type: 'string', default: '500' },
+                    height_um: { type: 'string', default: 'px' },
+                    cluster_color: { type: 'string', default: '#ffffff' },
+                    cluster_bg: { type: 'string', default: '#009CD7' },
+                    zoom: { type: 'string', default: '12' },
+                    zoom_scroll: { type: 'boolean', default: false },
+                    zoom_markers: { type: 'boolean', default: false },
+                    search: { type: 'boolean', default: false }
+                },
+                
+                save: function (props) {
+                    const { attributes } = props;
+                    const scroll_val = attributes.zoom_scroll ? 1 : 0;
+                    const search_val = attributes.search ? 1 : 0;
+                    const zoom_markers_val = attributes.zoom_markers ? 1 : 0;
+                    
+                    return '[venomap id="' + attributes.map_id + '" height="' + attributes.height + attributes.height_um + '" cluster_bg="' + attributes.cluster_bg + '" cluster_color="' + attributes.cluster_color + '" zoom="' + attributes.zoom + '" zoom_markers="' + zoom_markers_val + '" scroll="' + scroll_val + '" search="' + search_val + '"]';
+                },
+            },
             {
                 // Questa è la definizione della VECCHIA versione del blocco.
                 attributes: {

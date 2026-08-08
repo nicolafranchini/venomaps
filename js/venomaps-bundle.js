@@ -49018,7 +49018,7 @@ var venomaps = (function () {
        */
       initVenoMaps(mapblock) {
           const infomap = JSON.parse(mapblock.dataset.infomap);
-          const { mapid, lat: maplat, lon: maplon, zoom, cluster_color, cluster_bg, destination, routes, zoom_markers } = infomap;
+          const { mapid, lat: maplat, lon: maplon, zoom, cluster_color, cluster_bg, destination, routes, zoom_markers, disable_clusters } = infomap;
           const styleUrl = decodeURIComponent(infomap.style_url);
           const routeColors = ['#009CD7', '#FF6347', '#32CD32', '#FFD700', '#DA70D6', '#1E90FF'];
 
@@ -49034,43 +49034,49 @@ var venomaps = (function () {
           // --- LAYER ---
           const savedRoutesLayer = new VectorLayer({ source: savedRoutesSource, zIndex: 5 });
           const geolocationRouteLayer = new VectorLayer({ source: geolocationRouteSource, zIndex: 6 });
-          const clusterLayer = new VectorLayer({
-              source: clusterSource,
-              zIndex: 10,
-              style: (feature) => {
-                  const clusterMembers = feature.get('features').filter(f => f.get('is_matching_search') !== false);
-                  const size = clusterMembers.length;
-                  if (size === 0) return null;
+          const markerLayer = disable_clusters
+              ? new VectorLayer({
+                  source: markersSource,
+                  zIndex: 10,
+                  style: (feature) => feature.get('stile') || null
+              })
+              : new VectorLayer({
+                  source: clusterSource,
+                  zIndex: 10,
+                  style: (feature) => {
+                      const clusterMembers = feature.get('features').filter(f => f.get('is_matching_search') !== false);
+                      const size = clusterMembers.length;
+                      if (size === 0) return null;
 
-                  if (size > 1) {
-                      const cluster_bg_array = asArray(cluster_bg).slice();
-                      cluster_bg_array[3] = 0.3; // Trasparenza per l'anello esterno
-                      const radius = Math.min(parseInt(Math.sqrt(size) + 16), 25);
-                      return [
-                          new Style({ 
-                              image: new CircleStyle({ 
-                                  radius: (7 + radius), 
-                                  fill: new Fill({ color: cluster_bg_array }) 
-                              }) 
-                          }),
-                          new Style({
-                              image: new CircleStyle({ 
-                                  radius: radius, 
-                                  stroke: new Stroke({ color: cluster_color, width: 2 }), 
-                                  fill: new Fill({ color: cluster_bg }) 
+                      if (size > 1) {
+                          const cluster_bg_array = asArray(cluster_bg).slice();
+                          cluster_bg_array[3] = 0.3; // Trasparenza per l'anello esterno
+                          const radius = Math.min(parseInt(Math.sqrt(size) + 16), 25);
+                          return [
+                              new Style({ 
+                                  image: new CircleStyle({ 
+                                      radius: (7 + radius), 
+                                      fill: new Fill({ color: cluster_bg_array }) 
+                                  }) 
                               }),
-                              text: new Text({ 
-                                  text: size.toString(), 
-                                  fill: new Fill({ color: cluster_color }), 
-                                  font: "bold 12px sans-serif" 
+                              new Style({
+                                  image: new CircleStyle({ 
+                                      radius: radius, 
+                                      stroke: new Stroke({ color: cluster_color, width: 2 }), 
+                                      fill: new Fill({ color: cluster_bg }) 
+                                  }),
+                                  text: new Text({ 
+                                      text: size.toString(), 
+                                      fill: new Fill({ color: cluster_color }), 
+                                      font: "bold 12px sans-serif" 
+                                  })
                               })
-                          })
-                      ];
-                  } else {
-                      return clusterMembers[0].get('stile');
+                          ];
+                      } else {
+                          return clusterMembers[0].get('stile');
+                      }
                   }
-              }
-          });
+              });
 
           // --- STILI PERCORSI ---
           const primaryRouteStyle = new Style({ stroke: new Stroke({ color: '#009CD7', width: 7, lineCap: 'round' }) });
@@ -49211,7 +49217,7 @@ var venomaps = (function () {
                   feature.set('is_matching_search', isVisible);
               });
 
-              clusterLayer.getSource().refresh();
+              markerLayer.getSource().refresh();
 
               if (searchTerm.length > 2 && featuresToShow.length > 0) {
                   const tempSource = new VectorSource({ features: featuresToShow });
@@ -49281,7 +49287,7 @@ var venomaps = (function () {
                   new TileLayer({ source: new OSM(sourcesettings) }),
                   savedRoutesLayer,
                   geolocationRouteLayer,
-                  clusterLayer
+                  markerLayer
               ],
               controls: defaults$1({ attributionOptions: { collapsible: true } }).extend([new FullScreen()]),
               interactions: defaults({ mouseWheelZoom: Boolean(infomap.zoom_scroll) })
@@ -49307,9 +49313,9 @@ var venomaps = (function () {
 
               let hasInteracted = false;
 
-              clusterLayer.getFeatures(event.pixel).then((clickedFeatures) => {
+              markerLayer.getFeatures(event.pixel).then((clickedFeatures) => {
                   if (clickedFeatures.length > 0) {
-                      const clusterMembers = clickedFeatures[0].get('features');
+                      const clusterMembers = clickedFeatures[0].get('features') || [clickedFeatures[0]];
                       const view = map.getView();
 
                       if (clusterMembers.length > 1) {
@@ -49352,7 +49358,7 @@ var venomaps = (function () {
           });
           
           map.on('pointermove', (e) => {
-              const hit = map.hasFeatureAtPixel(e.pixel, { layerFilter: l => l === clusterLayer });
+              const hit = map.hasFeatureAtPixel(e.pixel, { layerFilter: l => l === markerLayer });
               map.getTargetElement().style.cursor = hit ? 'pointer' : '';
           });
 

@@ -664,6 +664,7 @@ class Venomaps_Plugin {
 				'auto_fit_map'       => __( 'Auto-fit Map', 'venomaps' ),
 				'initial_zoom'      => __( 'Initial zoom', 'venomaps' ),
 				'search'            => __( 'Search markers', 'venomaps' ),
+				'disable_clusters'  => __( 'Disable clusters', 'venomaps' ),
 			),
 		);
 
@@ -745,6 +746,7 @@ class Venomaps_Plugin {
 				'scroll' => 0,
 				'search' => 0,
 				'zoom_markers' => 0,
+				'disable_clusters' => 0,
 				// 'tags' => '',
 			),
 			$atts
@@ -766,6 +768,7 @@ class Venomaps_Plugin {
 		$zoom_scroll = rest_sanitize_boolean( $args['scroll'] );
 		$search = rest_sanitize_boolean( $args['search'] );
 		$zoom_markers = rest_sanitize_boolean( $args['zoom_markers'] );
+		$disable_clusters = rest_sanitize_boolean( $args['disable_clusters'] );
 
 		$html_map_id = $map_id . '_' . self::$mapscounter;
 
@@ -801,6 +804,7 @@ class Venomaps_Plugin {
 			'zoom' => $zoom,
 			'zoom_scroll' => $zoom_scroll,
 			'zoom_markers' => $zoom_markers,
+			'disable_clusters' => $disable_clusters,
 			'stylekey' => $style_key,
 			'cluster_color' => $cluster_color,
 			'cluster_bg' => $cluster_bg,

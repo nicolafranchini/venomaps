@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP OpenMaps\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-26 17:13+0000\n"
-"PO-Revision-Date: 2026-01-20 11:59+0000\n"
+"PO-Revision-Date: 2026-08-07 09:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es_ES\n"
@@ -12,67 +12,84 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.8.1; wp-6.9; php-8.2.0"
+"X-Loco-Version: 2.8.8; wp-7.0.3; php-7.4.33"
 
-#: include/class-venomaps-edit.php:188
+#: include/class-venomaps-edit.php:209
 msgid "A route has been selected and saved."
-msgstr "Una ruta que ha sido seleccionado y guardado."
+msgstr "Se ha seleccionado y guardado una ruta."
+
+#: include/class-venomaps-edit.php:186
+msgid "Add at least two markers and update the post to create routes."
+msgstr ""
+"Añade al menos dos marcadores y actualiza la publicación para crear rutas."
 
 #. "Settings Page" is the link to plugins settings page.
-#: include/class-venomaps-edit.php:278
+#: include/class-venomaps-edit.php:299
 #, php-format
 msgid "Add more Map Styles inside %1$sSettings Page%2$s."
-msgstr "Agrega más estilos de mapa en %1$sAjustes > OpenMaps%2$s."
+msgstr "Añade más estilos de mapa en %1$sPágina de configuración%2$s."
 
-#: include/class-venomaps-plugin.php:824 include/class-venomaps-plugin.php:825
+#: include/class-venomaps-plugin.php:930 include/class-venomaps-plugin.php:931
 msgid "Add new"
 msgstr "Añadir nuevo"
 
-#: include/class-venomaps-edit.php:192
+#: include/class-venomaps-edit.php:213
 msgid "Add Route"
 msgstr "Añadir Ruta"
 
-#: include/class-venomaps-plugin.php:828
+#: include/class-venomaps-plugin.php:934
 msgid "All maps"
 msgstr "Todos los mapas"
 
-#: include/class-venomaps-edit.php:98
+#: include/class-venomaps-edit.php:487
+msgid "Also semicolon separator allowed"
+msgstr "También se permite el separador punto y coma."
+
+#: include/class-venomaps-plugin.php:664
+msgid "Auto-fit Map"
+msgstr "Auto-fit Map"
+
+#: include/class-venomaps-edit.php:116
 msgid "Batch import"
-msgstr "Lote de importación"
+msgstr "Importación por lotes"
 
-#: include/class-venomaps-edit.php:281
+#: include/class-venomaps-edit.php:302
 msgid "Center"
-msgstr "Centro de"
+msgstr "Centro"
 
-#: include/class-venomaps-plugin.php:570
+#: include/class-venomaps-options.php:185
+msgid "Change Icon"
+msgstr "Cambiar icono"
+
+#: include/class-venomaps-plugin.php:661
 msgid "Clusters background"
-msgstr "Los clústeres de fondo"
+msgstr "Color de fondo de clusters"
 
-#: include/class-venomaps-plugin.php:571
+#: include/class-venomaps-plugin.php:662
 msgid "Clusters color"
-msgstr "Racimos de color"
+msgstr "Color de clusters"
 
-#: include/class-venomaps-edit.php:371
+#: include/class-venomaps-edit.php:420
 msgid "Color"
 msgstr "Color"
 
-#: include/class-venomaps-edit.php:463
+#: include/class-venomaps-edit.php:508
 msgid "Comma"
 msgstr "Coma"
 
-#: include/class-venomaps-edit.php:136
+#: include/class-venomaps-edit.php:157
 msgid "Coordinates"
 msgstr "Coordenadas"
 
-#: include/class-venomaps-plugin.php:395
+#: include/class-venomaps-plugin.php:466
 msgid "Copy"
 msgstr "Copia"
 
-#: include/class-venomaps-plugin.php:446
+#: include/class-venomaps-plugin.php:517
 msgid "Copy created"
 msgstr "Copia creada"
 
-#: include/class-venomaps-edit.php:247
+#: include/class-venomaps-edit.php:268
 msgid ""
 "Copy the shortcode and paste it inside your Posts or Pages, or search "
 "VenoMaps among Blocks to set more options"
@@ -80,49 +97,53 @@ msgstr ""
 "Copia el código corto y pegarlo dentro de tus Posts o Páginas, o la búsqueda "
 "de VenoMaps entre los Bloques para establecer más opciones"
 
-#: include/class-venomaps-options.php:270
+#: include/class-venomaps-options.php:391
 msgid "Custom Maps"
 msgstr "Mapas personalizados"
 
-#: include/class-venomaps-options.php:160
+#: include/class-venomaps-options.php:158
+msgid "Default Color"
+msgstr "Color predeterminado"
+
+#: include/class-venomaps-options.php:253
 #| msgid "Default Maps"
 msgid "Default Map"
 msgstr "Mapa predeterminado"
 
-#: include/class-venomaps-edit.php:425
+#: include/class-venomaps-edit.php:460
 msgid "Default Open"
-msgstr "Por Defecto Abrir"
+msgstr "Abierto por defecto"
 
-#: include/class-venomaps-edit.php:123
+#: include/class-venomaps-options.php:122
+msgid "Default Style"
+msgstr "Estilo predeterminado"
+
+#: include/class-venomaps-plugin.php:667
+msgid "Disable clusters"
+msgstr "Deshabilitar clusters"
+
+#: include/class-venomaps-edit.php:144
 msgid "Drag the marker to adjust the position and get the coordinates"
 msgstr ""
 "Arrastre el marcador para ajustar la posición y obtener las coordenadas"
 
-#: include/class-venomaps-plugin.php:826
+#: include/class-venomaps-plugin.php:932
 msgid "Edit map"
 msgstr "Editar mapa"
 
-#. %s is the plugin name
-#: include/class-venomaps-plugin.php:955
-#, php-format
-msgid ""
-"Enjoying %s? Please consider leaving a 5-star review ⭐⭐⭐⭐⭐. It helps us grow "
-"and support the plugin!"
-msgstr ""
-
-#: include/class-venomaps-plugin.php:475
+#: include/class-venomaps-plugin.php:558
 msgid "Error, invalid file"
 msgstr "Error, archivo no válido"
 
-#: include/class-venomaps-plugin.php:457
+#: include/class-venomaps-plugin.php:528
 msgid "Error: please reload the page"
 msgstr "Error: por favor, vuelva a cargar la página"
 
-#: include/class-venomaps-edit.php:107
+#: include/class-venomaps-edit.php:128
 msgid "Geolocation"
 msgstr "Geolocalización"
 
-#: include/class-venomaps-plugin.php:782
+#: include/class-venomaps-plugin.php:887
 msgid "Get Directions"
 msgstr "Obtener Indicaciones"
 
@@ -134,73 +155,81 @@ msgstr "https://veno.es"
 msgid "https://veno.es/venomaps"
 msgstr "https://veno.es/venomaps"
 
-#: include/class-venomaps-plugin.php:968
-msgid "I Already Rated It"
-msgstr "Yo Ya Clasificado"
+#: include/class-venomaps-edit.php:495
+msgid "Import CSV"
+msgstr "Importar CSV"
 
-#: include/class-venomaps-edit.php:454
+#: include/class-venomaps-edit.php:499
 msgid "Import data"
 msgstr "Importación de datos"
 
-#: include/class-venomaps-edit.php:417
+#: include/class-venomaps-edit.php:452
 msgid "Info Box"
 msgstr "Panel de información"
 
-#: include/class-venomaps-plugin.php:573
+#: include/class-venomaps-plugin.php:665
 msgid "Initial zoom"
 msgstr "Zoom inicial"
 
-#: include/class-venomaps-edit.php:136 include/class-venomaps-edit.php:281
-#: include/class-venomaps-edit.php:336
+#: include/class-venomaps-edit.php:483
+msgid ""
+"It is possible to batch import markers using a .csv file, the csv file "
+"should start with this line"
+msgstr ""
+"Es posible importar marcadores por lotes usando un archivo .csv; el archivo "
+"csv debe comenzar con esta línea."
+
+#: include/class-venomaps-edit.php:157 include/class-venomaps-edit.php:302
+#: include/class-venomaps-edit.php:373
 msgid "Latitude"
 msgstr "Latitud"
 
-#: include/class-venomaps-edit.php:136 include/class-venomaps-edit.php:281
-#: include/class-venomaps-edit.php:339
+#: include/class-venomaps-edit.php:157 include/class-venomaps-edit.php:302
+#: include/class-venomaps-edit.php:376
 msgid "Longitude"
 msgstr "Longitud"
 
-#: include/class-venomaps-plugin.php:568
+#: include/class-venomaps-plugin.php:659
 msgid "Map Height"
 msgstr "Altura del mapa"
 
-#: include/class-venomaps-edit.php:71
+#: include/class-venomaps-edit.php:87
 msgid "Map Options"
 msgstr "Opciones mapa"
 
-#: include/class-venomaps-edit.php:243
+#: include/class-venomaps-edit.php:264
 msgid "Map Shortcode"
 msgstr "Shortcode Mapa"
 
-#: include/class-venomaps-options.php:168
+#: include/class-venomaps-options.php:128
+msgid "Maps"
+msgstr "Mapas"
+
+#: include/class-venomaps-options.php:261
 msgid "Maptiler Maps"
 msgstr "Maptiler Mapas"
 
-#: include/class-venomaps-edit.php:80
+#: include/class-venomaps-options.php:118 include/class-venomaps-edit.php:96
 msgid "Markers"
 msgstr "Marcadores"
 
-#: include/class-venomaps-plugin.php:473
-msgid "Markers successfully imported. Reload the page"
-msgstr "Marcadores importado correctamente. Recargar la página"
+#: include/class-venomaps-plugin.php:553
+msgid "Markers successfully imported"
+msgstr "Marcadores importados con éxito"
 
-#: include/class-venomaps-plugin.php:965
-msgid "Maybe Later"
-msgstr "Tal Vez Más Tarde"
-
-#: include/class-venomaps-plugin.php:572
+#: include/class-venomaps-plugin.php:663
 msgid "Mouse wheel zoom"
-msgstr "La rueda del ratón zoom"
+msgstr "Mouse wheel zoom"
 
-#: include/class-venomaps-plugin.php:827
+#: include/class-venomaps-plugin.php:933
 msgid "New map"
 msgstr "Nuevo mapa"
 
-#: include/class-venomaps-edit.php:436
+#: include/class-venomaps-edit.php:471
 msgid "New marker"
 msgstr "Nuevo marcador"
 
-#: include/class-venomaps-options.php:311
+#: include/class-venomaps-options.php:432
 msgid "New style"
 msgstr "Nuevo estilo"
 
@@ -208,116 +237,117 @@ msgstr "Nuevo estilo"
 msgid "Nicola Franchini"
 msgstr "Nicola Franchini"
 
-#: include/class-venomaps-plugin.php:831
+#: include/class-venomaps-plugin.php:937
 msgid "No map found."
 msgstr "No se encontraron mapas."
 
-#: include/class-venomaps-plugin.php:660
+#: include/class-venomaps-plugin.php:758
 msgid "No map selected"
 msgstr "Ningún mapa seleccionado"
 
-#: include/class-venomaps-plugin.php:832
+#: include/class-venomaps-plugin.php:938
 msgid "No Maps found in trash."
 msgstr "No se encontraron mapas en la papelera."
 
-#: include/class-venomaps-options.php:100
-msgid "Options"
-msgstr "Opciones"
-
-#: include/class-venomaps-options.php:273
+#: include/class-venomaps-options.php:394
 msgid "Paste here your custom raster tile url."
-msgstr "Pega aquí tu costumbre de trama url del icono."
+msgstr "Pega aquí la URL de tu raster tile personalizado."
 
-#: include/class-venomaps-options.php:204
+#. %s: Maptiler API keys URL.
+#: include/class-venomaps-options.php:302
 #, php-format
 msgid ""
 "Place here your <a target=\"_blank\" href=\"%s\">Maptiler</a> api key to "
 "enable these maps"
 msgstr ""
+"Introduce aquí tu clave API de <a target=\"_blank\" href=\"%s\">Maptiler</a> "
+"para habilitar estos mapas."
 
-#: include/class-venomaps-options.php:222
+#. %s: Stadiamaps API keys URL.
+#: include/class-venomaps-options.php:330
 #, php-format
 msgid ""
 "Place here your <a target=\"_blank\" href=\"%s\">Stadiamaps</a> api key to "
 "enable these maps"
 msgstr ""
+"Introduce aquí tu clave API de <a target=\"_blank\" href=\"%s\">"
+"Stadiamaps</a> para habilitar estos mapas."
 
-#: include/class-venomaps-options.php:268
+#. %s: Thunderforest API keys URL.
+#: include/class-venomaps-options.php:385
 #, php-format
 msgid ""
 "Place here your <a target=\"_blank\" href=\"%s\">Thunderforest</a> api key "
 "to enable these maps"
 msgstr ""
+"Introduce aquí tu clave API de <a target=\"_blank\" href=\"%s\">"
+"Thunderforest</a> para habilitar estos mapas."
 
-#: include/class-venomaps-plugin.php:822
+#: include/class-venomaps-plugin.php:928
 msgctxt "post type general name"
 msgid "VenoMaps"
 msgstr "VenoMaps"
 
-#: include/class-venomaps-plugin.php:823
+#: include/class-venomaps-plugin.php:929
 msgctxt "post type singular name"
 msgid "Map"
 msgstr "Mapa"
 
-#: include/class-venomaps-edit.php:184 include/class-venomaps-edit.php:206
+#: include/class-venomaps-edit.php:205 include/class-venomaps-edit.php:227
 msgid "Preview"
 msgstr "Vista previa"
 
-#: include/class-venomaps-edit.php:170 include/class-venomaps-edit.php:197
+#: include/class-venomaps-edit.php:191 include/class-venomaps-edit.php:218
 msgid "Route"
 msgstr "Ruta"
 
-#: include/class-venomaps-edit.php:89
+#: include/class-venomaps-edit.php:105
 msgid "Routes"
 msgstr "Rutas"
 
-#: include/class-venomaps-plugin.php:776
+#: include/class-venomaps-plugin.php:881
 msgid "Search"
 msgstr "Buscar"
 
-#: include/class-venomaps-edit.php:128
+#: include/class-venomaps-edit.php:149
 msgid "Search address"
 msgstr "La dirección de la búsqueda"
 
-#: include/class-venomaps-plugin.php:830
+#: include/class-venomaps-plugin.php:936
 msgid "Search maps"
 msgstr "Buscar mapas"
 
-#: include/class-venomaps-plugin.php:574
+#: include/class-venomaps-plugin.php:666
 msgid "Search markers"
 msgstr "Búsqueda de marcadores"
 
-#: include/class-venomaps-plugin.php:567
+#: include/class-venomaps-plugin.php:658
 msgid "Select a map to display"
 msgstr "Seleccionar un mapa para mostrar"
 
-#: include/class-venomaps-edit.php:458
+#: include/class-venomaps-edit.php:503
 msgid "Select the CSV delimiter"
 msgstr "Seleccione el delimitador de CSV"
 
-#: include/class-venomaps-edit.php:467
+#: include/class-venomaps-edit.php:512
 msgid "Semicolon"
 msgstr "Punto y coma"
 
-#: include/class-venomaps-plugin.php:812
+#: include/class-venomaps-plugin.php:918
 msgid "Settings"
 msgstr "Ajustes"
 
-#: include/class-venomaps-edit.php:381
+#: include/class-venomaps-options.php:151 include/class-venomaps-edit.php:413
 msgid "Size"
 msgstr "Dimensiones"
 
-#: include/class-venomaps-options.php:206
+#: include/class-venomaps-options.php:309
 msgid "Stadia Maps"
 msgstr "Los Estadios De Mapas"
 
-#: include/class-venomaps-options.php:101 include/class-venomaps-edit.php:252
+#: include/class-venomaps-options.php:129 include/class-venomaps-edit.php:273
 msgid "Style"
 msgstr "Estilo"
-
-#: include/class-venomaps-plugin.php:962
-msgid "Sure, I’d love to!"
-msgstr "Claro, me encantaría!"
 
 #. Description of the plugin
 msgid ""
@@ -325,50 +355,49 @@ msgid ""
 "and markers using OpenStreetMap and OpenLayers, requiring no API keys for "
 "default styles."
 msgstr ""
-"El ayuno, respetuosos de la intimidad de los Mapas de Google alternativa. "
-"Crear Geo Mapas y marcadores de uso de OpenStreetMap y OpenLayers, sin "
-"necesidad de claves de API para los estilos predeterminados."
+"La alternativa a Google Maps rápida y respetuosa de la privacidad. Crea "
+"mapas geográficos y marcadores personalizados con OpenStreetMap y OpenLayers,"
+" sin necesidad de claves API para los estilos predeterminados."
 
-#: include/class-venomaps-options.php:224
+#: include/class-venomaps-options.php:336
 msgid "Thunderforest Maps"
-msgstr "Thunderforest Mapas"
+msgstr "Mapas Thunderforest"
 
-#: include/class-venomaps-options.php:291
-#: include/class-venomaps-options.php:301 include/class-venomaps-edit.php:179
-#: include/class-venomaps-edit.php:200 include/class-venomaps-edit.php:332
+#: include/class-venomaps-options.php:412
+#: include/class-venomaps-options.php:422 include/class-venomaps-edit.php:200
+#: include/class-venomaps-edit.php:221 include/class-venomaps-edit.php:369
 msgid "Title"
 msgstr "Título"
 
-#: include/class-venomaps-plugin.php:569
+#: include/class-venomaps-plugin.php:660
 msgid "units"
 msgstr "unidad"
 
-#: include/class-venomaps-edit.php:450
-msgid "Upload CSV"
-msgstr "CSV"
-
 #. Name of the plugin
-#: include/class-venomaps-options.php:72 include/class-venomaps-options.php:73
-#: include/class-venomaps-plugin.php:833
+#: include/class-venomaps-options.php:87 include/class-venomaps-options.php:88
+#: include/class-venomaps-plugin.php:939
 msgid "VenoMaps"
 msgstr "VenoMaps"
 
-#: include/class-venomaps-options.php:83
+#: include/class-venomaps-options.php:98
 msgid "VenoMaps Settings"
 msgstr "Ajustes VenoMaps"
 
-#: include/class-venomaps-plugin.php:829
+#: include/class-venomaps-edit.php:118
+msgid "View documentation"
+msgstr "Ver documentación"
+
+#: include/class-venomaps-plugin.php:935
 msgid "View map"
 msgstr "Ver el mapa"
 
-#: include/class-venomaps-edit.php:471
+#: include/class-venomaps-edit.php:516
+#| msgid ""
+#| "Warning: importing the CSV any previous marker of this map will be "
+#| "overwritten"
 msgid ""
-"Warning: importing the CSV any previous marker of this map will be "
+"Warning: selecting a new .CSV file, any previous marker of this map will be "
 "overwritten"
 msgstr ""
-"Advertencia: importar el CSV cualquier marcador anterior de este mapa se "
-"sobrescribirán"
-
-#: include/class-venomaps-edit.php:165
-msgid "You need at least two markers to create a route."
-msgstr "Usted necesita por lo menos dos marcadores para crear una ruta."
+"Advertencia: al seleccionar un nuevo archivo .CSV, cualquier marcador "
+"anterior de este mapa será sobrescrito."

@@ -356,38 +356,31 @@
 .wrap-venomaps, .wrap-venomaps *{
   box-sizing: border-box;
 }
-
 .venomap {
   height: 500px;
   width: 100%;
 }
-
 .wpol-hide{
   visibility: hidden;
   opacity: 0;
 }
-
 /*
  * Marker
  */
-
 .wpol-infomarker{
   display: block;
   margin: 0;
   cursor: pointer;
 }
-
 .wpol-infomarker img{
   width: auto;
   display: block;
   margin: 0;
   padding: 0;
 }
-
 /*
  * Infopanel
- */
-
+ */ 
 .wpol-infopanel{
   position: relative;
   width: auto;
@@ -399,7 +392,6 @@
   width: auto;
   height: auto;*/
 }
-
 .wpol-infopanel.infobox-closed{
 /*  pointer-events: none;
   opacity: 0;
@@ -408,7 +400,6 @@
   height: 0;*/
   display: none;
 }
-
 .wpol-infopanel-close{
   display: block;
   position: absolute;
@@ -420,21 +411,17 @@
   cursor: pointer;
   color: #6c6c6c;
 }
-
 .wpol-infopanel-close img, .wpol-infopanel-close svg{
   display: block;
   width: 100%;
   height: auto;
 }
-
 .wpol-infopanel-overlay{
   z-index: 4;
 }
-
 .wpol-infopanel-active{
   z-index: 5;
 }
-
 .wpol-infopanel .wpol-infolabel{
   padding: 14px;
   padding-right: 16px;
@@ -450,16 +437,13 @@
   max-height: 200px;
   overflow-y: auto;
 }
-
 .wpol-infopanel .wpol-infolabel *{
   margin: 0;
   line-height: 1.2;
 }
-
 .wpol-infopanel .wpol-infolabel p{
   margin-bottom: 4px;
 }
-
 .wpol-arrow{
   position: absolute;
   display: block;
@@ -474,7 +458,6 @@
   border-width: 11px;
   border-bottom-width: 0;
 }
-
 .wpol-arrow:after {
   position: absolute;
   display: block;
@@ -490,24 +473,19 @@
   border-width: 10px;
   border-bottom-width: 0;
 }
-
 /*
  * OL controls
  */
-
 .ol-attribution *{
   font-size: 9px;
 }
-
 .ol-attribution-collapse,
 .ol-attribution-expand{
   line-height: 2.5;
 }
-
 .ol-control{
   padding: 0;
 }
-
 .ol-control.ol-zoom,
 .ol-control.ol-zoom:hover{
   background:none;
@@ -519,14 +497,12 @@
   line-height: 1 !important;
   border: none !important;
 }
-
 /*
 .ol-control button,
 .ol-control button:focus, .ol-control button:hover{
   background-color: rgba(125, 125, 125, 0.7);
   color: #fff;
 }*/
-
 .ol-control button:focus, .ol-control button:hover{
   opacity: .8;
 }
@@ -557,7 +533,6 @@ input[type="text"].venomaps-form-control{
   width: 100%;
   display: flex;
 }
-
 .vmap-flex{
   display: flex;
 }
@@ -565,7 +540,6 @@ input[type="text"].venomaps-form-control{
 .vmap-flex-grow{
   flex-grow: 1 !important;
 }
-
 .vmap-input-group-text{
   padding: .375rem 1rem;
   font-size: 1rem;
