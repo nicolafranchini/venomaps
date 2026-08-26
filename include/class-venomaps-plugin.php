@@ -715,7 +715,7 @@ class Venomaps_Plugin {
 		if ( isset( $styles[ $style_group ]['attribution'] ) ) {
 			$attribution .= '&copy;';
 			foreach ( $styles[ $style_group ]['attribution'] as $attrib ) {
-				$attribution .= ' <a href="' . $attrib['link'] . ' target="_blank">' . $attrib['title'] . '</a> |';
+				$attribution .= ' <a href="' . esc_url( $attrib['link'] ) . '" target="_blank" rel="noopener">' . esc_html( $attrib['title'] ) . '</a> |';
 			}
 		}
 		return array(
