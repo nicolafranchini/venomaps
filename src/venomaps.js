@@ -219,15 +219,22 @@ const VenoMaps = {
         };
 
         const updateSearch = (term) => {
-            const searchTerm = term.toLowerCase();
+
+            // const searchTerm = term.toLowerCase();
+            const normalizedSearchTerm = term.toLowerCase().replace(/\s+/g, ' ').trim();
+
             let featuresToShow = [];
 
             markersSource.forEachFeature((feature) => {
                 const panel = feature.get('panel');
                 let isVisible = true;
-                if (searchTerm.length > 2) {
-                    const infoboxText = panel?.querySelector('.wpol-infolabel')?.innerText.toLowerCase() || '';
-                    isVisible = infoboxText.includes(searchTerm);
+                if (normalizedSearchTerm.length > 2) {
+                    const rawText = panel?.querySelector('.wpol-infolabel')?.innerText || '';
+                    
+                    // 2. Normalizziamo anche il testo dell'infobox nello stesso modo
+                    const infoboxText = rawText.toLowerCase().replace(/\s+/g, ' ').trim();
+
+                    isVisible = infoboxText.includes(normalizedSearchTerm);
                     if (isVisible) featuresToShow.push(feature);
                 }
                 feature.set('is_matching_search', isVisible);
@@ -235,7 +242,7 @@ const VenoMaps = {
 
             markerLayer.getSource().refresh();
 
-            if (searchTerm.length > 2 && featuresToShow.length > 0) {
+            if (normalizedSearchTerm.length > 2 && featuresToShow.length > 0) {
                 const tempSource = new VectorSource({ features: featuresToShow });
                 map.getView().fit(tempSource.getExtent(), { duration: 500, padding: [100, 100, 100, 100], maxZoom: 15 });
             }
