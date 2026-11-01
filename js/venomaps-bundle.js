@@ -1,6 +1,28 @@
 var venomaps = (function () {
   'use strict';
 
+  const PATCH_FLAG = '__venomapsCanvasPatched';
+
+  function patchFirefoxCanvas() {
+    if (typeof window === 'undefined' || window[PATCH_FLAG]) return;
+
+    const isFirefox = /firefox/i.test(navigator.userAgent) ||
+      (typeof CSS !== 'undefined' && CSS.supports('-moz-appearance', 'none'));
+
+    if (!isFirefox || typeof HTMLCanvasElement === 'undefined') return;
+
+    const getContext = HTMLCanvasElement.prototype.getContext;
+
+    HTMLCanvasElement.prototype.getContext = function (type, attributes) {
+      if (type === '2d') {
+        attributes = Object.assign({}, attributes, { willReadFrequently: true });
+      }
+      return getContext.call(this, type, attributes);
+    };
+
+    window[PATCH_FLAG] = true;
+  }
+
   /**
    * @module ol/CollectionEventType
    */
@@ -49012,6 +49034,8 @@ var venomaps = (function () {
     };
   }
 
+  patchFirefoxCanvas();
+
   const VenoMaps = {
       /**
        * Inizializza una singola istanza della mappa
@@ -49279,6 +49303,7 @@ var venomaps = (function () {
           const attribution = mapblock.querySelector(".venomaps-get-attribution")?.innerHTML || '';
           let sourcesettings = { url: styleUrl, attributions: attribution };
           if (styleUrl === 'default') sourcesettings = {};
+          sourcesettings.referrerPolicy = document.referrerPolicy || 'strict-origin-when-cross-origin';
 
           map = new Map({
               target: 'venomaps_' + mapid,

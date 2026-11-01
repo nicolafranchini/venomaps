@@ -1,4 +1,5 @@
 import './venomaps-admin.css';
+import { patchFirefoxCanvas } from './canvas-compat.js';
 import { Feature, Map, View, Overlay } from 'ol';
 import { Point } from 'ol/geom';
 import { Style, Circle, Fill, Stroke, Text } from 'ol/style';
@@ -10,6 +11,8 @@ import { defaults as interactionDefaults } from 'ol/interaction/defaults';
 import { DragPan } from 'ol/interaction';
 import { GeoJSON } from 'ol/format';
 import { unByKey } from 'ol/Observable';
+
+patchFirefoxCanvas();
 
 /*!
  * venomaps admin scripts
@@ -24,7 +27,8 @@ const VenomapsAdmin = function(){
 	let routeClickListenerKey;
 	let markerTemplate;
 
-	let sourcesettings = {};
+	const referrerPolicy = document.referrerPolicy || 'strict-origin-when-cross-origin';
+	let sourcesettings = { referrerPolicy };
 	let rowdata = {};
 	const defaultIcon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
 
@@ -1064,7 +1068,7 @@ console.log(res)
 		var map = new Map({
 			target: 'wpol-admin-map',
 			view: view,
-			layers: [ new Tile({ source: new OSM() }) ],
+			layers: [ new Tile({ source: new OSM({ referrerPolicy }) }) ],
 			interactions: interactionDefaults({mouseWheelZoom:false})
 		});
 		var marker_el = document.getElementById(geomarker_id);

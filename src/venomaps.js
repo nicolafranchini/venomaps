@@ -1,4 +1,5 @@
 import './venomaps.css'; // Rollup userà questo per generare il file CSS
+import { patchFirefoxCanvas } from './canvas-compat.js';
 import { Map, View, Overlay, Feature } from 'ol';
 import { fromLonLat } from 'ol/proj';
 import { Point, LineString } from 'ol/geom';
@@ -11,6 +12,8 @@ import { FullScreen } from 'ol/control';
 import { defaults as interactionDefaults } from 'ol/interaction/defaults';
 import { GeoJSON } from 'ol/format';
 import { createEmpty, extend } from 'ol/extent';
+
+patchFirefoxCanvas();
 
 const VenoMaps = {
     /**
@@ -292,6 +295,7 @@ const VenoMaps = {
         const attribution = mapblock.querySelector(".venomaps-get-attribution")?.innerHTML || '';
         let sourcesettings = { url: styleUrl, attributions: attribution };
         if (styleUrl === 'default') sourcesettings = {};
+        sourcesettings.referrerPolicy = document.referrerPolicy || 'strict-origin-when-cross-origin';
 
         map = new Map({
             target: 'venomaps_' + mapid,

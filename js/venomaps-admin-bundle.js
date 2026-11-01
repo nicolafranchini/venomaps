@@ -1,6 +1,28 @@
 (function () {
   'use strict';
 
+  const PATCH_FLAG = '__venomapsCanvasPatched';
+
+  function patchFirefoxCanvas() {
+    if (typeof window === 'undefined' || window[PATCH_FLAG]) return;
+
+    const isFirefox = /firefox/i.test(navigator.userAgent) ||
+      (typeof CSS !== 'undefined' && CSS.supports('-moz-appearance', 'none'));
+
+    if (!isFirefox || typeof HTMLCanvasElement === 'undefined') return;
+
+    const getContext = HTMLCanvasElement.prototype.getContext;
+
+    HTMLCanvasElement.prototype.getContext = function (type, attributes) {
+      if (type === '2d') {
+        attributes = Object.assign({}, attributes, { willReadFrequently: true });
+      }
+      return getContext.call(this, type, attributes);
+    };
+
+    window[PATCH_FLAG] = true;
+  }
+
   /**
    * @module ol/CollectionEventType
    */
@@ -48313,6 +48335,8 @@
     };
   }
 
+  patchFirefoxCanvas();
+
   /*!
    * venomaps admin scripts
    */
@@ -48325,7 +48349,8 @@
   	let routeClickListenerKey;
   	let markerTemplate;
 
-  	let sourcesettings = {};
+  	const referrerPolicy = document.referrerPolicy || 'strict-origin-when-cross-origin';
+  	let sourcesettings = { referrerPolicy };
   	let rowdata = {};
   	const defaultIcon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
 
@@ -49362,7 +49387,7 @@
   		var map = new Map({
   			target: 'wpol-admin-map',
   			view: view,
-  			layers: [ new TileLayer({ source: new OSM() }) ],
+  			layers: [ new TileLayer({ source: new OSM({ referrerPolicy }) }) ],
   			interactions: defaults({mouseWheelZoom:false})
   		});
   		var marker_el = document.getElementById(geomarker_id);
