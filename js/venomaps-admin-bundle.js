@@ -50740,6 +50740,10 @@
   	const referrerPolicy = document.referrerPolicy || 'strict-origin-when-cross-origin';
   	let sourcesettings = { referrerPolicy };
   	let rowdata = {};
+  	const colorPaletteInstances = new WeakMap();
+  	const INFOBOX_EDITOR_ID = 'vmap-marker-infobox';
+  	let infoboxEditorInitialized = false;
+  	let infoboxSyncLocked = false;
   	const defaultIcon = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" fill="currentColor" viewBox="0 0 30 30" xml:space="preserve"><path d="M15,1C8.7,1,3.5,6.1,3.5,12.3S8.3,22.8,15,28.7c6.7-5.9,11.5-10.2,11.5-16.4S21.3,1,15,1z M15,17.2 c-2.5,0-4.6-2.1-4.6-4.6c0-2.5,2.1-4.6,4.6-4.6s4.6,2.1,4.6,4.6C19.6,15.1,17.5,17.2,15,17.2z"/></svg>';
 
   	function init() {
@@ -50797,6 +50801,7 @@
   		const postForm = document.getElementById('post');
   		if (postForm) {
   			postForm.addEventListener('submit', function(event) {
+  				syncInfoboxToRow();
   				const routesAreValid = validateRoutesBeforeSave();
   				if (!routesAreValid) {
   					event.preventDefault(); // Blocca il salvataggio
@@ -51371,8 +51376,6 @@
   	    })
   	    .then(response => response.json())
   	    .then(res => {
-  console.log(res);
-
   	        if (spinner) spinner.classList.remove("is-active");
   	        
   	        if (responseMsg) {
@@ -51465,6 +51468,99 @@
   		}
   	}
 
+  	function getColorPaletteColors() {
+  		const palette = window.venomapsAdminVars && window.venomapsAdminVars.color_palette;
+  		return Array.isArray(palette) ? palette : [];
+  	}
+
+  	function normalizeHexColor(value, fallback) {
+  		let color = value == null ? '' : String(value).trim();
+  		if (!color) {
+  			return fallback == null ? '' : fallback;
+  		}
+  		if (color.charAt(0) !== '#') {
+  			color = '#' + color;
+  		}
+  		if (/^#[0-9a-fA-F]{3}$/.test(color)) {
+  			color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
+  		}
+  		if (/^#[0-9a-fA-F]{6}$/.test(color)) {
+  			return color.toLowerCase();
+  		}
+  		return fallback == null ? '' : fallback;
+  	}
+
+  	function mountNativeColorInput(container, value, onChange) {
+  		container.innerHTML = '';
+  		const input = document.createElement('input');
+  		input.type = 'color';
+  		input.className = 'vmap-input vmap-form-control-color';
+  		input.value = normalizeHexColor(value, '#000000');
+  		input.addEventListener('input', function() {
+  			onChange(input.value);
+  		});
+  		container.appendChild(input);
+  		return {
+  			setValue: function(next) {
+  				const color = normalizeHexColor(next, '');
+  				if (color) input.value = color;
+  			}
+  		};
+  	}
+
+  	function mountColorPalette(container, options) {
+  		if (!container) return null;
+  		const settings = options || {};
+  		const onChange = typeof settings.onChange === 'function' ? settings.onChange : function() {};
+  		const fallbackColor = normalizeHexColor(settings.value, '#000000');
+  		const wpApi = window.wp;
+  		const element = wpApi && wpApi.element;
+  		const components = wpApi && wpApi.components;
+
+  		if (!element || !components || !components.ColorPalette || typeof element.createRoot !== 'function' || typeof element.useState !== 'function') {
+  			const native = mountNativeColorInput(container, fallbackColor, onChange);
+  			colorPaletteInstances.set(container, native);
+  			return native;
+  		}
+
+  		let setValueRef = null;
+  		const colors = getColorPaletteColors();
+  		const ColorPaletteField = function() {
+  			const [value, setValue] = element.useState(fallbackColor);
+  			setValueRef = setValue;
+  			return element.createElement(components.ColorPalette, {
+  				colors: colors,
+  				value: value,
+  				onChange: function(next) {
+  					const color = normalizeHexColor(next, value);
+  					if (!color) return;
+  					setValue(color);
+  					onChange(color);
+  				},
+  				clearable: false,
+  				disableCustomColors: false
+  			});
+  		};
+
+  		const root = element.createRoot(container);
+  		root.render(element.createElement(ColorPaletteField));
+  		const instance = {
+  			setValue: function(next) {
+  				const color = normalizeHexColor(next, '');
+  				if (color && setValueRef) setValueRef(color);
+  			}
+  		};
+  		colorPaletteInstances.set(container, instance);
+  		return instance;
+  	}
+
+  	function setColorPaletteValue(container, value) {
+  		const instance = container ? colorPaletteInstances.get(container) : null;
+  		if (instance && typeof instance.setValue === 'function') {
+  			instance.setValue(value);
+  		}
+  	}
+
   	function iconUploader(modal_component){
   		if (!modal_component) return false;
   		const upmarker = modal_component.classList.contains('vmap-icon-uploader') 
@@ -51505,7 +51601,7 @@
   			});
   		});
   		const get_color = upmarker.querySelector( '.vmap-modal-get-color' );
-  		if (get_color) {
+  		if (get_color && get_color.type !== 'hidden') {
   			get_color.addEventListener("input", function(){
   				rowdata.color = get_color.value;
   				updateIconStyle(modal_component);
@@ -51516,6 +51612,77 @@
   			get_size.addEventListener("input", function(){
   				updateIconStyle(modal_component);
   			});
+  		}
+  	}
+
+  	function getInfoboxTextarea() {
+  		return document.getElementById(INFOBOX_EDITOR_ID);
+  	}
+
+  	function getInfoboxEditor() {
+  		return (window.tinymce && window.tinymce.get(INFOBOX_EDITOR_ID)) || null;
+  	}
+
+  	function getInfoboxContent() {
+  		const editor = getInfoboxEditor();
+  		if (editor && !editor.isHidden()) {
+  			return editor.getContent();
+  		}
+  		const textarea = getInfoboxTextarea();
+  		return textarea ? textarea.value : '';
+  	}
+
+  	function setInfoboxContent(content) {
+  		const html = content == null ? '' : String(content);
+  		const textarea = getInfoboxTextarea();
+  		if (textarea) {
+  			textarea.value = html;
+  		}
+  		const editor = getInfoboxEditor();
+  		if (editor) {
+  			infoboxSyncLocked = true;
+  			editor.setContent(html);
+  			if (editor.undoManager) editor.undoManager.clear();
+  			infoboxSyncLocked = false;
+  		}
+  	}
+
+  	function syncInfoboxToRow() {
+  		if (infoboxSyncLocked) return;
+  		const dialog = document.querySelector("#vmap-modal");
+  		if (!dialog) return;
+  		const modal_component = dialog.querySelector(".vmap-modal-content");
+  		if (!modal_component) return;
+  		const target = modal_component.dataset.rowTarget;
+  		if (!target) return;
+  		rowdata.infobox = getInfoboxContent();
+  		updateRowData(target);
+  	}
+
+  	function ensureInfoboxEditor() {
+  		if (infoboxEditorInitialized) return;
+  		const textarea = getInfoboxTextarea();
+  		const editorApi = window.wp && window.wp.editor;
+  		if (!textarea || !editorApi || typeof editorApi.initialize !== 'function' || !window.tinymce) {
+  			return;
+  		}
+
+  		infoboxEditorInitialized = true;
+  		try {
+  			editorApi.initialize(INFOBOX_EDITOR_ID, {
+  				tinymce: {
+  					height: 220,
+  					content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }',
+  					init_instance_callback: function(editor) {
+  						editor.on('input change undo redo', syncInfoboxToRow);
+  					}
+  				},
+  				quicktags: { buttons: 'strong,em,link' },
+  				mediaButtons: false
+  			});
+  		} catch (error) {
+  			infoboxEditorInitialized = false;
+  			console.error('Unable to initialize the infobox editor.', error);
   		}
   	}
 
@@ -51539,16 +51706,26 @@
   		const get_icon = modal_component.querySelector(".vmap-modal-get-icon");
   		const get_color = modal_component.querySelector(".vmap-modal-get-color");
   		const set_color = modal_component.querySelector(".vmap-modal-set-color");
+  		const get_color_palette = modal_component.querySelector(".vmap-color-palette");
   		const get_infobox = modal_component.querySelector(".vmap-modal-get-infobox");
   		const get_infobox_open = modal_component.querySelector(".vmap-modal-get-infobox-open");
   		const get_header = modal_component.querySelector(".vmap-modal-title");
   		const upmarker = modal_component.querySelector(".vmap-icon-uploader");
 
+  		const infoboxValue = rowdata.infobox == null ? '' : String(rowdata.infobox);
+
+  		const colorValue = normalizeHexColor(rowdata.color, get_color.value || '#000000');
+  		rowdata.color = colorValue;
   		get_size.value = rowdata.size;
   		get_icon.value = rowdata.icon;
-  		get_color.value = rowdata.color;
-  		set_color.value = rowdata.color;
-  		get_infobox.value = rowdata.infobox;
+  		get_color.value = colorValue;
+  		set_color.value = colorValue;
+  		setColorPaletteValue(get_color_palette, colorValue);
+  		if (!infoboxEditorInitialized) {
+  			if (get_infobox) get_infobox.value = infoboxValue;
+  			ensureInfoboxEditor();
+  		}
+  		setInfoboxContent(infoboxValue);
   		get_infobox_open.checked = rowdata.infobox_open == 1;
   		get_header.innerHTML = `<span class="vmap-badge">#${rowindex}</span> ${rowdata.title}`;
 
@@ -51580,39 +51757,51 @@
   		const modal_component = dialog.querySelector(".vmap-modal-content");
   		const dismiss_modal = dialog.querySelectorAll(".vmap-modal-dismiss");
   		dismiss_modal.forEach(modal_close => {
-  			modal_close.addEventListener("click", () => dialog.classList.remove("active"));
+  			modal_close.addEventListener("click", () => {
+  				syncInfoboxToRow();
+  				dialog.classList.remove("active");
+  			});
   		});
   		const get_size = modal_component.querySelector('.vmap-modal-get-size' );
   		const get_color = modal_component.querySelector('.vmap-modal-get-color' );
+  		const get_color_palette = modal_component.querySelector('.vmap-color-palette');
   		const get_infobox = modal_component.querySelector(".vmap-modal-get-infobox");
   		const get_infobox_open = modal_component.querySelector('.vmap-modal-get-infobox-open' );
   		const set_color = modal_component.querySelector('.vmap-modal-set-color' );
   		let get_target;
-  		get_color.addEventListener("change", function(){
-  			rowdata.color = get_color.value;
-  			set_color.value = get_color.value;
+
+  		const applyColor = function(value){
+  			const color = normalizeHexColor(value, get_color.value || rowdata.color || '#000000');
+  			if (!color) return;
+  			rowdata.color = color;
+  			get_color.value = color;
+  			set_color.value = color;
+  			setColorPaletteValue(get_color_palette, color);
   			updateIconStyle(modal_component);
   			get_target = modal_component.dataset.rowTarget || false;
   			if (get_target) updateRowData(get_target);
+  		};
+
+  		mountColorPalette(get_color_palette, {
+  			value: get_color.value || '#000000',
+  			onChange: applyColor
   		});
-  		set_color.addEventListener("change", function(){
-  			rowdata.color = set_color.value;
-  			get_color.value = set_color.value;
-  			updateIconStyle(modal_component);
-  			get_target = modal_component.dataset.rowTarget || false;
-  			if (get_target) updateRowData(get_target);
-  		});
+
+  		if (set_color) {
+  			set_color.addEventListener("change", function(){
+  				applyColor(set_color.value);
+  			});
+  		}
   		get_size.addEventListener("change", function(){
   			rowdata.size = get_size.value;
   			updateIconStyle(modal_component);
   			get_target = modal_component.dataset.rowTarget || false;
   			if (get_target) updateRowData(get_target);
   		});
-  		get_infobox.addEventListener("change", function(){
-  			rowdata.infobox = get_infobox.value;
-  			get_target = modal_component.dataset.rowTarget || false;
-  			if (get_target) updateRowData(get_target);
-  		});
+  		if (get_infobox) {
+  			get_infobox.addEventListener("input", syncInfoboxToRow);
+  			get_infobox.addEventListener("change", syncInfoboxToRow);
+  		}
   		get_infobox_open.addEventListener("change", function(){
   			rowdata.infobox_open = get_infobox_open.checked;
   			get_target = modal_component.dataset.rowTarget || false;
@@ -51628,47 +51817,15 @@
   		if (!clonemaster || !row_container || !newmarker_btn) return false;
 
   		newmarker_btn.addEventListener("click", function() {
-  			// const allRows = row_container.querySelectorAll('.vmap-marker-row');
-  			// let maxKey = -1;
-  			// allRows.forEach(r => {
-  			//     const key = parseInt(r.dataset.markerKey, 10);
-  			//     if (key > maxKey) maxKey = key;
-  			// });
-  			// const newKey = maxKey + 1;
-  			// const clone = clonemaster.cloneNode(true);
-  			// clone.dataset.markerKey = newKey;
-  			// clone.id = `vmap-row-${newKey}`;
-  			// clone.querySelector(".vmap-badge-text").innerText = newKey + 1;
-
-  			// const inputdata = clone.querySelector(".vmap-modal-set-data");
-  			// inputdata.name = `venomaps_data[${newKey}]`;
+  			const clone = clonemaster.cloneNode(true);
   			
-  			// // CORREZIONE: Inizializza con un JSON valido ma vuoto
-  			// let newMarkerData = JSON.parse(venomapsAdminVars.default_settings);
-  			// newMarkerData.lat = '';
-  			// newMarkerData.lon = '';
-  			// newMarkerData.title = '';
-  			// newMarkerData.key = newKey + 1;
-  			// inputdata.value = JSON.stringify(newMarkerData);
-  			
-  			// clone.querySelectorAll("input[type='text']").forEach(input => {
-  			//     input.value = "";
-  			// });
+  			// Pulisce i campi del clone
+  			clone.querySelector(".vmap-modal-set-data").value = venomapsAdminVars.default_settings;
+  			clone.querySelectorAll("input[type='text']").forEach(input => input.value = "");
 
-  			// row_container.append(clone);
-  			// initRow(clone);
-  			// updateAllRouteSelects();
-  			// syncPreviewMarkers();
-
-  	const clone = clonemaster.cloneNode(true);
-  	
-  	// Pulisce i campi del clone
-  	clone.querySelector(".vmap-modal-set-data").value = venomapsAdminVars.default_settings;
-  	clone.querySelectorAll("input[type='text']").forEach(input => input.value = "");
-
-  	row_container.append(clone);
-  	initRow(clone); // Inizializza i listener sulla nuova riga
-  	reIndexMarkers(); // Sistema gli indici per includere la nuova riga
+  			row_container.append(clone);
+  			initRow(clone); // Inizializza i listener sulla nuova riga
+  			reIndexMarkers(); // Sistema gli indici per includere la nuova riga
 
   		});
   	}
@@ -51677,23 +51834,27 @@
   	function initSettingsPage() {
   		const repeatablegroup = document.querySelector(".wpol-repeatable-group");
   		const callrepeatables = document.querySelectorAll(".wpol-call-repeat");
-  		if (!repeatablegroup || !callrepeatables.length) return;
-  		callrepeatables.forEach(callrepeatable => {
-  			callrepeatable.addEventListener("click", function(){
-  				const lastItem = repeatablegroup.querySelector(".wpol-repeatable-item:last-child");
-  				const lastitemnum = lastItem ? lastItem.dataset.number : -1;
-  				const newnum = parseFloat(lastitemnum) + 1;
-  				const newItemHtml = `<div class="wpol-repeatable-item wpol-form-group vmap-flex vmap-flex-collapse" data-number="${newnum}"><input type="text" class="all-options" name="venomaps_settings[style][${newnum}][name]" value="map style ${newnum}"> <div class="vmap-flex-grow-1"><input type="url" class="large-text" name="venomaps_settings[style][${newnum}][url]" value="" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=..."></div></div>`;
-  				repeatablegroup.insertAdjacentHTML('beforeend', newItemHtml);
+  		if (repeatablegroup && callrepeatables.length) {
+  			callrepeatables.forEach(callrepeatable => {
+  				callrepeatable.addEventListener("click", function(){
+  					const lastItem = repeatablegroup.querySelector(".wpol-repeatable-item:last-child");
+  					const lastitemnum = lastItem ? lastItem.dataset.number : -1;
+  					const newnum = parseFloat(lastitemnum) + 1;
+  					const newItemHtml = `<div class="wpol-repeatable-item wpol-form-group vmap-flex vmap-flex-collapse" data-number="${newnum}"><input type="text" class="all-options" name="venomaps_settings[style][${newnum}][name]" value="map style ${newnum}"> <div class="vmap-flex-grow-1"><input type="url" class="large-text" name="venomaps_settings[style][${newnum}][url]" value="" placeholder="https://provider.ext/{z}/{x}/{y}.png?api_key=..."></div></div>`;
+  					repeatablegroup.insertAdjacentHTML('beforeend', newItemHtml);
+  				});
   			});
-  		});
+  		}
 
   		// --- NUOVA LOGICA: INIZIALIZZAZIONE MARKER GLOBALI ---
   		const settingsWrapper = document.querySelector("#vmap-global-settings-wrapper");
   		if (settingsWrapper) {
   			// Prepariamo rowdata con i valori attuali dei settings
+  			const colorInput = settingsWrapper.querySelector('.vmap-modal-get-color');
+  			const colorText = settingsWrapper.querySelector('.vmap-modal-set-color');
+  			const colorPalette = settingsWrapper.querySelector('.vmap-color-palette');
   			rowdata = {
-  				color: settingsWrapper.querySelector('.vmap-modal-get-color').value,
+  				color: normalizeHexColor(colorInput ? colorInput.value : '', '#000000'),
   				size: settingsWrapper.querySelector('.vmap-modal-get-size').value,
   				icon: settingsWrapper.querySelector('.vmap-modal-get-icon').value
   			};
@@ -51708,7 +51869,21 @@
 
   			// Listener per aggiornare l'anteprima (Size e Color)
   			const sizeInput = settingsWrapper.querySelector('.vmap-modal-get-size');
-  			const colorInput = settingsWrapper.querySelector('.vmap-modal-get-color');
+
+  			const applySettingsColor = function(value) {
+  				const color = normalizeHexColor(value, rowdata.color || (colorInput ? colorInput.value : '#000000'));
+  				if (!color) return;
+  				rowdata.color = color;
+  				if (colorInput) colorInput.value = color;
+  				if (colorText) colorText.value = color;
+  				setColorPaletteValue(colorPalette, color);
+  				updateIconStyle(settingsWrapper);
+  			};
+
+  			mountColorPalette(colorPalette, {
+  				value: rowdata.color,
+  				onChange: applySettingsColor
+  			});
 
   			if (sizeInput) {
   				sizeInput.addEventListener('input', () => {
@@ -51716,13 +51891,9 @@
   					updateIconStyle(settingsWrapper);
   				});
   			}
-  			if (colorInput) {
-  				colorInput.addEventListener('input', () => {
-  					rowdata.color = colorInput.value;
-  					// Aggiorna anche il testo accanto se presente
-  					const colorText = settingsWrapper.querySelector('.vmap-modal-set-color');
-  					if (colorText) colorText.value = colorInput.value;
-  					updateIconStyle(settingsWrapper);
+  			if (colorText) {
+  				colorText.addEventListener('change', () => {
+  					applySettingsColor(colorText.value);
   				});
   			}
 

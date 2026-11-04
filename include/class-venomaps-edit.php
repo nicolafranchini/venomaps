@@ -47,9 +47,10 @@ class Venomaps_Edit {
 
 				wp_enqueue_media();
 				wp_enqueue_editor();
+				wp_enqueue_style( 'wp-components' );
 
-				wp_enqueue_style( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'css/venomaps-admin-bundle' . $min . '.css', array(), VENOMAPS_VERSION );
-				wp_register_script( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'js/venomaps-admin-bundle' . $min . '.js', array(), VENOMAPS_VERSION, true );
+				wp_enqueue_style( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'css/venomaps-admin-bundle' . $min . '.css', array( 'wp-components' ), VENOMAPS_VERSION );
+				wp_register_script( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'js/venomaps-admin-bundle' . $min . '.js', array( 'wp-components', 'wp-element' ), VENOMAPS_VERSION, true );
 
 				// --- RECUPERO SETTINGS GLOBALI ---
 				$global_settings = get_option( 'venomaps_settings', array() );
@@ -70,6 +71,7 @@ class Venomaps_Edit {
 					'ajax_url'         => admin_url( 'admin-ajax.php' ),
 					'nonce'            => wp_create_nonce( 'vmap-ajax-nonce' ),
 					'default_settings' => wp_json_encode( $merged_defaults ), // <--- Ora contiene i tuoi Style settings
+					'color_palette'    => $this->plugin->get_marker_color_palette(),
 				);
 
 				wp_localize_script( 'venomaps-admin', 'venomapsAdminVars', $venomaps_vars );
@@ -419,9 +421,10 @@ class Venomaps_Edit {
 							<div class="wpol-form-group">
 								<strong><?php esc_html_e( 'Color', 'venomaps' ); ?></strong>
 							</div>
+							<div class="vmap-color-palette" data-default-color="<?php echo esc_attr( $global_default_color ); ?>"></div>
+							<input type="hidden" value="<?php echo esc_attr( $global_default_color ); ?>" class="vmap-modal-get-color" data-default-color="<?php echo esc_attr( $global_default_color ); ?>" />
 							<div class="vmap-flex vmap-flex-collapse">
-								<input type="color" value="" class="vmap-modal-get-color vmap-input vmap-form-control-color" data-default-color="<?php echo esc_attr( $global_default_color ); ?>" />
-								<input type="text" value="" class="vmap-modal-set-color vmap-input" placeholder="<?php echo esc_attr( $global_default_color ); ?>" />
+								<input type="text" value="<?php echo esc_attr( $global_default_color ); ?>" class="vmap-modal-set-color vmap-input" placeholder="<?php echo esc_attr( $global_default_color ); ?>" />
 							</div>
 						</div>
 
@@ -452,7 +455,7 @@ class Venomaps_Edit {
 						<strong><?php esc_html_e( 'Info Box', 'venomaps' ); ?></strong>
 					</div>
 					<div class="wpol-form-group">
-						<textarea class="vmap-modal-get-infobox vmap-form-control"></textarea>
+						<textarea id="vmap-marker-infobox" class="vmap-modal-get-infobox vmap-form-control"></textarea>
 					</div>
 					<div class="wpol-form-group">
 						<label>

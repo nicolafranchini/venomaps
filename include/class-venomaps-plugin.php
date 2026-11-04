@@ -281,6 +281,49 @@ class Venomaps_Plugin {
 	}
 
 	/**
+	 * Getter for the editor color palette, using the theme palette when available.
+	 *
+	 * @return array
+	 */
+	public function get_marker_color_palette() {
+		$palette = array();
+
+		if ( function_exists( 'wp_get_global_settings' ) ) {
+			$palette_by_origin = wp_get_global_settings( array( 'color', 'palette' ) );
+
+			if ( is_array( $palette_by_origin ) ) {
+				foreach ( array( 'custom', 'theme', 'default' ) as $origin ) {
+					if ( ! empty( $palette_by_origin[ $origin ] ) && is_array( $palette_by_origin[ $origin ] ) ) {
+						$palette = $palette_by_origin[ $origin ];
+						break;
+					}
+				}
+			}
+		}
+
+		if ( empty( $palette ) ) {
+			$theme_palette = get_theme_support( 'editor-color-palette' );
+			if ( is_array( $theme_palette ) && ! empty( $theme_palette[0] ) && is_array( $theme_palette[0] ) ) {
+				$palette = $theme_palette[0];
+			}
+		}
+
+		$colors = array();
+		foreach ( $palette as $color ) {
+			if ( empty( $color['color'] ) ) {
+				continue;
+			}
+
+			$colors[] = array(
+				'name'  => ! empty( $color['name'] ) ? $color['name'] : $color['color'],
+				'color' => $color['color'],
+			);
+		}
+
+		return apply_filters( 'venomaps_marker_color_palette', $colors );
+	}
+
+	/**
 	 * Getter for default_settings.
 	 *
 	 * @return array
@@ -847,7 +890,11 @@ class Venomaps_Plugin {
 					$marker_icon = $svgicon_encoded;
 				}
 
-				$infobox = isset( $marker['infobox'] ) && strlen( $marker['infobox'] ) ? nl2br( $marker['infobox'] ) : '';
+				$infobox = isset( $marker['infobox'] ) && strlen( $marker['infobox'] ) ? $marker['infobox'] : '';
+
+				if ( '' !== $infobox && ! preg_match( '/<[a-z][\s\S]*>/i', $infobox ) ) {
+					$infobox = nl2br( $infobox );
+				}
 
 				$marker_data['icon'] = $marker_icon;
 				$marker_data['lat'] = $marker['lat'];

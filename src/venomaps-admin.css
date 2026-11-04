@@ -427,6 +427,22 @@ textarea.vmap-form-control {
   border:0 !important;
   border-radius: 0;
 }
+.vmap-color-palette {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+.vmap-color-palette .components-circular-option-picker {
+  margin-bottom: 0;
+}
+.vmap-color-palette .components-color-palette {
+  margin-bottom: 0;
+}
+.vmap-color-palette .components-color-palette__custom-color {
+  margin-bottom: 0;
+}
+#vmap-modal .components-popover {
+  z-index: 100000;
+}
 
 .vmap-response-message{
 	border-left: 4px solid #456D95;
@@ -463,4 +479,18 @@ textarea.vmap-form-control {
 .vmap-route-row .vmap-route-status.error-message {
     color: red;
     font-weight: bold;
+}
+
+.vmap-marker-box-right .wp-editor-wrap {
+	max-width: 100%;
+}
+
+.vmap-marker-box-right .mce-tinymce {
+	border: 0;
+	box-shadow: none;
+}
+
+.vmap-marker-box-right .wp-editor-area,
+#vmap-marker-infobox {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }

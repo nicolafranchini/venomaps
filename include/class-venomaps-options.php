@@ -64,15 +64,17 @@ class Venomaps_Options {
 		$min = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? '' : '.min';
 
 		wp_enqueue_media();
+		wp_enqueue_style( 'wp-components' );
 
-		wp_enqueue_style( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'css/venomaps-admin-bundle' . $min . '.css', array(), VENOMAPS_VERSION );
-		wp_register_script( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'js/venomaps-admin-bundle' . $min . '.js', array(), VENOMAPS_VERSION, true );
+		wp_enqueue_style( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'css/venomaps-admin-bundle' . $min . '.css', array( 'wp-components' ), VENOMAPS_VERSION );
+		wp_register_script( 'venomaps-admin', plugin_dir_url( __DIR__ ) . 'js/venomaps-admin-bundle' . $min . '.js', array( 'wp-components', 'wp-element' ), VENOMAPS_VERSION, true );
 
 		$global_settings = $this->options;
 
 		$venomaps_vars = array(
 			'ajax_url'         => admin_url( 'admin-ajax.php' ),
 			'nonce'            => wp_create_nonce( 'vmap-ajax-nonce' ),
+			'color_palette'    => Venomaps_Plugin::get_instance()->get_marker_color_palette(),
 		);
 
 		wp_localize_script( 'venomaps-admin', 'venomapsAdminVars', $venomaps_vars );
@@ -157,8 +159,9 @@ class Venomaps_Options {
 				<div class="wpol-form-group">
 					<strong><?php esc_html_e( 'Default Color', 'venomaps' ); ?></strong>
 				</div>
+				<div class="vmap-color-palette" data-default-color="<?php echo esc_attr( $color ); ?>"></div>
+				<input type="hidden" name="venomaps_settings[default_color]" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-get-color" />
 				<div class="vmap-flex vmap-flex-collapse">
-					<input type="color" name="venomaps_settings[default_color]" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-get-color vmap-input vmap-form-control-color" />
 					<input type="text" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-set-color vmap-inputr" readonly />
 				</div>
 			</div>
