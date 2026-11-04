@@ -50935,11 +50935,9 @@
   			let featuresExist = false;
 
   			allRouteRows.forEach((row, index) => {
-  				console.log(`--- Analizzando la riga di percorso #${index} ---`);
   				const geometryInput = row.querySelector('.vmap-route-geometry');
   				
   				if (geometryInput && geometryInput.value && geometryInput.value.trim() !== '') {
-  					console.log(`Riga #${index}: Trovata geometria salvata.`);
   					try {
   						const feature = format.readFeature(geometryInput.value);
   						if (feature.getGeometry().getCoordinates().length > 0) {
@@ -50953,7 +50951,6 @@
   							feature.setStyle(style);
   							routeSource.addFeature(feature);
   							featuresExist = true;
-  							console.log(`Riga #${index}: Feature del percorso aggiunta con successo.`);
   						}
   					} catch (e) {
   						console.error(`Riga #${index}: ERRORE nel parsare la geometria salvata.`, e);
@@ -50971,7 +50968,6 @@
   			} else {
   				console.warn("Nessuna feature valida da mostrare, lo zoom non viene eseguito.");
   			}
-  			console.groupEnd();
   		}, 500);
   	}
 
@@ -51632,8 +51628,16 @@
   		return textarea ? textarea.value : '';
   	}
 
-  	function setInfoboxContent(content) {
+  	function formatInfoboxForEditor(content) {
   		const html = content == null ? '' : String(content);
+  		if (!html || /<(?:br|\/?p)\b[^>]*>/.test(html)) {
+  			return html;
+  		}
+  		return html.replace(/\r\n|\n\r|\r|\n/g, '<br />');
+  	}
+
+  	function setInfoboxContent(content) {
+  		const html = formatInfoboxForEditor(content);
   		const textarea = getInfoboxTextarea();
   		if (textarea) {
   			textarea.value = html;

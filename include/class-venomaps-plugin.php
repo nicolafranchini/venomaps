@@ -894,7 +894,8 @@ class Venomaps_Plugin {
 
 				$infobox = isset( $marker['infobox'] ) && strlen( $marker['infobox'] ) ? $marker['infobox'] : '';
 
-				if ( '' !== $infobox && ! preg_match( '/<[a-z][\s\S]*>/i', $infobox ) ) {
+				// if ( '' !== $infobox && ! preg_match( '/<[a-z][\s\S]*>/i', $infobox ) ) {
+				if ( '' !== $infobox && ! preg_match( '/<(?:br|\/?p)\b[^>]*>/i', $infobox ) ) {
 					$infobox = nl2br( $infobox );
 				}
 
