@@ -102,6 +102,8 @@ Default maps data provided by: OpenStreetMap [ODbL](https://www.openstreetmap.or
 == Changelog ==
 
 = 2.2.2 =
+* Update: Collapse infoboxes inside clusters
+* Update: Higher z-index to latest infobox open
 * Fix: nl2br for rich text infoboxes 
 
 = 2.2.1 =

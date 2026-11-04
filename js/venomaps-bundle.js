@@ -51458,6 +51458,8 @@ var venomaps = (function () {
 
           let map; 
           let routeInfoOverlay = null;
+          let nextPanelZ = 10;
+          let clusterUpdateScheduled = false;
 
           // --- SOURCE ---
           const markersSource = new VectorSource();
@@ -51551,15 +51553,12 @@ var venomaps = (function () {
 
           const logDirections = (route, title = 'Indicazioni') => {
               if (!route || !route.legs) return;
-              console.clear();
-              const duration = Math.round(route.duration / 60);
-              const distance = (route.distance / 1000).toFixed(2);
-              console.log(`%c--- ${title} (Durata: ${duration} min, Distanza: ${distance} km) ---`, 'color: #009CD7; font-weight: bold; font-size: 14px;');
+              Math.round(route.duration / 60);
+              (route.distance / 1000).toFixed(2);
               route.legs[0].steps.forEach((step, index) => {
-                  const stepDistance = (step.distance / 1000).toFixed(2);
-                  const streetName = step.name ? `su ${step.name}` : '';
-                  const instructionText = buildInstruction(step.maneuver);
-                  console.log(`${index + 1}. ${instructionText} ${streetName} (per ${stepDistance} km)`);
+                  (step.distance / 1000).toFixed(2);
+                  step.name ? `su ${step.name}` : '';
+                  buildInstruction(step.maneuver);
               });
           };
 
@@ -51736,7 +51735,34 @@ var venomaps = (function () {
           });
 
           overlays.forEach(overlay => map.addOverlay(overlay));
-          
+
+          // Chiudi gli infopanel dei marker che vengono inglobati in un cluster (es. zoom out)
+          // Differito con setTimeout per non interferire con il ciclo di ricalcolo di OpenLayers
+          clusterSource.on('change', () => {
+              if (clusterUpdateScheduled) return;
+              clusterUpdateScheduled = true;
+              setTimeout(() => {
+                  clusterUpdateScheduled = false;
+
+                  const clusteredMembers = new Set();
+                  clusterSource.getFeatures().forEach((f) => {
+                      const members = f.get('features');
+                      // Solo i cluster con più di un membro nascondono i marker singoli
+                      if (members && members.length > 1) {
+                          members.forEach((m) => clusteredMembers.add(m));
+                      }
+                  });
+
+                  markersSource.forEachFeature((feature) => {
+                      const panel = feature.get('panel');
+                      if (panel && clusteredMembers.has(feature) && !panel.classList.contains('infobox-closed')) {
+                          panel.classList.add('infobox-closed');
+                          panel.classList.remove('was-open');
+                      }
+                  });
+              }, 0);
+          });
+
           const searchInput = mapblock.querySelector(".venomaps-search");
           if (searchInput) {
               searchInput.addEventListener("input", (e) => updateSearch(e.target.value));
@@ -51762,13 +51788,17 @@ var venomaps = (function () {
 
                       if (clusterMembers.length > 1) {
                           const extent = createEmpty();
-                          clusterMembers.forEach((f) => extend$1(extent, f.getGeometry().getExtent()));
+                          clusterMembers.forEach((f) => {
+                              extend$1(extent, f.getGeometry().getExtent());
+                          });
                           view.fit(extent, { duration: 500, padding: [50, 50, 50, 50] });
                           hasInteracted = true;
                       } else if (clusterMembers.length === 1) {
                           const paneltarget = clusterMembers[0].get('panel');
                           if (paneltarget) {
                               paneltarget.classList.remove('infobox-closed');
+                              const panelContainer = paneltarget.closest('.ol-overlay-container') || paneltarget.parentElement;
+                              panelContainer.style.zIndex = String(nextPanelZ++);
                               view.animate({ center: clusterMembers[0].getGeometry().getCoordinates(), duration: 500 });
                               hasInteracted = true;
                           }

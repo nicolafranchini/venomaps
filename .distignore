@@ -8,7 +8,8 @@ rollup.config.js
 .git/
 .gitignore
 .distignore
-
+.opencodeignore
+opencode.json
 *.map
 
 .DS_Store
