@@ -57,7 +57,7 @@ class Venomaps_Options {
 	 * @param string $hook page hook.
 	 */
 	public function load_scripts( $hook ) {
-		if ( 'settings_page_venomaps' !== $hook ) {
+		if ( 'venomaps_page_venomaps' !== $hook && 'edit-venomaps_page_venomaps' !== $hook && 'settings_page_venomaps' !== $hook ) {
 			return;
 		}
 
@@ -82,13 +82,13 @@ class Venomaps_Options {
 	}
 
 	/**
-	 * Add the options page under Setting Menu.
+	 * Add the options page under VenoMaps CPT Menu.
 	 */
 	public function add_page() {
 		// $page_title, $menu_title, $capability, $menu_slug, $callback_function
-		$page_title = __( 'VenoMaps', 'venomaps' );
-		$menu_title = __( 'VenoMaps', 'venomaps' );
-		add_options_page( $page_title, $menu_title, 'manage_options', 'venomaps', array( $this, 'display_page' ) );
+		$page_title = __( 'Settings', 'venomaps' );
+		$menu_title = __( 'Settings', 'venomaps' );
+		add_submenu_page( 'edit.php?post_type=venomaps', $page_title, $menu_title, 'manage_options', 'venomaps', array( $this, 'display_page' ) );
 	}
 
 	/**

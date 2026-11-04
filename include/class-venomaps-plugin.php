@@ -389,6 +389,8 @@ class Venomaps_Plugin {
 
 		// Definisci le pagine in cui visualizzare la notifica.
 		$allowed_screens = array(
+			'venomaps_page_venomaps',
+			'edit-venomaps_page_venomaps',
 			'settings_page_venomaps', // Pagina delle opzioni del plugin.
 			'edit-venomaps',          // Pagina di elenco dei CPT "venomaps".
 			'venomaps',               // Schermata di modifica e aggiunta del CPT "venomaps".
@@ -962,7 +964,7 @@ class Venomaps_Plugin {
 	 * @return additional $links in plugins page
 	 */
 	public function action_links( $links ) {
-		$links[] = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=venomaps' ) ) . '">' . __( 'Settings', 'venomaps' ) . '</a>';
+		$links[] = '<a href="' . esc_url( admin_url( 'edit.php?post_type=venomaps&page=venomaps' ) ) . '">' . __( 'Settings', 'venomaps' ) . '</a>';
 		return $links;
 	}
 

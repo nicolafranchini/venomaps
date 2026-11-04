@@ -298,7 +298,7 @@ class Venomaps_Edit {
 				</div>
 			</div>
 			<?php // translators: "Settings Page" is the link to plugins settings page. ?>
-			<p><?php printf( esc_html__( 'Add more Map Styles inside %1$sSettings Page%2$s.', 'venomaps' ), '<a target="_blank" href="' . esc_url( get_admin_url( null, 'options-general.php?page=venomaps' ) ) . '">', '</a>' ); // XSS ok. ?></p>
+			<p><?php printf( esc_html__( 'Add more Map Styles inside %1$sSettings Page%2$s.', 'venomaps' ), '<a target="_blank" href="' . esc_url( admin_url( 'edit.php?post_type=venomaps&page=venomaps' ) ) . '">', '</a>' ); // XSS ok. ?></p>
 			<hr>
 
 			<div><strong><?php esc_html_e( 'Center', 'venomaps' ); ?></strong> ( <?php esc_html_e( 'Latitude', 'venomaps' ); ?> / <?php esc_html_e( 'Longitude', 'venomaps' ); ?> )</div>
