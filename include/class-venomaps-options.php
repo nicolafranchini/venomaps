@@ -161,9 +161,9 @@ class Venomaps_Options {
 				</div>
 				<div class="vmap-color-palette" data-default-color="<?php echo esc_attr( $color ); ?>"></div>
 				<input type="hidden" name="venomaps_settings[default_color]" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-get-color" />
-				<div class="vmap-flex vmap-flex-collapse">
+<!-- 				<div class="vmap-flex vmap-flex-collapse">
 					<input type="text" value="<?php echo esc_attr( $color ); ?>" class="vmap-modal-set-color vmap-inputr" readonly />
-				</div>
+				</div> -->
 			</div>
 
 			<div class="wpol-form-group vmap-flex vmap-align-center" style="margin-top: 15px;">
@@ -171,21 +171,20 @@ class Venomaps_Options {
 					
 					<!-- DIV SVG: Contiene SEMPRE l'SVG, ma lo nascondiamo se c'è un'icona custom -->
 					<div class="vmap-icon-default venomaps_marker_upload_btn <?php echo esc_attr( $svg_visible_class ); ?>" 
-						 style="width:<?php echo esc_attr( $size ); ?>px; color: <?php echo esc_attr( $color ); ?>;">
+						 style="width:<?php echo esc_attr( $size ); ?>px; color: <?php echo esc_attr( $color ); ?>;" title="<?php esc_html_e( 'Change Icon', 'venomaps' ); ?>">
 						<?php // default loaded via js. ?>
 					</div>
 
 					<!-- DIV IMMAGINE: Contiene il tag IMG solo se l'URL è salvato -->
 					<div class="vmap-icon-image venomaps_marker_upload_btn <?php echo esc_attr( $img_visible_class ); ?>" 
-						 style="width:<?php echo esc_attr( $size ); ?>px;">
+						 style="width:<?php echo esc_attr( $size ); ?>px;" title="<?php esc_html_e( 'Change Icon', 'venomaps' ); ?>">
 						<?php if ( ! empty( $custom_icon_url ) ) : ?>
 							<img src="<?php echo esc_url( $custom_icon_url ); ?>" style="height: <?php echo esc_attr( $size ); ?>px; width: auto;">
 						<?php endif; ?>
 					</div>
 				</div>
 
-				<div style="margin-left: 15px;">
-				<div class="button venomaps_marker_upload_btn"><?php esc_html_e( 'Change Icon', 'venomaps' ); ?></div>
+				<div>
 				<div class="wpol-btn-link venomaps_marker_remove_btn <?php echo esc_attr( $remove_btn_class ); ?>" style="color:#a00; cursor:pointer;">
 					<span class="dashicons dashicons-trash"></span>
 				</div>

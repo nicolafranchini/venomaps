@@ -424,7 +424,7 @@ class Venomaps_Edit {
 							<div class="vmap-color-palette" data-default-color="<?php echo esc_attr( $global_default_color ); ?>"></div>
 							<input type="hidden" value="<?php echo esc_attr( $global_default_color ); ?>" class="vmap-modal-get-color" data-default-color="<?php echo esc_attr( $global_default_color ); ?>" />
 							<div class="vmap-flex vmap-flex-collapse">
-								<input type="text" value="<?php echo esc_attr( $global_default_color ); ?>" class="vmap-modal-set-color vmap-input" placeholder="<?php echo esc_attr( $global_default_color ); ?>" />
+								<input type="hidden" value="<?php echo esc_attr( $global_default_color ); ?>" class="vmap-modal-set-color vmap-input" placeholder="<?php echo esc_attr( $global_default_color ); ?>" />
 							</div>
 						</div>
 
@@ -439,9 +439,9 @@ class Venomaps_Edit {
 									<!-- Verrà riempito dal JS con il tag <img> -->
 								</div>
 							</div>
-							<div style="margin-left: 15px;">
-								<div class="wpol-btn-link venomaps_marker_upload_btn"><span class="dashicons dashicons-update"></span></div>
-								<div class="wpol-btn-link venomaps_marker_remove_btn vmap-invisible"><span class="dashicons dashicons-trash"></span></div>
+							<div>
+								<div class="venomaps_marker_upload_btn"><span class="dashicons dashicons-update"></span></div>
+								<div class="venomaps_marker_remove_btn vmap-invisible"><span class="dashicons dashicons-trash"></span></div>
 								<!-- Input nascosto per l'URL icona -->
 								<input type="hidden" class="vmap-modal-get-icon" value="">
 							</div>

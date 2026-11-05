@@ -32,19 +32,9 @@
   position: relative;
   width: auto;
   max-width: 320px;
-/*  opacity: 1;
-  transform: translateY(0);
-  transition: transform .2s, opacity .2s;
-  pointer-events: auto;
-  width: auto;
-  height: auto;*/
+  min-width: 200px;
 }
 .wpol-infopanel.infobox-closed{
-/*  pointer-events: none;
-  opacity: 0;
-  transform: translateY(-16px);
-  width: 0;
-  height: 0;*/
   display: none;
 }
 .wpol-infopanel-close{
@@ -89,7 +79,10 @@
   line-height: 1.2;
 }
 .wpol-infopanel .wpol-infolabel p{
-  margin-bottom: 4px;
+  margin-bottom: 0.5em;
+}
+.wpol-infopanel .wpol-infolabel ul{
+  padding: 0 1em;
 }
 .wpol-arrow{
   position: absolute;
