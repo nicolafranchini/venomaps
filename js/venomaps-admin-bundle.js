@@ -50756,6 +50756,7 @@
   		drawSavedRoutesOnLoad();
   		syncPreviewMarkers();
   		initFormValidation();
+  		initCsvExport();
   		document.onkeydown = onDisableEnterKey;
   	}
 
@@ -51426,6 +51427,113 @@
 
   		updateAllRouteSelects();
   		syncPreviewMarkers();
+  	}
+
+  	/**
+  	 * Escape un valore per un campo CSV (RFC 4180).
+  	 * Se force è true il campo viene sempre racchiuso tra virgolette (utile per i testi liberi).
+  	 * Riutilizzato sia per l'header che per ogni cella del marker.
+  	 */
+  	function escapeCsvField(value, force = false) {
+  		const str = String(value == null ? '' : value);
+  		if (force || /[",\n\r]/.test(str)) {
+  			return '"' + str.replace(/"/g, '""') + '"';
+  		}
+  		return str;
+  	}
+
+  	/**
+  	 * Legge i marker attualmente presenti nelle righe a schermo.
+  	 * Stesso pattern di lettura usato da syncPreviewMarkers / initRow.
+  	 * @returns {Array} array di oggetti marker {title,lat,lon,size,icon,color,infobox,infobox_open}
+  	 */
+  	function getAllMarkersData() {
+  		const rows = document.querySelectorAll('.vmap-wrap-rows .vmap-marker-row');
+  		const markers = [];
+  		rows.forEach(row => {
+  			const dataTextarea = row.querySelector('.vmap-modal-set-data');
+  			const rawData = dataTextarea ? dataTextarea.value : null;
+  			if (!rawData || rawData.trim() === '') {
+  				return;
+  			}
+  			let data;
+  			try {
+  				data = JSON.parse(rawData);
+  			} catch (e) {
+  				console.error('Export CSV: errore nel parsing JSON del marker.', e);
+  				return;
+  			}
+  			if (data && typeof data === 'object') {
+  			markers.push(data);
+  		}
+  		});
+  		return markers;
+  	}
+
+  	/**
+  	 * Esporta i marker correnti in un file CSV scaricabile.
+  	 * Le colonne rispettano lo schema già compreso da parse_csv (lato PHP),
+  	 * quindi il file è immediatamente re-importabile in altre mappe/CPT.
+  	 *
+  	 * @param {string|number} postId   ID del post/mappa corrente
+  	 * @param {string}        postTitle Titolo del post/CPT (usati per il nome file)
+  	 */
+  	function exportMarkersCsv(postId, postTitle = '') {
+  		const markers = getAllMarkersData();
+  		if (!markers.length) {
+  			alert('No markers to export.');
+  			return;
+  		}
+
+  		// Colonne nell'ordine documentato per l'import CSV.
+  		const columns = ['title', 'lat', 'lon', 'size', 'icon', 'color', 'infobox', 'infobox_open'];
+
+  		// I campi di testo libero vengono sempre racchiusi tra virgolette
+  		// così l'import (fgetcsv) non può spezzarli se contengono virgole/apici.
+  		const textFields = ['title', 'infobox', 'icon', 'color'];
+
+  		const lines = [columns.join(',')];
+  		markers.forEach(marker => {
+  			const row = columns.map((col) => {
+  				const val = marker[col] !== undefined ? marker[col] : '';
+  				return escapeCsvField(val, textFields.includes(col));
+  			}).join(',');
+  			lines.push(row);
+  		});
+
+  		// BOM UTF-8 per corretta apertura in Excel.
+  		const content = '\uFEFF' + lines.join('\n');
+  		const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  		const url = URL.createObjectURL(blob);
+
+  		// Nome file: titolo del CPT sanificato + ID post, fallback generico.
+  		const safeTitle = String(postTitle || '')
+  			.toLowerCase()
+  			.replace(/[^a-z0-9]+/g, '-')
+  			.replace(/^-+|-+$/g, '') || 'markers';
+  		const fileName = 'venomaps-' + safeTitle + '-' + postId + '.csv';
+
+  		const link = document.createElement('a');
+  		link.href = url;
+  		link.download = fileName;
+  		document.body.appendChild(link);
+  		link.click();
+  		document.body.removeChild(link);
+  		URL.revokeObjectURL(url);
+  	}
+
+  	function initCsvExport() {
+  		document.addEventListener('click', function(e) {
+  			const btn = e.target.closest('.vmap-export-csv');
+  			if (btn) {
+  				e.preventDefault();
+  				const postId = btn.dataset.postId;
+  				const postTitle = btn.dataset.postTitle || '';
+  				if (postId) {
+  					exportMarkersCsv(postId, postTitle);
+  				}
+  			}
+  		});
   	}
 
   	function loadIconImage(upmarker, url = false) {

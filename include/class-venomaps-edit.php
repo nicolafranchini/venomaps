@@ -472,7 +472,7 @@ class Venomaps_Edit {
 </div>
 
 <div class="button wpol-new-marker"><span class="dashicons dashicons-plus"></span> <?php esc_html_e( 'New marker', 'venomaps' ); ?></div>
-
+<button class="button vmap-export-csv" data-post-id="<?php echo esc_attr( $post->ID ); ?>" data-post-title="<?php echo esc_attr( $post->post_title ); ?>"><span class="dashicons dashicons-download"></span> <?php esc_html_e( 'Export markers as CSV', 'venomaps' ); ?></button>
 		<?php
 	}
 

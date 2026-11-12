@@ -631,6 +631,12 @@ class Venomaps_Plugin {
 			return false;
 		}
 
+		// Rimuovi eventuale BOM UTF-8 dal primo nome di colonna
+		// (es. esportazioni che antepongono \uFEFF per Excel).
+		if ( ! empty( $header[0] ) ) {
+			$header[0] = ltrim( $header[0], "\xEF\xBB\xBF" );
+		}
+
 		// 1. Verifica la presenza dei campi obbligatori
 		if ( ! in_array( 'lat', $header ) || ! in_array( 'lon', $header ) ) {
 			fclose( $handle );
